@@ -1,3 +1,4 @@
+
 # AI 编程能力提升系统 v5.0 - 统一认知表示层
 
 一个智能高效的 AI 辅助编程系统，专注于减少 Token 消耗、提升调试效率并提供企业级配置管理。**v5.0 新增统一认知表示层 (UCR Layer)**，实现符号 - 向量混合表示，为"识别万物、研究万物"提供真正的技术基础。
@@ -5,6 +6,7 @@
 ## 🎯 愿景
 
 > "识别万物，研究万物" - 通过**统一认知表示**、**感知 **(Perception)、**推理 **(Reasoning)、**行动 **(Action) 和 **学习 **(Learning) 的完整认知循环，构建能够跨领域泛化的 AI 智慧系统。
+
 
 ## 🚀 核心特性
 
@@ -38,6 +40,7 @@
 - 类型安全的配置类
 - 完整的配置验证
 
+
 ### 6. 统一认知表示层 (UCR Layer) - 技术突破（新增）✨
 - **符号表示**: 精确的逻辑结构、因果关系、规则（可解释、可推理、可验证）
 - **向量表示**: 语义嵌入、模糊匹配、模式识别（基于 TF-IDF 风格权重）
@@ -47,6 +50,7 @@
 - **实体类型**: CONCEPT, ACTION, PROPERTY, RELATION, EVENT, CONSTRAINT, HYPOTHESIS, EVIDENCE
 
 ### 7. 通用认知引擎 (Cognition Engine) - 智慧核心
+
 - **感知 (Perception)**: 解析多样化输入（代码、文本、数据结构）
 - **推理 (Reasoning)**: 生成动态思维链 (Chain of Thought)
 - **行动 (Action)**: 在安全环境中执行验证计划
@@ -246,7 +250,6 @@ for node in nodes:
     print(f"知识节点：{node.description}")
     print(f"置信度：{node.confidence_score}")
 ```
-
 ### 运行测试
 
 ```bash
@@ -264,6 +267,7 @@ python -m unittest test_cognition_engine -v
 ## 测试结果
 
 ### 测试覆盖率
+
 
 截至 v5.0，项目共有 **105** 个单元测试，覆盖所有核心模块：
 
@@ -370,6 +374,7 @@ AI 智慧的核心框架，实现完整的认知循环：
   - `find_relations()`: 关系发现和图谱遍历
   - `export_to_dict()/import_from_dict()`: 持久化支持
 
+
 ## 扩展开发
 
 ### 添加新的本地修复规则
@@ -398,7 +403,8 @@ FIX_PATTERNS = [
 - 📝 更新文档至 v5.0
 - ✅ 新增 28 个 UCR 层测试，总测试数达 105 个
 
-### v4.0 - 通用认知引擎
+
+### v4.0 (当前版本) - 通用认知引擎
 - ✨ 新增通用认知引擎 (`cognition_engine.py`)
 - ✨ 感知 - 推理 - 行动 - 学习完整循环
 - ✨ 持久化记忆银行和知识节点系统
