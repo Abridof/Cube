@@ -1,4 +1,1 @@
-```
-__pycache__/
-*.pyc
-```
+Nothing should be ignored based on the provided file changes, as they consist only of source code files (.py, .json) and a documentation file (.md).
