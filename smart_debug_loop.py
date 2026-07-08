@@ -55,23 +55,21 @@ class ExecutionResult:
 class LocalFixer:
     """本地语法修复器 (零 Token 消耗)"""
     
+    # 预编译正则表达式以提高性能
     FIX_PATTERNS = [
         # 拼写错误 (仅在 SyntaxError 时应用)
-        (r'\bprnt\s*\(', 'print('),
-        (r'\bprin\s*\(', 'print('),
-        (r'\bretun\s+', 'return '),
-        (r'\bdefen\s+', 'def '),
-        (r'\bimport\s+mathh\b', 'import math'),
-        # 缺失冒号
-        (r'if\s+(.+)$', r'if \1:'),
-        (r'else$', 'else:'),
-        (r'for\s+(.+)$', r'for \1:'),
-        (r'while\s+(.+)$', r'while \1:'),
-        (r'def\s+(.+)$', r'def \1:'),
-        (r'class\s+(.+)$', r'class \1:'),
-        # 缩进混合 (简单处理)
-        (r'    \t', '        '),
+        (re.compile(r'\bprnt\s*\(', re.IGNORECASE), 'print('),
+        (re.compile(r'\bprin\s*\(', re.IGNORECASE), 'print('),
+        (re.compile(r'\bretun\s+', re.IGNORECASE), 'return '),
+        (re.compile(r'\bdefen\s+', re.IGNORECASE), 'def '),
+        (re.compile(r'\bimport\s+mathh\b', re.IGNORECASE), 'import math'),
     ]
+    
+    # 需要添加冒号的关键字
+    COLON_KEYWORDS = {'if', 'else', 'for', 'while', 'def', 'class', 'elif', 'try', 'except', 'finally', 'with'}
+    
+    # 预编译关键字匹配正则
+    KEYWORD_PATTERN = re.compile(r'^(if|else|for|while|def|class|elif|try|except|finally|with)\s+')
     
     @classmethod
     def try_fix(cls, code: str, error_msg: str) -> Optional[str]:
@@ -79,45 +77,62 @@ class LocalFixer:
         original_code = code
         fixed = False
         
-        # 基于错误消息的针对性修复
-        if "SyntaxError" in error_msg or "TabError" in error_msg or "IndentationError" in error_msg:
+        # 判断是否为语法相关错误
+        is_syntax_error = any(kw in error_msg for kw in ["SyntaxError", "TabError", "IndentationError"])
+        
+        if is_syntax_error:
+            # 1. 处理缺失冒号
             if "invalid syntax" in error_msg or "expected ':'" in error_msg:
-                # 尝试添加缺失的冒号
-                lines = code.split('\n')
-                for i, line in enumerate(lines):
-                    stripped = line.strip()
-                    if any(stripped.startswith(k) for k in ['if', 'else', 'for', 'while', 'def', 'class']):
-                        if not stripped.endswith(':'):
-                            # 简单处理：在行尾加冒号
-                            lines[i] = line.rstrip() + ':'
-                            fixed = True
-                if fixed:
-                    code = '\n'.join(lines)
+                code, fixed = cls._fix_missing_colons(code)
             
-            # 处理 TabError
+            # 2. 处理 TabError
             if "TabError" in error_msg or "inconsistent use of tabs" in error_msg:
-                code = code.replace('    \t', '        ')
-                if code != original_code:
+                new_code = code.replace('    \t', '        ')
+                if new_code != code:
+                    code = new_code
                     fixed = True
             
-            # 应用通用模式修复 (包括拼写错误)
-            for pattern, replacement in cls.FIX_PATTERNS:
-                new_code = re.sub(pattern, replacement, code, flags=re.IGNORECASE)
-                if new_code != code:
-                    code = new_code
-                    fixed = True
+            # 3. 应用通用拼写错误修复
+            code, pattern_fixed = cls._apply_pattern_fixes(code)
+            fixed = fixed or pattern_fixed
         else:
-            # 非语法错误也尝试模式匹配 (如拼写错误)
-            for pattern, replacement in cls.FIX_PATTERNS:
-                new_code = re.sub(pattern, replacement, code, flags=re.IGNORECASE)
-                if new_code != code:
-                    code = new_code
-                    fixed = True
+            # 非语法错误也尝试拼写错误修复
+            code, fixed = cls._apply_pattern_fixes(code)
         
         return code if fixed and code != original_code else None
+    
+    @classmethod
+    def _fix_missing_colons(cls, code: str) -> Tuple[str, bool]:
+        """修复缺失的冒号"""
+        lines = code.split('\n')
+        fixed = False
+        
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            # 检查是否是关键字开头且缺少冒号
+            if cls.KEYWORD_PATTERN.match(stripped) and not stripped.endswith(':'):
+                lines[i] = line.rstrip() + ':'
+                fixed = True
+        
+        return '\n'.join(lines), fixed
+    
+    @classmethod
+    def _apply_pattern_fixes(cls, code: str) -> Tuple[str, bool]:
+        """应用预定义的正则修复模式"""
+        fixed = False
+        for pattern, replacement in cls.FIX_PATTERNS:
+            new_code = pattern.sub(replacement, code)
+            if new_code != code:
+                code = new_code
+                fixed = True
+        return code, fixed
 
 class ContextCompressor:
     """上下文压缩器 (减少 Token 输入)"""
+    
+    # 预编译正则表达式
+    LINE_NUMBER_PATTERN = re.compile(r'line (\d+)', re.IGNORECASE)
+    COMMENT_PATTERN = re.compile(r'^\s*#')
     
     @staticmethod
     def compress(code: str, error_msg: str, max_lines: int = 20) -> str:
@@ -130,7 +145,7 @@ class ContextCompressor:
         lines = code.split('\n')
         
         # 尝试从错误消息中提取行号
-        line_match = re.search(r'line (\d+)', error_msg, re.IGNORECASE)
+        line_match = ContextCompressor.LINE_NUMBER_PATTERN.search(error_msg)
         if line_match:
             error_line = int(line_match.group(1)) - 1  # 0-based
             start = max(0, error_line - 3)
@@ -141,19 +156,19 @@ class ContextCompressor:
             relevant_lines = lines[:max_lines]
         
         # 移除纯空行和纯注释行 (保留缩进)
-        compressed = []
-        for line in relevant_lines:
-            stripped = line.strip()
-            if stripped and not stripped.startswith('#'):
-                compressed.append(line)
+        compressed = [
+            line for line in relevant_lines 
+            if line.strip() and not ContextCompressor.COMMENT_PATTERN.match(line)
+        ]
         
         result = '\n'.join(compressed)
-        if len(compressed) < len(lines):
-            return result
-        return code  # 如果没压缩多少，返回原代码
+        return result if len(compressed) < len(lines) else code
 
 class SmartDebugLoop:
     """智能调试主循环 (v2.0)"""
+    
+    # 预编译正则表达式用于代码提取
+    CODE_BLOCK_PATTERN = re.compile(r'```python\s*(.*?)\s*```', re.DOTALL)
     
     def __init__(self, max_attempts: int = 5, use_cache: bool = True):
         self.max_attempts = max_attempts
@@ -170,7 +185,7 @@ class SmartDebugLoop:
     
     def _estimate_tokens(self, text: str) -> int:
         """粗略估算 Token 数 (1 token ≈ 4 chars)"""
-        return len(text) // 4
+        return len(text) >> 2  # 位运算优化除法
     
     def run(self, requirement: str, initial_code: Optional[str] = None) -> ExecutionResult:
         """执行智能调试循环"""
@@ -183,7 +198,7 @@ class SmartDebugLoop:
         if not code:
             self.stats.total_requests += 1
             prompt = f"Write Python code to: {requirement}"
-            response = call_llm(prompt) # 假设调用 LLM
+            response = call_llm(prompt)
             code = self._extract_code(response)
             self.stats.total_tokens_used += self._estimate_tokens(prompt + response)
         
@@ -223,7 +238,7 @@ class SmartDebugLoop:
             
             # 4. 准备 LLM 请求 (使用压缩上下文)
             compressed_code = self.compressor.compress(code, last_error)
-            compression_ratio = 1 - (len(compressed_code) / len(code)) if len(code) > 0 else 0
+            compression_ratio = 1 - (len(compressed_code) / len(code)) if code else 0
             
             if compression_ratio > 0.1:  # 压缩超过 10% 才记录
                 self.stats.compressed_contexts += 1
@@ -245,7 +260,6 @@ class SmartDebugLoop:
             
             # 更新缓存 - 使用原始错误和代码生成 key，这样下次相同错误能命中
             if self.use_cache and new_code != code:
-                # 缓存 key 应该基于"错误 + 原始代码"，而不是"错误 + 新代码"
                 cache_key = self._get_error_hash(last_error, compressed_code)
                 self.cache[cache_key] = new_code
             
@@ -263,10 +277,8 @@ class SmartDebugLoop:
     
     def _extract_code(self, text: str) -> str:
         """从 LLM 响应中提取代码块"""
-        match = re.search(r'```python\s*(.*?)\s*```', text, re.DOTALL)
-        if match:
-            return match.group(1)
-        return text.strip()
+        match = self.CODE_BLOCK_PATTERN.search(text)
+        return match.group(1).strip() if match else text.strip()
     
     def get_stats_report(self) -> str:
         """生成 Token 节省报告"""
