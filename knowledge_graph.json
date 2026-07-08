@@ -1,0 +1,188 @@
+{
+  "nodes": {
+    "condition_f594a0f3": {
+      "id": "condition_f594a0f3",
+      "symbolic": {
+        "id": "condition_f594a0f3",
+        "entity_type": "constraint",
+        "label": "Conditional Statement",
+        "definition": "n is a reusable block of code that performs a specific task",
+        "attributes": {
+          "relation_type": "condition",
+          "domain": "general"
+        },
+        "relations": [
+          [
+            "used_in",
+            "unit_a6292c871f0a"
+          ]
+        ],
+        "constraints": [],
+        "source": "Position 59-61",
+        "confidence": 1.0,
+        "created_at": "2026-07-08T18:17:23.272953"
+      },
+      "vector": {
+        "id": "f8407bbc99cf",
+        "vector": {
+          "function": 0.21428571428571427,
+          "reusable": 0.21428571428571427,
+          "block": 0.21428571428571427,
+          "code": 0.21428571428571427,
+          "performs": 0.21428571428571427,
+          "specific": 0.21428571428571427,
+          "task": 0.21428571428571427
+        },
+        "metadata": {
+          "text_length": 68
+        },
+        "norm": 0.5669467095138409
+      },
+      "tags": [
+        "function",
+        "fundamental"
+      ],
+      "activation_level": 0.5,
+      "access_count": 0,
+      "last_accessed": "2026-07-08T18:17:23.273082"
+    },
+    "unit_a6292c871f0a": {
+      "id": "unit_a6292c871f0a",
+      "symbolic": {
+        "id": "unit_a6292c871f0a",
+        "entity_type": "concept",
+        "label": "Concept from text",
+        "definition": "A class is a blueprint for creating objects with attributes and methods",
+        "attributes": {
+          "content_type": "text",
+          "domain": "programming",
+          "length": 71
+        },
+        "relations": [],
+        "constraints": [],
+        "source": null,
+        "confidence": 1.0,
+        "created_at": "2026-07-08T18:17:23.273611"
+      },
+      "vector": {
+        "id": "a6292c871f0a",
+        "vector": {
+          "class": 0.41666666666666663,
+          "blueprint": 0.41666666666666663,
+          "creating": 0.41666666666666663,
+          "objects": 0.41666666666666663,
+          "attributes": 0.41666666666666663,
+          "methods": 0.41666666666666663
+        },
+        "metadata": {
+          "text_length": 71
+        },
+        "norm": 1.0206207261596574
+      },
+      "tags": [
+        "fundamental",
+        "class"
+      ],
+      "activation_level": 0.5,
+      "access_count": 0,
+      "last_accessed": "2026-07-08T18:17:23.273619"
+    },
+    "unit_1f836f0f3620": {
+      "id": "unit_1f836f0f3620",
+      "symbolic": {
+        "id": "unit_1f836f0f3620",
+        "entity_type": "concept",
+        "label": "Concept from text",
+        "definition": "How to fix an infinite loop?",
+        "attributes": {
+          "content_type": "text",
+          "domain": "coding",
+          "length": 28
+        },
+        "relations": [],
+        "constraints": [],
+        "source": null,
+        "confidence": 1.0,
+        "created_at": "2026-07-08T18:17:23.274261"
+      },
+      "vector": {
+        "id": "1f836f0f3620",
+        "vector": {
+          "fix": 1.3333333333333333,
+          "infinite": 1.3333333333333333,
+          "loop": 1.3333333333333333
+        },
+        "metadata": {
+          "text_length": 28
+        },
+        "norm": 2.309401076758503
+      },
+      "tags": [
+        "coding",
+        "problem"
+      ],
+      "activation_level": 0.5,
+      "access_count": 0,
+      "last_accessed": "2026-07-08T18:17:23.274266"
+    },
+    "unit_ddd9746c4365": {
+      "id": "unit_ddd9746c4365",
+      "symbolic": {
+        "id": "unit_ddd9746c4365",
+        "entity_type": "concept",
+        "label": "Concept from text",
+        "definition": "Add a proper termination condition to the loop",
+        "attributes": {
+          "content_type": "text",
+          "domain": "coding",
+          "length": 46
+        },
+        "relations": [],
+        "constraints": [],
+        "source": null,
+        "confidence": 1.0,
+        "created_at": "2026-07-08T18:17:23.274769"
+      },
+      "vector": {
+        "id": "ddd9746c4365",
+        "vector": {
+          "add": 1.0,
+          "proper": 1.0,
+          "termination": 1.0,
+          "condition": 1.0,
+          "loop": 0.6000000000000001
+        },
+        "metadata": {
+          "text_length": 46
+        },
+        "norm": 2.08806130178211
+      },
+      "tags": [
+        "coding",
+        "solution"
+      ],
+      "activation_level": 0.5,
+      "access_count": 0,
+      "last_accessed": "2026-07-08T18:17:23.274776"
+    }
+  },
+  "edges": [
+    {
+      "source_id": "condition_f594a0f3",
+      "target_id": "unit_a6292c871f0a",
+      "relation_type": "used_in",
+      "weight": 1.0,
+      "confidence": 0.8,
+      "evidence": [
+        "Functions are used within classes as methods"
+      ],
+      "created_at": "2026-07-08T18:17:23.274101",
+      "last_verified": null
+    }
+  ],
+  "metadata": {
+    "node_count": 4,
+    "edge_count": 1,
+    "exported_at": "2026-07-08T18:17:23.274919"
+  }
+}

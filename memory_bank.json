@@ -9,7 +9,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:32.325021",
-    "last_accessed": "2026-07-08T17:59:08.989419"
+    "last_accessed": "2026-07-08T18:40:08.712456"
   },
   "ea42ca692bb4": {
     "id": "ea42ca692bb4",
@@ -21,7 +21,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:32.325886",
-    "last_accessed": "2026-07-08T17:59:08.989430"
+    "last_accessed": "2026-07-08T18:40:08.712469"
   },
   "prior_1": {
     "id": "prior_1",
@@ -30,8 +30,8 @@
     "description": "Known pattern",
     "examples": [],
     "confidence_score": 0.5,
-    "created_at": "2026-07-08T17:59:08.992394",
-    "last_accessed": "2026-07-08T17:59:08.992407"
+    "created_at": "2026-07-08T18:40:08.715405",
+    "last_accessed": "2026-07-08T18:40:08.715410"
   },
   "a4d22ffc946f": {
     "id": "a4d22ffc946f",
@@ -43,7 +43,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:42.471483",
-    "last_accessed": "2026-07-08T17:59:08.989432"
+    "last_accessed": "2026-07-08T18:40:08.712472"
   },
   "037f1a82305f": {
     "id": "037f1a82305f",
@@ -55,7 +55,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:42.472534",
-    "last_accessed": "2026-07-08T17:59:08.989434"
+    "last_accessed": "2026-07-08T18:40:08.712474"
   },
   "2fa764f7b852": {
     "id": "2fa764f7b852",
@@ -67,7 +67,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:56.212580",
-    "last_accessed": "2026-07-08T17:59:08.989436"
+    "last_accessed": "2026-07-08T18:40:08.712475"
   },
   "09633f371f17": {
     "id": "09633f371f17",
@@ -79,7 +79,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:56.223894",
-    "last_accessed": "2026-07-08T17:59:08.989437"
+    "last_accessed": "2026-07-08T18:40:08.712477"
   },
   "50e2d65df79f": {
     "id": "50e2d65df79f",
@@ -91,7 +91,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:59.365874",
-    "last_accessed": "2026-07-08T17:59:08.989439"
+    "last_accessed": "2026-07-08T18:40:08.712478"
   },
   "18c08231caba": {
     "id": "18c08231caba",
@@ -103,7 +103,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:31:59.367018",
-    "last_accessed": "2026-07-08T17:59:08.989440"
+    "last_accessed": "2026-07-08T18:40:08.712480"
   },
   "1cfdd2ee70cb": {
     "id": "1cfdd2ee70cb",
@@ -115,7 +115,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:33:16.171499",
-    "last_accessed": "2026-07-08T17:59:08.989441"
+    "last_accessed": "2026-07-08T18:40:08.712481"
   },
   "ec794b1b7473": {
     "id": "ec794b1b7473",
@@ -127,7 +127,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:33:16.184102",
-    "last_accessed": "2026-07-08T17:59:08.989443"
+    "last_accessed": "2026-07-08T18:40:08.712483"
   },
   "b713007e3ea9": {
     "id": "b713007e3ea9",
@@ -139,7 +139,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:33:17.925371",
-    "last_accessed": "2026-07-08T17:59:08.989444"
+    "last_accessed": "2026-07-08T18:40:08.712484"
   },
   "572515873753": {
     "id": "572515873753",
@@ -163,7 +163,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:53:23.987110",
-    "last_accessed": "2026-07-08T17:59:08.989446"
+    "last_accessed": "2026-07-08T18:40:08.712486"
   },
   "acec659a2c96": {
     "id": "acec659a2c96",
@@ -175,7 +175,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:54:42.112915",
-    "last_accessed": "2026-07-08T17:59:08.989447"
+    "last_accessed": "2026-07-08T18:40:08.712487"
   },
   "1de634661af1": {
     "id": "1de634661af1",
@@ -187,7 +187,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:54:42.123654",
-    "last_accessed": "2026-07-08T17:59:08.989448"
+    "last_accessed": "2026-07-08T18:40:08.712488"
   },
   "04879d932dbf": {
     "id": "04879d932dbf",
@@ -199,7 +199,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:57:38.343088",
-    "last_accessed": "2026-07-08T17:59:08.989450"
+    "last_accessed": "2026-07-08T18:40:08.712490"
   },
   "3778c7bf47ac": {
     "id": "3778c7bf47ac",
@@ -211,7 +211,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:57:38.344570",
-    "last_accessed": "2026-07-08T17:59:08.989451"
+    "last_accessed": "2026-07-08T18:40:08.712491"
   },
   "7d383b2d8f39": {
     "id": "7d383b2d8f39",
@@ -223,7 +223,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:59:08.989696",
-    "last_accessed": "2026-07-08T17:59:08.989698"
+    "last_accessed": "2026-07-08T18:40:08.712493"
   },
   "9f71e91feff7": {
     "id": "9f71e91feff7",
@@ -235,6 +235,126 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-08T17:59:08.990868",
-    "last_accessed": "2026-07-08T17:59:08.990871"
+    "last_accessed": "2026-07-08T18:40:08.712494"
+  },
+  "02822aeaeaaf": {
+    "id": "02822aeaeaaf",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:18:35.437204",
+    "last_accessed": "2026-07-08T18:40:08.712496"
+  },
+  "e6ca1e368e61": {
+    "id": "e6ca1e368e61",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:18:35.448687",
+    "last_accessed": "2026-07-08T18:40:08.712497"
+  },
+  "3c5bb3419d8c": {
+    "id": "3c5bb3419d8c",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:19:02.794945",
+    "last_accessed": "2026-07-08T18:40:08.712498"
+  },
+  "e52865f99515": {
+    "id": "e52865f99515",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:19:02.796337",
+    "last_accessed": "2026-07-08T18:40:08.712500"
+  },
+  "7ef18b201621": {
+    "id": "7ef18b201621",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:30:02.967738",
+    "last_accessed": "2026-07-08T18:40:08.712501"
+  },
+  "6d311c276354": {
+    "id": "6d311c276354",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:30:02.969486",
+    "last_accessed": "2026-07-08T18:40:08.712503"
+  },
+  "699a88e1d6c4": {
+    "id": "699a88e1d6c4",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:31:08.454580",
+    "last_accessed": "2026-07-08T18:40:08.712504"
+  },
+  "c54b68a7fead": {
+    "id": "c54b68a7fead",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:31:08.455923",
+    "last_accessed": "2026-07-08T18:40:08.712505"
+  },
+  "435ce25d6ad5": {
+    "id": "435ce25d6ad5",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:40:08.712778",
+    "last_accessed": "2026-07-08T18:40:08.712780"
+  },
+  "df668f2b64ac": {
+    "id": "df668f2b64ac",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-08T18:40:08.714305",
+    "last_accessed": "2026-07-08T18:40:08.714308"
   }
 }
