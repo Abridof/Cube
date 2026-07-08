@@ -1,10 +1,12 @@
-# AI 编程能力提升系统 v4.0 - 通用认知引擎
 
-一个智能高效的 AI 辅助编程系统，专注于减少 Token 消耗、提升调试效率并提供企业级配置管理。**v4.0 新增通用认知引擎 (UCE)**，赋予 AI 识别万物、研究万物的智慧框架。
+# AI 编程能力提升系统 v5.0 - 统一认知表示层
+
+一个智能高效的 AI 辅助编程系统，专注于减少 Token 消耗、提升调试效率并提供企业级配置管理。**v5.0 新增统一认知表示层 (UCR Layer)**，实现符号 - 向量混合表示，为"识别万物、研究万物"提供真正的技术基础。
 
 ## 🎯 愿景
 
-> "识别万物，研究万物" - 通过感知 (Perception)、推理 (Reasoning)、行动 (Action) 和学习 (Learning) 的完整认知循环，构建能够跨领域泛化的 AI 智慧系统。
+> "识别万物，研究万物" - 通过**统一认知表示**、**感知 **(Perception)、**推理 **(Reasoning)、**行动 **(Action) 和 **学习 **(Learning) 的完整认知循环，构建能够跨领域泛化的 AI 智慧系统。
+
 
 ## 🚀 核心特性
 
@@ -38,7 +40,17 @@
 - 类型安全的配置类
 - 完整的配置验证
 
-### 7. 通用认知引擎 (Cognition Engine) - 智慧核心（新增）
+
+### 6. 统一认知表示层 (UCR Layer) - 技术突破（新增）✨
+- **符号表示**: 精确的逻辑结构、因果关系、规则（可解释、可推理、可验证）
+- **向量表示**: 语义嵌入、模糊匹配、模式识别（基于 TF-IDF 风格权重）
+- **混合索引**: 同时支持精确查询和相似性搜索
+- **多模态解析**: 代码结构（函数/类/约束）、文本逻辑关系（因果/条件/对比）
+- **认知单元**: 符号 + 向量的统一数据结构，支持关系发现和图谱构建
+- **实体类型**: CONCEPT, ACTION, PROPERTY, RELATION, EVENT, CONSTRAINT, HYPOTHESIS, EVIDENCE
+
+### 7. 通用认知引擎 (Cognition Engine) - 智慧核心
+
 - **感知 (Perception)**: 解析多样化输入（代码、文本、数据结构）
 - **推理 (Reasoning)**: 生成动态思维链 (Chain of Thought)
 - **行动 (Action)**: 在安全环境中执行验证计划
@@ -46,24 +58,25 @@
 - **记忆银行 (Memory Bank)**: 存储和检索跨领域知识节点
 - **状态管理**: 完整的认知状态追踪（IDLE → PERCEIVING → REASONING → ACTING → LEARNING）
 
-
 ## 项目结构
 
 ```
 /workspace/
-├── smart_debug_loop.py    # 智能调试主循环模块
-├── token_optimizer.py     # Token 优化模块
-├── secure_sandbox.py      # 安全代码执行沙箱
-├── llm_client.py          # LLM 客户端接口（多后端支持）
-├── config.py              # 配置管理模块
-├── cognition_engine.py    # 通用认知引擎（感知 - 推理 - 行动 - 学习）✨
-├── test_smart_debug.py    # 智能调试模块测试
-├── test_token_optimizer.py # Token 优化模块测试
-├── test_config.py         # 配置模块测试
-├── test_llm_client.py     # LLM 客户端测试
-├── test_cognition_engine.py # 认知引擎测试 ✨
-├── cube/                  # (预留目录)
-└── README.md              # 项目文档
+├── smart_debug_loop.py       # 智能调试主循环模块
+├── token_optimizer.py        # Token 优化模块
+├── secure_sandbox.py         # 安全代码执行沙箱
+├── llm_client.py             # LLM 客户端接口（多后端支持）
+├── config.py                 # 配置管理模块
+├── cognition_engine.py       # 通用认知引擎（感知 - 推理 - 行动 - 学习）
+├── ucr_layer.py              # 统一认知表示层（符号 - 向量混合）✨
+├── test_smart_debug.py       # 智能调试模块测试
+├── test_token_optimizer.py   # Token 优化模块测试
+├── test_config.py            # 配置模块测试
+├── test_llm_client.py        # LLM 客户端测试
+├── test_cognition_engine.py  # 认知引擎测试
+├── test_ucr_layer.py         # UCR 层测试 ✨
+├── cube/                     # (预留目录)
+└── README.md                 # 项目文档
 ```
 
 ## 快速开始
@@ -166,7 +179,49 @@ from config import Config
 config = Config.from_json("config.json")
 ```
 
-#### 4. 使用通用认知引擎（新增）
+#### 5. 使用统一认知表示层（新增）✨
+
+```python
+from ucr_layer import (
+    UnifiedRepresentationEngine, SymbolicNode, 
+    CognitiveUnit, EntityType, represent
+)
+
+# 创建引擎
+engine = UnifiedRepresentationEngine()
+
+# 示例 1: 代码解析 - 自动提取函数、类、约束
+code = """
+def calculate(a, b):
+    return a + b
+
+class Calculator:
+    def add(self, x):
+        assert x >= 0
+"""
+unit = engine.create_unit(code, content_type='code', domain='programming', tags={'python'})
+print(f"实体类型：{unit.symbolic.entity_type}")
+print(f"关系数量：{len(unit.symbolic.relations)}")
+
+# 示例 2: 文本解析 - 提取因果/条件关系
+text = "If temperature exceeds 100°C, water boils because molecules move faster."
+unit = engine.create_unit(text, content_type='text', domain='physics')
+print(f"定义：{unit.symbolic.definition[:80]}...")
+
+# 示例 3: 语义相似性搜索
+results = engine.search_by_similarity("heat and boiling", threshold=0.1)
+for unit, score in results:
+    print(f"匹配：{unit.symbolic.label} (相似度：{score:.3f})")
+
+# 示例 4: 关系发现（图谱遍历）
+related = engine.find_relations(unit.id, max_depth=2)
+print(f"相关单元数：{len(related)}")
+
+# 示例 5: 便捷函数
+unit = represent("Quick concept", domain='general')
+```
+
+#### 6. 使用通用认知引擎
 
 ```python
 from cognition_engine import CognitionEngine, MemoryBank, KnowledgeNode
@@ -213,7 +268,8 @@ python -m unittest test_cognition_engine -v
 
 ### 测试覆盖率
 
-截至 v4.0，项目共有 **77** 个单元测试，覆盖所有核心模块：
+
+截至 v5.0，项目共有 **105** 个单元测试，覆盖所有核心模块：
 
 | 模块 | 测试数 | 状态 |
 |------|--------|------|
@@ -222,21 +278,8 @@ python -m unittest test_cognition_engine -v
 | config | 11 | ✅ 通过 |
 | llm_client | 18 | ✅ 通过 |
 | cognition_engine | 11 | ✅ 通过 |
-| **总计** | **77** | **✅ 全部通过** |
-
-## 测试结果
-
-### 测试覆盖率
-
-截至 v3.0，项目共有 **66** 个单元测试，覆盖所有核心模块：
-
-| 模块 | 测试数 | 状态 |
-|------|--------|------|
-| smart_debug_loop | 15 | ✅ 通过 |
-| token_optimizer | 22 | ✅ 通过 |
-| config | 11 | ✅ 通过 |
-| llm_client | 18 | ✅ 通过 |
-| **总计** | **66** | **✅ 全部通过** |
+| **ucr_layer** | **28** | ✅ 通过 |
+| **总计** | **105** | **✅ 全部通过** |
 
 ### 性能指标
 
@@ -302,7 +345,7 @@ LLM 客户端接口，支持：
 - 资源限制
 - 导入白名单/黑名单
 
-### cognition_engine.py - 通用认知引擎（新增）
+### cognition_engine.py - 通用认知引擎
 AI 智慧的核心框架，实现完整的认知循环：
 - `CognitionEngine`: 主引擎类，编排感知 - 推理 - 行动 - 学习流程
 - `MemoryBank`: 持久化知识库，存储和检索跨领域知识节点
@@ -314,6 +357,23 @@ AI 智慧的核心框架，实现完整的认知循环：
   - `act()`: 在安全环境中执行计划步骤
   - `learn()`: 从结果中提取可泛化的知识模式
   - `process()`: 完整认知循环的主入口
+
+### ucr_layer.py - 统一认知表示层（新增）✨
+技术突破模块，实现符号 - 向量混合表示：
+- `SymbolicNode`: 精确的逻辑单元（可解释、可推理、可验证）
+- `VectorEmbedding`: 语义嵌入（基于 TF-IDF 风格权重，支持余弦相似度）
+- `CognitiveUnit`: 符号 + 向量的统一数据结构
+- `TextEncoder`: 文本编码器（分词、去停用词、TF-IDF 加权）
+- `SymbolicParser`: 符号解析器（代码结构提取、逻辑关系发现）
+- `UnifiedRepresentationEngine`: 统一表示引擎（多模态输入处理、索引、搜索）
+- `EntityType`: 实体类型枚举（CONCEPT, ACTION, PROPERTY, RELATION, EVENT, CONSTRAINT, HYPOTHESIS, EVIDENCE）
+- **核心功能**:
+  - `create_unit()`: 从代码/文本创建认知单元
+  - `search_by_similarity()`: 语义相似性搜索
+  - `search_by_type/tag()`: 精确查询
+  - `find_relations()`: 关系发现和图谱遍历
+  - `export_to_dict()/import_from_dict()`: 持久化支持
+
 
 ## 扩展开发
 
@@ -333,6 +393,15 @@ FIX_PATTERNS = [
 继承 `ContextCompressor` 并重写 `compress()` 方法。
 
 ## 版本历史
+
+### v5.0 (当前版本) - 统一认知表示层
+- ✨ 新增统一认知表示层 (`ucr_layer.py`)
+- ✨ 符号 - 向量混合表示架构
+- ✨ 多模态解析（代码结构、逻辑关系提取）
+- ✨ 语义相似性搜索和关系发现
+- ✨ 8 种实体类型支持（CONCEPT, ACTION, PROPERTY, RELATION, EVENT, CONSTRAINT, HYPOTHESIS, EVIDENCE）
+- 📝 更新文档至 v5.0
+- ✅ 新增 28 个 UCR 层测试，总测试数达 105 个
 
 
 ### v4.0 (当前版本) - 通用认知引擎
