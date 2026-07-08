@@ -46,6 +46,7 @@
 - **记忆银行 (Memory Bank)**: 存储和检索跨领域知识节点
 - **状态管理**: 完整的认知状态追踪（IDLE → PERCEIVING → REASONING → ACTING → LEARNING）
 
+
 ## 项目结构
 
 ```
@@ -194,7 +195,6 @@ for node in nodes:
     print(f"知识节点：{node.description}")
     print(f"置信度：{node.confidence_score}")
 ```
-
 ### 运行测试
 
 ```bash
@@ -223,6 +223,20 @@ python -m unittest test_cognition_engine -v
 | llm_client | 18 | ✅ 通过 |
 | cognition_engine | 11 | ✅ 通过 |
 | **总计** | **77** | **✅ 全部通过** |
+
+## 测试结果
+
+### 测试覆盖率
+
+截至 v3.0，项目共有 **66** 个单元测试，覆盖所有核心模块：
+
+| 模块 | 测试数 | 状态 |
+|------|--------|------|
+| smart_debug_loop | 15 | ✅ 通过 |
+| token_optimizer | 22 | ✅ 通过 |
+| config | 11 | ✅ 通过 |
+| llm_client | 18 | ✅ 通过 |
+| **总计** | **66** | **✅ 全部通过** |
 
 ### 性能指标
 
@@ -319,6 +333,7 @@ FIX_PATTERNS = [
 继承 `ContextCompressor` 并重写 `compress()` 方法。
 
 ## 版本历史
+
 
 ### v4.0 (当前版本) - 通用认知引擎
 - ✨ 新增通用认知引擎 (`cognition_engine.py`)
