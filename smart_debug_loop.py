@@ -298,7 +298,7 @@ if __name__ == "__main__":
     print(f"结果: {'✅ 成功' if result.success else '❌ 失败'}")
     print(f"尝试次数: {result.attempts}")
     print(f"本地修复: {result.token_stats.local_fixes} 次")
-    print(result.get_stats_report())
+    loop = SmartDebugLoop(); print(loop.get_stats_report())
     
     # 测试 2: 缓存命中
     print("\n[Test 2] 测试缓存命中...")
@@ -306,4 +306,4 @@ if __name__ == "__main__":
     result2 = run_smart_debug("Say hi", bad_code)
     print(f"结果: {'✅ 成功' if result2.success else '❌ 失败'}")
     print(f"缓存命中: {result2.token_stats.cache_hits} 次")
-    print(result2.get_stats_report())
+    loop2 = SmartDebugLoop(); print(loop2.get_stats_report())
