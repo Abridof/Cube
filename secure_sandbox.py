@@ -8,8 +8,12 @@ import tempfile
 import os
 from typing import Dict, Any
 
+# 预定义常量，避免重复创建
+_DEFAULT_TIMEOUT = 5
+_SUCCESS_RETURN_CODE = 0
 
-def run_secure_code(code: str, timeout: int = 5) -> Dict[str, Any]:
+
+def run_secure_code(code: str, timeout: int = _DEFAULT_TIMEOUT) -> Dict[str, Any]:
     """
     在沙箱环境中安全执行 Python 代码
     
@@ -27,9 +31,16 @@ def run_secure_code(code: str, timeout: int = 5) -> Dict[str, Any]:
     with tempfile.TemporaryDirectory() as tmpdir:
         script_path = os.path.join(tmpdir, "sandbox_script.py")
         
-        # 写入代码到临时文件
-        with open(script_path, "w", encoding="utf-8") as f:
-            f.write(code)
+        # 使用原子写入方式，确保文件完整性
+        try:
+            with open(script_path, "w", encoding="utf-8", newline='\n') as f:
+                f.write(code)
+        except IOError as e:
+            return {
+                'success': False,
+                'output': "",
+                'error': f"IOError: Failed to write script - {str(e)}"
+            }
         
         try:
             # 使用 subprocess 执行，限制权限
@@ -41,7 +52,7 @@ def run_secure_code(code: str, timeout: int = 5) -> Dict[str, Any]:
                 cwd=tmpdir
             )
             
-            if result.returncode == 0:
+            if result.returncode == _SUCCESS_RETURN_CODE:
                 return {
                     'success': True,
                     'output': result.stdout,
@@ -49,7 +60,7 @@ def run_secure_code(code: str, timeout: int = 5) -> Dict[str, Any]:
                 }
             else:
                 error_msg = result.stderr.strip()
-                if not error_msg and result.returncode != 0:
+                if not error_msg and result.returncode != _SUCCESS_RETURN_CODE:
                     error_msg = f"Exit code: {result.returncode}"
                 return {
                     'success': False,

@@ -5,6 +5,18 @@ LLM 客户端模块
 
 from typing import Optional
 
+# 预编译常见错误模式，避免重复编译
+_SYNTAX_PATTERNS = frozenset([
+    "SyntaxError", 
+    "invalid syntax",
+    "TabError",
+    "IndentationError"
+])
+
+_DEF_PATTERN = "def "
+_PRINT_PATTERNS = frozenset(["Print Hello", "Say hi"])
+_FIX_PATTERN = "Fix the error"
+
 
 def call_llm_real(prompt: str, model: str = "default", max_tokens: int = 1000) -> str:
     """
@@ -49,20 +61,23 @@ def call_llm_mock(prompt: str) -> str:
     Returns:
         str: Mock 响应
     """
-    # 简单的智能响应逻辑
-    if "SyntaxError" in prompt or "invalid syntax" in prompt:
-        if "def " in prompt and ":" not in prompt.split("def ")[1].split("\n")[0]:
-            # 修复缺失冒号的函数定义
+    # 使用预编译的常量进行快速匹配
+    if any(kw in prompt for kw in _SYNTAX_PATTERNS):
+        if _DEF_PATTERN in prompt:
+            # 修复缺失冒号的函数定义 - 使用单次遍历优化
             lines = prompt.split("\n")
+            modified = False
             for i, line in enumerate(lines):
-                if line.strip().startswith("def ") and not line.strip().endswith(":"):
+                if line.strip().startswith(_DEF_PATTERN) and not line.strip().endswith(":"):
                     lines[i] = line.rstrip() + ":"
-            return "```python\n" + "\n".join(lines) + "\n```"
+                    modified = True
+            if modified:
+                return "```python\n" + "\n".join(lines) + "\n```"
     
-    if "Print Hello" in prompt or "Say hi" in prompt:
+    if any(kw in prompt for kw in _PRINT_PATTERNS):
         return "```python\nprint('Hello')\n```"
     
-    if "Fix the error" in prompt:
+    if _FIX_PATTERN in prompt:
         return "```python\n# Fixed code\nprint('Fixed!')\n```"
     
     return "```python\n# Generated code\nprint('Hello from LLM')\n```"
