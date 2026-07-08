@@ -1,9 +1,11 @@
 ```
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Dependencies
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
 
 # Logs and temp files
 *.log
@@ -29,17 +31,7 @@ coverage/
 htmlcov/
 .coverage
 
-# Testing
-.pytest_cache/
-.mypy_cache/
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
+# OS generated files
 .DS_Store
 Thumbs.db
 ```
