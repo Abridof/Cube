@@ -254,7 +254,13 @@ class TestGridWorldEnvironment(unittest.TestCase):
     
     def test_step_goal_reached(self):
         """测试到达目标"""
+        # 重置环境并清除所有障碍，确保路径畅通
+        self.env.reset()
+        self.env.obstacles.clear()
+        self.env.state.obstacles = self.env.obstacles
+        
         # 在 (0, 1) 放置目标
+        self.env.goals.clear()
         self.env.goals.add((0, 1))
         self.env.state.goals = self.env.goals
         

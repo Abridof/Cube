@@ -1,0 +1,36 @@
+{
+  "db4f61fbbb31": {
+    "id": "db4f61fbbb31",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-09T14:59:38.869571",
+    "last_accessed": "2026-07-09T14:59:38.869574"
+  },
+  "782158a6e78f": {
+    "id": "782158a6e78f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-09T14:59:38.871234",
+    "last_accessed": "2026-07-09T14:59:38.871236"
+  },
+  "prior_1": {
+    "id": "prior_1",
+    "domain": "test_domain",
+    "pattern_type": "pattern",
+    "description": "Known pattern",
+    "examples": [],
+    "confidence_score": 0.5,
+    "created_at": "2026-07-09T14:59:38.885603",
+    "last_accessed": "2026-07-09T14:59:38.885615"
+  }
+}
