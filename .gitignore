@@ -1,15 +1,28 @@
 ```
-# Test and data files
-*.json
-
-# Dependencies
-__pycache__/
+# Compiled Python files
 *.pyc
-*.pyo
-*.pyd
+__pycache__/
+# Dependencies
+.venv/
+venv/
+node_modules/
 
+# Logs and temporary files
+*.log
+*.tmp
+
+# Environment files
+.env
+.env.local
+*.env.*
+
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# Editors/IDE
 # Testing
-.pytest_cache/
 .coverage
 coverage/
 htmlcov/

@@ -237,7 +237,6 @@ class TestLongTermEvolution(unittest.TestCase):
     def test_mutation_engine(self):
         """测试变异引擎"""
         from src.modules.long_term_evolution import MutationEngine
-        me = MutationEngine(sandbox_enabled=False)
         
         mutation = {'type': 'test', 'change': '+1'}
         success = me.apply_mutation(mutation, lambda x: True)
@@ -267,6 +266,7 @@ class TestLongTermEvolution(unittest.TestCase):
     def test_report_generator(self):
         """测试报告生成器"""
         from src.modules.long_term_evolution import ReportGenerator, EvolutionCycle, MetricCollector
+
         import tempfile
         import shutil
         
@@ -297,7 +297,7 @@ class TestLongTermEvolution(unittest.TestCase):
     def test_evolution_cycle_execution(self):
         """测试单个演化循环执行"""
         from src.modules.long_term_evolution import LongTermEvolution
-        evolution = LongTermEvolution()
+        evolution = LongTermEvolution()on
         
         # 设置任务数以便有实际任务执行
         evolution.config['tasks_per_cycle'] = 5
@@ -348,7 +348,7 @@ class TestIntegration(unittest.TestCase):
         """模拟完整流水线"""
         from src.modules.system_orchestrator import SystemOrchestrator, Priority
         from src.modules.long_term_evolution import LongTermEvolution
-        
+
         orchestrator = SystemOrchestrator()
         evolution = LongTermEvolution(orchestrator=orchestrator)
         
