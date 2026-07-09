@@ -1,26 +1,66 @@
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Dependencies
+.venv/
+venv/
+ENV/
+env/
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
+
 # Python cache
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-.eggs/
-
-# Virtual environments
-.venv/
-venv/
-ENV/
-env/
-
-# Editor directories
-.vscode/
-
-# Test cache
+.Python
+*.so
+.coverage
+htmlcov/
+.coverage.*
 .pytest_cache/
+.mypy_cache/
 
-# Logs
-*.log
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
