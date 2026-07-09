@@ -2,6 +2,7 @@
 *.log
 *.tmp
 *.swp
+*.swo
 
 # Environment
 .env
@@ -27,6 +28,8 @@ __pycache__/
 *.pyd
 .Python
 *.so
+*.dylib
+*.dll
 .coverage
 coverage/
 htmlcov/
@@ -41,6 +44,10 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Backup files
+*~
+\#*\#
 
 # Compressed files
 *.zip
