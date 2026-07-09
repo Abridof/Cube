@@ -13,6 +13,8 @@
 - Embodied Environment: 具身环境
 - Neural Backend: 神经语义后端
 - Intrinsic Motivation: 内在动机与好奇心驱动 (阶段 9)
+- Concept Abstraction: 概念抽象与元模式识别 (阶段 11)
+- Analogy Engine: 类比推理引擎 (阶段 12)
 """
 
 from .ucr_layer import (
@@ -99,6 +101,26 @@ from .intrinsic_motivation import (
     ExplorationGoal,
 )
 
+from .concept_abstraction import (
+    PatternType,
+    AbstractStructure,
+    ConcreteCase,
+    Isomorphism,
+    ConceptHierarchy,
+    MetaPatternRecognizer,
+)
+
+from .analogy_engine import (
+    AnalogyType,
+    MappingHypothesis,
+    AnalogyMapping,
+    StructureAligner,
+    AnalogyGenerator,
+    KnowledgeTransferEngine,
+    AnalogyReasoningEngine,
+    create_analogy_engine,
+)
+
 __all__ = [
     # UCR Layer
     'CognitiveUnit',
@@ -173,4 +195,22 @@ __all__ = [
     'InformationGain',
     'IntrinsicReward',
     'ExplorationGoal',
+    
+    # Concept Abstraction (Stage 11)
+    'PatternType',
+    'AbstractStructure',
+    'ConcreteCase',
+    'Isomorphism',
+    'ConceptHierarchy',
+    'MetaPatternRecognizer',
+    
+    # Analogy Engine (Stage 12)
+    'AnalogyType',
+    'MappingHypothesis',
+    'AnalogyMapping',
+    'StructureAligner',
+    'AnalogyGenerator',
+    'KnowledgeTransferEngine',
+    'AnalogyReasoningEngine',
+    'create_analogy_engine',
 ]
