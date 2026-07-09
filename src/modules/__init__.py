@@ -12,6 +12,7 @@
 - Self Reflection: 自反思模块
 - Embodied Environment: 具身环境
 - Neural Backend: 神经语义后端
+- Intrinsic Motivation: 内在动机与好奇心驱动 (阶段 9)
 """
 
 from .ucr_layer import (
@@ -87,6 +88,17 @@ from .neural_backend import (
     Tensor,
 )
 
+from .intrinsic_motivation import (
+    IntrinsicMotivationEngine,
+    PredictionErrorCalculator,
+    InformationGainCalculator,
+    MotivationType,
+    PredictionError,
+    InformationGain,
+    IntrinsicReward,
+    ExplorationGoal,
+)
+
 __all__ = [
     # UCR Layer
     'CognitiveUnit',
@@ -151,4 +163,14 @@ __all__ = [
     'DataManager',
     'IntrinsicMotivation',
     'Tensor',
+    
+    # Intrinsic Motivation (Stage 9)
+    'IntrinsicMotivationEngine',
+    'PredictionErrorCalculator',
+    'InformationGainCalculator',
+    'MotivationType',
+    'PredictionError',
+    'InformationGain',
+    'IntrinsicReward',
+    'ExplorationGoal',
 ]

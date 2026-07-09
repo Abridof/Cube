@@ -237,6 +237,7 @@ class TestLongTermEvolution(unittest.TestCase):
     def test_mutation_engine(self):
         """测试变异引擎"""
         from src.modules.long_term_evolution import MutationEngine
+        me = MutationEngine()
         
         mutation = {'type': 'test', 'change': '+1'}
         success = me.apply_mutation(mutation, lambda x: True)
@@ -297,7 +298,7 @@ class TestLongTermEvolution(unittest.TestCase):
     def test_evolution_cycle_execution(self):
         """测试单个演化循环执行"""
         from src.modules.long_term_evolution import LongTermEvolution
-        evolution = LongTermEvolution()on
+        evolution = LongTermEvolution()
         
         # 设置任务数以便有实际任务执行
         evolution.config['tasks_per_cycle'] = 5
