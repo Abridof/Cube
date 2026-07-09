@@ -22,9 +22,9 @@ from enum import Enum
 
 # Import existing modules for integration
 try:
-    from config import Config
-    from llm_client import LLMClient
-    from secure_sandbox import SecureSandbox
+    from .config import Config
+    from .llm_client import LLMClient
+    from .secure_sandbox import SecureSandbox
 except ImportError:
     # Fallback for standalone testing or partial imports
     class Config:

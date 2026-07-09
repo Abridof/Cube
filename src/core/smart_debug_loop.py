@@ -18,10 +18,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'ai-dev-system'))
 
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
-from secure_sandbox import run_secure_code
+from .secure_sandbox import run_secure_code
 # 修复导入：使用实际的函数名
 try:
-    from llm_client import call_llm_real as call_llm
+    from .llm_client import call_llm_real as call_llm
 except ImportError:
     # Mock for testing without API key
     def call_llm(prompt: str) -> str:

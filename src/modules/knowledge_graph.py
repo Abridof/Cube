@@ -26,7 +26,7 @@ import math
 
 # Import UCR components
 try:
-    from ucr_layer import (
+    from .ucr_layer import (
         CognitiveUnit, SymbolicNode, VectorEmbedding,
         EntityType, UnifiedRepresentationEngine, represent
     )

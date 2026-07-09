@@ -22,11 +22,11 @@ from enum import Enum
 
 # 导入前序模块
 try:
-    from ucr_layer import UCR, UCRLayer, EntityType
-    from knowledge_graph import KnowledgeGraph, HybridRetriever, EnhancedMemoryBank
-    from world_model import WorldModel, State, Prediction
-    from multimodal_perception import MultimodalFusionEngine, Modality
-    from neural_backend import NeuralUCREncoder, DataManager, IntrinsicMotivation
+    from .ucr_layer import UCR, UCRLayer, EntityType
+    from .knowledge_graph import KnowledgeGraph, HybridRetriever, EnhancedMemoryBank
+    from .world_model import WorldModel, State, Prediction
+    from .multimodal_perception import MultimodalFusionEngine, Modality
+    from .neural_backend import NeuralUCREncoder, DataManager, IntrinsicMotivation
 except ImportError as e:
     print(f"警告：部分模块未找到，将使用模拟模式: {e}")
     # 定义模拟类以保证代码可运行
