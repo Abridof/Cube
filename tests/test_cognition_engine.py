@@ -7,7 +7,7 @@ import unittest
 import json
 import os
 from unittest.mock import patch, MagicMock
-from cognition_engine import (
+from src.modules.cognition_engine import (
     CognitionEngine, 
     MemoryBank, 
     KnowledgeNode, 

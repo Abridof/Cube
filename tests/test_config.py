@@ -6,7 +6,7 @@ import unittest
 import os
 import json
 import tempfile
-from config import (
+from src.core.config import (
     Config, LLMConfig, SandboxConfig, DebugConfig,
     get_config
 )

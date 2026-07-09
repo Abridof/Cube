@@ -16,7 +16,7 @@ import unittest
 import time
 import json
 import os
-from world_model import (
+from src.modules.world_model import (
     WorldModel, State, StateVariable, Transition, Prediction, Counterfactual,
     StateType, TransitionType
 )

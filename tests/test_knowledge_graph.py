@@ -4,12 +4,12 @@
 
 import unittest
 import json
-from knowledge_graph import (
+from src.modules.knowledge_graph import (
     RelationType, KnowledgeEdge, LearningStrategy, Hypothesis,
     KnowledgeGraph, HybridRetriever, MetaLearner, EnhancedMemoryBank,
     get_memory_bank
 )
-from ucr_layer import UnifiedRepresentationEngine, EntityType
+from src.modules.ucr_layer import UnifiedRepresentationEngine, EntityType
 
 
 class TestRelationType(unittest.TestCase):

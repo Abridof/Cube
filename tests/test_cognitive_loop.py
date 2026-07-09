@@ -9,7 +9,7 @@ import time
 from unittest.mock import Mock, patch
 
 # 导入被测模块
-from cognitive_loop import (
+from src.modules.cognitive_loop import (
     CognitiveLoopController,
     CognitiveEvent,
     LoopPhase

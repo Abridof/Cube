@@ -16,7 +16,7 @@ import os
 # 添加 ai-dev-system 到路径以导入依赖模块
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'ai-dev-system'))
 
-from smart_debug_loop import (
+from src.core.smart_debug_loop import (
     LocalFixer, 
     ContextCompressor, 
     SmartDebugLoop, 
@@ -125,8 +125,8 @@ class TestTokenStats(unittest.TestCase):
 class TestSmartDebugLoop(unittest.TestCase):
     """测试智能调试主循环"""
     
-    @patch('smart_debug_loop.run_secure_code')
-    @patch('smart_debug_loop.call_llm')
+    @patch('src.core.smart_debug_loop.run_secure_code')
+    @patch('src.core.smart_debug_loop.call_llm')
     def test_local_fix_prevents_llm_call(self, mock_llm, mock_exec):
         """本地修复成功时不调用 LLM"""
         # 第一次执行失败 (SyntaxError)
@@ -144,8 +144,8 @@ class TestSmartDebugLoop(unittest.TestCase):
         self.assertEqual(result.token_stats.local_fixes, 1)
         self.assertTrue(result.success)
     
-    @patch('smart_debug_loop.run_secure_code')
-    @patch('smart_debug_loop.call_llm')
+    @patch('src.core.smart_debug_loop.run_secure_code')
+    @patch('src.core.smart_debug_loop.call_llm')
     def test_cache_hit_prevents_llm_call(self, mock_llm, mock_exec):
         """缓存命中时不调用 LLM"""
         # 第一次：失败 -> LLM 修复 -> 成功
@@ -174,8 +174,8 @@ class TestSmartDebugLoop(unittest.TestCase):
         self.assertEqual(llm_calls_first, llm_calls_second)
         self.assertGreater(result2.token_stats.cache_hits, 0)
     
-    @patch('smart_debug_loop.run_secure_code')
-    @patch('smart_debug_loop.call_llm')
+    @patch('src.core.smart_debug_loop.run_secure_code')
+    @patch('src.core.smart_debug_loop.call_llm')
     def test_context_compression_reduces_tokens(self, mock_llm, mock_exec):
         """验证上下文压缩减少 Token"""
         long_code = "\n".join([f"# comment {i}\nline_{i}" for i in range(50)])
@@ -196,8 +196,8 @@ class TestSmartDebugLoop(unittest.TestCase):
 class TestIntegration(unittest.TestCase):
     """集成测试"""
     
-    @patch('smart_debug_loop.run_secure_code')
-    @patch('smart_debug_loop.call_llm')
+    @patch('src.core.smart_debug_loop.run_secure_code')
+    @patch('src.core.smart_debug_loop.call_llm')
     def test_full_workflow_with_savings(self, mock_llm, mock_exec):
         """完整工作流程并验证 Token 节省"""
         # 场景：代码有语法错误 -> 本地修复成功
@@ -213,8 +213,8 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(result.token_stats.total_requests, 0)  # 未调用 LLM
         self.assertGreater(result.token_stats.savings_rate(), 50)  # 节省率 > 50%
     
-    @patch('smart_debug_loop.run_secure_code')
-    @patch('smart_debug_loop.call_llm')
+    @patch('src.core.smart_debug_loop.run_secure_code')
+    @patch('src.core.smart_debug_loop.call_llm')
     def test_max_attempts_reached(self, mock_llm, mock_exec):
         """达到最大尝试次数"""
         mock_exec.return_value = {'success': False, 'error': 'Persistent Error', 'output': ''}
