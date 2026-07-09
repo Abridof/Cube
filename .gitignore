@@ -2,7 +2,6 @@
 # Compiled Python files
 *.pyc
 __pycache__/
-
 # Dependencies
 .venv/
 venv/
@@ -23,8 +22,33 @@ coverage/
 htmlcov/
 
 # Editors/IDE
-.vscode/
-.idea/
+=======
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Testing
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Logs
+*.log
+test_results.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Dependencies
+.venv/
+venv/
+.env/
 
 # System files
 .DS_Store
@@ -38,4 +62,3 @@ target/
 # Testing
 .pytest_cache/
 .mypy_cache/
-```
