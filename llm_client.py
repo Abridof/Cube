@@ -284,36 +284,6 @@ if __name__ == "__main__":
     print(f"Latency: {response.latency_ms:.2f}ms")
 
 
-# Mock 实现用于测试
-def call_llm_mock(prompt: str) -> str:
-    """
-    Mock LLM 响应，用于测试环境
-    
-    Args:
-        prompt: 输入提示词
-    
-    Returns:
-        str: Mock 响应
-    """
-    # 简单的智能响应逻辑
-    if "SyntaxError" in prompt or "invalid syntax" in prompt:
-        if "def " in prompt and ":" not in prompt.split("def ")[1].split("\n")[0]:
-            # 修复缺失冒号的函数定义
-            lines = prompt.split("\n")
-            for i, line in enumerate(lines):
-                if line.strip().startswith("def ") and not line.strip().endswith(":"):
-                    lines[i] = line.rstrip() + ":"
-            return "```python\n" + "\n".join(lines) + "\n```"
-    
-    if "Print Hello" in prompt or "Say hi" in prompt:
-        return "```python\nprint('Hello')\n```"
-    
-    if "Fix the error" in prompt:
-        return "```python\n# Fixed code\nprint('Fixed!')\n```"
-    
-    return "```python\n# Generated code\nprint('Hello from LLM')\n```"
-
-
 # 默认导出 mock 版本
 call_llm = call_llm_mock
 

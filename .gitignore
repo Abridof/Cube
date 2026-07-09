@@ -13,17 +13,36 @@ __pycache__/
 .env.local
 *.env.*
 
-# Coverage
-.coverage
-coverage/
-htmlcov/
+# Dependencies
+venv/
+.venv/
+node_modules/
 
-# Testing
-.pytest_cache/
-.mypy_cache/
-
-# Distribution / packaging
+# Build artifacts
 dist/
 build/
-*.egg-info/
+target/
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+*.tmp
+*.swp
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
 ```

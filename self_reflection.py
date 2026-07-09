@@ -295,8 +295,13 @@ class LimitationAnalyzer:
                         ),
                         description=f"Method '{func_def.name}' is too long ({length} lines)",
                         severity=min(1.0, length / 100.0),
-                        suggestion="Consider breaking this method into smaller, focused functions",
-                        affected_lines=self._get_lines(file_path, func_def.lineno, func_def.end_lineno)
+                        suggestion=(
+                            "Consider breaking this method into smaller, "
+                            "focused functions"
+                        ),
+                        affected_lines=self._get_lines(
+                            file_path, func_def.lineno, func_def.end_lineno
+                        )
                     )
                     smells.append(smell)
         
@@ -314,8 +319,13 @@ class LimitationAnalyzer:
                         ),
                         description=f"Class '{cls_def.name}' is too large ({length} lines)",
                         severity=min(1.0, length / 500.0),
-                        suggestion="Consider splitting this class into smaller, single-responsibility classes",
-                        affected_lines=self._get_lines(file_path, cls_def.lineno, cls_def.end_lineno)
+                        suggestion=(
+                            "Consider splitting this class into smaller, "
+                            "single-responsibility classes"
+                        ),
+                        affected_lines=self._get_lines(
+                            file_path, cls_def.lineno, cls_def.end_lineno
+                        )
                     )
                     smells.append(smell)
         
@@ -331,10 +341,18 @@ class LimitationAnalyzer:
                             line_start=func_def.lineno,
                             line_end=func_def.end_lineno
                         ),
-                        description=f"Function '{func_def.name}' has too many parameters ({param_count})",
+                        description=(
+                            f"Function '{func_def.name}' has too many "
+                            f"parameters ({param_count})"
+                        ),
                         severity=min(1.0, param_count / 10.0),
-                        suggestion="Consider using a parameter object or breaking the function down",
-                        affected_lines=self._get_lines(file_path, func_def.lineno, func_def.end_lineno)
+                        suggestion=(
+                            "Consider using a parameter object or breaking "
+                            "the function down"
+                        ),
+                        affected_lines=self._get_lines(
+                            file_path, func_def.lineno, func_def.end_lineno
+                        )
                     )
                     smells.append(smell)
         
@@ -344,16 +362,24 @@ class LimitationAnalyzer:
                 metrics = self.parser.get_complexity_metrics(func_def)
                 if metrics['cyclomatic_complexity'] > 10:
                     smell = CodeSmellDetection(
-                        smell_type=CodeSmell.SWITCH_STATEMENTS,  # Using as proxy for complexity
+                        smell_type=CodeSmell.SWITCH_STATEMENTS,
                         location=CodeLocation(
                             file_path=file_path,
                             line_start=func_def.lineno,
                             line_end=func_def.end_lineno
                         ),
-                        description=f"Function '{func_def.name}' has high cyclomatic complexity ({metrics['cyclomatic_complexity']})",
+                        description=(
+                            f"Function '{func_def.name}' has high cyclomatic "
+                            f"complexity ({metrics['cyclomatic_complexity']})"
+                        ),
                         severity=min(1.0, metrics['cyclomatic_complexity'] / 20.0),
-                        suggestion="Consider refactoring to reduce complexity using strategy pattern or polymorphism",
-                        affected_lines=self._get_lines(file_path, func_def.lineno, func_def.end_lineno)
+                        suggestion=(
+                            "Consider refactoring to reduce complexity using "
+                            "strategy pattern or polymorphism"
+                        ),
+                        affected_lines=self._get_lines(
+                            file_path, func_def.lineno, func_def.end_lineno
+                        )
                     )
                     smells.append(smell)
         
@@ -386,7 +412,10 @@ class LimitationAnalyzer:
         if avg_method_length > 30:
             limitations.append(LimitationAnalysis(
                 limitation_type=LimitationType.SCALABILITY,
-                description="Average method length is high, which may impact maintainability as codebase grows",
+                description=(
+                    "Average method length is high, which may impact "
+                    "maintainability as codebase grows"
+                ),
                 impact_score=min(1.0, avg_method_length / 50.0),
                 evidence=[f"Average method length: {avg_method_length:.1f} lines"],
                 suggested_fix="Refactor long methods into smaller, focused units",
@@ -400,7 +429,10 @@ class LimitationAnalyzer:
                 limitation_type=LimitationType.MAINTAINABILITY,
                 description=f"Found {len(duplicate_functions)} pairs of potentially duplicate code",
                 impact_score=min(1.0, len(duplicate_functions) / 10.0),
-                evidence=[f"{pair[0]} and {pair[1]} (similarity: {pair[2]:.2f})" for pair in duplicate_functions],
+                evidence=[
+                    f"{pair[0]} and {pair[1]} (similarity: {pair[2]:.2f})" 
+                    for pair in duplicate_functions
+                ],
                 suggested_fix="Extract common logic into shared utility functions",
                 priority=8
             ))
@@ -415,9 +447,15 @@ class LimitationAnalyzer:
         if high_complexity_functions:
             limitations.append(LimitationAnalysis(
                 limitation_type=LimitationType.PERFORMANCE,
-                description=f"Found {len(high_complexity_functions)} functions with very high complexity",
+                description=(
+                    f"Found {len(high_complexity_functions)} functions with "
+                    "very high complexity"
+                ),
                 impact_score=min(1.0, len(high_complexity_functions) / 5.0),
-                evidence=[f"{key.split(':')[-1]} (complexity: {complexity})" for key, complexity in high_complexity_functions],
+                evidence=[
+                    f"{key.split(':')[-1]} (complexity: {complexity})" 
+                    for key, complexity in high_complexity_functions
+                ],
                 suggested_fix="Optimize algorithms or break down complex functions",
                 priority=9
             ))
@@ -523,12 +561,17 @@ class CodeModifier:
         try:
             with open(target_location.file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
-                original_code = ''.join(lines[target_location.line_start-1:target_location.line_end])
+                original_code = ''.join(
+                    lines[target_location.line_start-1:target_location.line_end]
+                )
         except Exception:
             return None
         
         # Generate a placeholder modified code (in real implementation, this would be AI-generated)
-        modified_code = f"# TODO: Implement improvement for {hypothesis.description}\n{original_code}"
+        modified_code = (
+            f"# TODO: Implement improvement for {hypothesis.description}\n"
+            f"{original_code}"
+        )
         
         # Create diff
         diff = difflib.unified_diff(
@@ -586,7 +629,8 @@ class SafetySandbox:
         
     def execute_in_sandbox(self, code: str, context: Optional[Dict] = None) -> Any:
         """Execute code in a restricted environment"""
-        # This is a simplified sandbox - a real implementation would use more sophisticated isolation
+        # This is a simplified sandbox - a real implementation would use 
+        # more sophisticated isolation
         self.execution_log.append(f"Executing code snippet ({len(code)} chars)")
         
         # Check for forbidden operations
@@ -673,7 +717,10 @@ class SelfReflectionEngine:
         file_count = 0
         for root, dirs, files in os.walk(self.project_root):
             # Skip hidden directories and common non-source directories
-            dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', 'venv', 'env']]
+            dirs[:] = [
+                d for d in dirs 
+                if not d.startswith('.') and d not in ['__pycache__', 'venv', 'env']
+            ]
             
             for file in files:
                 if file_count >= max_files:
@@ -796,12 +843,17 @@ class SelfReflectionEngine:
             'modifications_proposed': len(modifications),
             'modifications_validated': validated_count,
             'top_hypotheses': [h.hypothesis_id for h in hypotheses[:3]],
-            'validated_modifications': [m.modification_id for m in modifications if m.status == 'validated']
+            'validated_modifications': [
+                m.modification_id for m in modifications if m.status == 'validated'
+            ]
         }
         
         self.reflection_history.append(cycle_result)
         
-        print(f"Reflection cycle complete. Generated {len(hypotheses)} hypotheses, validated {validated_count} modifications.")
+        print(
+            f"Reflection cycle complete. Generated {len(hypotheses)} hypotheses, "
+            f"validated {validated_count} modifications."
+        )
         return cycle_result
 
 
