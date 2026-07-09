@@ -1,1 +1,28 @@
-Nothing needs to be added to .gitignore since the changes only include source files (.py) and a markdown file (.md), which should not be ignored.
+```gitignore
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test cache files
+.pytest_cache/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+*.env.*
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+```
