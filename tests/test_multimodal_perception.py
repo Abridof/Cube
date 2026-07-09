@@ -4,7 +4,7 @@
 
 import unittest
 import json
-from multimodal_perception import (
+from src.modules.multimodal_perception import (
     ModalityType, FeatureType, ModalFeature, PerceivedObject,
     ImagePerceiver, AudioPerceiver, StructuredDataPerceiver,
     MultimodalFusionEngine, create_multimodal_engine

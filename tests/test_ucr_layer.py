@@ -4,7 +4,7 @@
 
 import unittest
 import json
-from ucr_layer import (
+from src.modules.ucr_layer import (
     SymbolicNode, VectorEmbedding, CognitiveUnit,
     TextEncoder, SymbolicParser, UnifiedRepresentationEngine,
     EntityType, represent, get_engine

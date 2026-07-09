@@ -30,19 +30,19 @@ class TestSystemOrchestrator(unittest.TestCase):
     
     def test_module_status_enum(self):
         """测试模块状态枚举"""
-        from system_orchestrator import ModuleStatus
+        from src.modules.system_orchestrator import ModuleStatus
         self.assertEqual(ModuleStatus.READY.value, "ready")
         self.assertEqual(ModuleStatus.ERROR.value, "error")
         
     def test_priority_enum(self):
         """测试优先级枚举"""
-        from system_orchestrator import Priority
+        from src.modules.system_orchestrator import Priority
         self.assertEqual(Priority.CRITICAL.value, 0)
         self.assertEqual(Priority.BACKGROUND.value, 4)
         
     def test_module_info(self):
         """测试模块信息数据类"""
-        from system_orchestrator import ModuleInfo, ModuleStatus
+        from src.modules.system_orchestrator import ModuleInfo, ModuleStatus
         info = ModuleInfo(
             name="test_module",
             class_name="TestClass",
@@ -53,7 +53,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_event_creation(self):
         """测试事件创建"""
-        from system_orchestrator import Event, Priority
+        from src.modules.system_orchestrator import Event, Priority
         event = Event(
             event_type="test.event",
             source="test",
@@ -65,7 +65,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_task_creation(self):
         """测试任务创建"""
-        from system_orchestrator import Task, Priority
+        from src.modules.system_orchestrator import Task, Priority
         task = Task(
             task_id="task_001",
             task_type="reasoning.query",
@@ -77,7 +77,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_event_bus(self):
         """测试事件总线"""
-        from system_orchestrator import EventBus, Event, Priority
+        from src.modules.system_orchestrator import EventBus, Event, Priority
         bus = EventBus()
         received_events = []
         
@@ -102,7 +102,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_resource_manager(self):
         """测试资源管理器"""
-        from system_orchestrator import ResourceManager
+        from src.modules.system_orchestrator import ResourceManager
         rm = ResourceManager(max_cpu=4, max_memory_mb=2048)
         
         # 分配资源
@@ -120,7 +120,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_checkpoint_manager(self):
         """测试检查点管理器"""
-        from system_orchestrator import CheckpointManager
+        from src.modules.system_orchestrator import CheckpointManager
         import tempfile
         import shutil
         
@@ -138,7 +138,7 @@ class TestSystemOrchestrator(unittest.TestCase):
             
     def test_cognitive_pipeline(self):
         """测试认知流水线"""
-        from system_orchestrator import SystemOrchestrator, CognitivePipeline
+        from src.modules.system_orchestrator import SystemOrchestrator, CognitivePipeline
         orchestrator = SystemOrchestrator()
         pipeline = CognitivePipeline(orchestrator)
         
@@ -150,7 +150,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_system_orchestrator_initialization(self):
         """测试系统编排器初始化"""
-        from system_orchestrator import SystemOrchestrator
+        from src.modules.system_orchestrator import SystemOrchestrator
         orchestrator = SystemOrchestrator()
         
         self.assertEqual(len(orchestrator.modules), 8)
@@ -159,7 +159,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_module_registration(self):
         """测试模块注册"""
-        from system_orchestrator import SystemOrchestrator, ModuleInfo
+        from src.modules.system_orchestrator import SystemOrchestrator, ModuleInfo
         orchestrator = SystemOrchestrator()
         
         new_module = ModuleInfo(
@@ -173,7 +173,7 @@ class TestSystemOrchestrator(unittest.TestCase):
         
     def test_get_status(self):
         """测试获取系统状态"""
-        from system_orchestrator import SystemOrchestrator
+        from src.modules.system_orchestrator import SystemOrchestrator
         orchestrator = SystemOrchestrator()
         
         status = orchestrator.get_status()
@@ -189,13 +189,13 @@ class TestLongTermEvolution(unittest.TestCase):
     
     def test_evolution_phase_enum(self):
         """测试演化阶段枚举"""
-        from long_term_evolution import EvolutionPhase
+        from src.modules.long_term_evolution import EvolutionPhase
         self.assertEqual(EvolutionPhase.EXPLORATION.value, "exploration")
         self.assertEqual(EvolutionPhase.VALIDATION.value, "validation")
         
     def test_evolution_cycle(self):
         """测试演化循环数据类"""
-        from long_term_evolution import EvolutionCycle, EvolutionPhase
+        from src.modules.long_term_evolution import EvolutionCycle, EvolutionPhase
         cycle = EvolutionCycle(cycle_id=1, start_time=time.time())
         
         self.assertEqual(cycle.cycle_id, 1)
@@ -204,7 +204,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_curriculum_generator(self):
         """测试课程生成器"""
-        from long_term_evolution import CurriculumGenerator
+        from src.modules.long_term_evolution import CurriculumGenerator
         gen = CurriculumGenerator()
         
         # 生成单个任务 - 使用位置参数
@@ -217,7 +217,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_knowledge_consolidator(self):
         """测试知识巩固器"""
-        from long_term_evolution import KnowledgeConsolidator
+        from src.modules.long_term_evolution import KnowledgeConsolidator
         kc = KnowledgeConsolidator()
         
         # 添加少量知识（不触发巩固）
@@ -236,7 +236,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_mutation_engine(self):
         """测试变异引擎"""
-        from long_term_evolution import MutationEngine
+        from src.modules.long_term_evolution import MutationEngine
         me = MutationEngine(sandbox_enabled=False)
         
         mutation = {'type': 'test', 'change': '+1'}
@@ -249,7 +249,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_metric_collector(self):
         """测试指标收集器"""
-        from long_term_evolution import MetricCollector
+        from src.modules.long_term_evolution import MetricCollector
         mc = MetricCollector()
         
         # 记录指标
@@ -266,7 +266,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_report_generator(self):
         """测试报告生成器"""
-        from long_term_evolution import ReportGenerator, EvolutionCycle, MetricCollector
+        from src.modules.long_term_evolution import ReportGenerator, EvolutionCycle, MetricCollector
         import tempfile
         import shutil
         
@@ -286,7 +286,7 @@ class TestLongTermEvolution(unittest.TestCase):
             
     def test_long_term_evolution_initialization(self):
         """测试长期演化引擎初始化"""
-        from long_term_evolution import LongTermEvolution
+        from src.modules.long_term_evolution import LongTermEvolution
         evolution = LongTermEvolution()
         
         self.assertFalse(evolution.running)
@@ -296,7 +296,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_evolution_cycle_execution(self):
         """测试单个演化循环执行"""
-        from long_term_evolution import LongTermEvolution
+        from src.modules.long_term_evolution import LongTermEvolution
         evolution = LongTermEvolution()
         
         # 设置任务数以便有实际任务执行
@@ -312,7 +312,7 @@ class TestLongTermEvolution(unittest.TestCase):
         
     def test_get_evolution_status(self):
         """测试获取演化状态"""
-        from long_term_evolution import LongTermEvolution
+        from src.modules.long_term_evolution import LongTermEvolution
         evolution = LongTermEvolution()
         
         # 运行几个循环（直接添加到历史）
@@ -332,8 +332,8 @@ class TestIntegration(unittest.TestCase):
     
     def test_orchestrator_with_evolution(self):
         """测试编排器与演化引擎集成"""
-        from system_orchestrator import SystemOrchestrator
-        from long_term_evolution import LongTermEvolution
+        from src.modules.system_orchestrator import SystemOrchestrator
+        from src.modules.long_term_evolution import LongTermEvolution
         
         # 创建编排器
         orchestrator = SystemOrchestrator()
@@ -346,8 +346,8 @@ class TestIntegration(unittest.TestCase):
         
     def test_full_pipeline_simulation(self):
         """模拟完整流水线"""
-        from system_orchestrator import SystemOrchestrator, Priority
-        from long_term_evolution import LongTermEvolution
+        from src.modules.system_orchestrator import SystemOrchestrator, Priority
+        from src.modules.long_term_evolution import LongTermEvolution
         
         orchestrator = SystemOrchestrator()
         evolution = LongTermEvolution(orchestrator=orchestrator)

@@ -5,7 +5,7 @@ LLM 客户端单元测试
 
 import unittest
 from unittest.mock import patch, MagicMock
-from llm_client import (
+from src.core.llm_client import (
     LLMClient, 
     LLMResponse,
     call_llm, 

@@ -5,7 +5,7 @@
 
 import unittest
 import math
-from embodied_environment import (
+from src.modules.embodied_environment import (
     Vector2D, GameObject, ObjectType,
     ContinuousPhysicsEngine,
     InternalState, Action, MotivationType, EmbodiedAgent,

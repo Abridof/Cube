@@ -16,7 +16,7 @@ import sys
 from io import StringIO
 
 # 导入被测试模块
-from experiment_phase5 import (
+from src.experiments.data_learning_simulation import (
     DataSourceType, DataSample,
     WikipediaSimulator, CodeRepositorySimulator, ScientificPaperSimulator,
     DataIngestionEngine,

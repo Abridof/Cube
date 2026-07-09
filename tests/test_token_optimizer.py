@@ -4,7 +4,7 @@ Token 优化器单元测试
 """
 
 import unittest
-from token_optimizer import (
+from src.core.token_optimizer import (
     TokenOptimizer, 
     TokenStats, 
     optimize_prompt, 
