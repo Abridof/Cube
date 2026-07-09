@@ -1,37 +1,20 @@
 ```
 # Python
 __pycache__/
-# Dependencies
-.venv/
-venv/
-.mypy_cache/
-.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
 
-# Logs and temp files
+# Checkpoints and models
+checkpoints/
+
+# Logs
 *.log
-*.tmp
 
-# Environment
-.env
-.env.local
-*.env.*
+# Test results
+test_results.log
 
-# Dependencies
-.venv/
-venv/
-node_modules/
-
-# Build artifacts
-dist/
-build/
-target/
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
-
-# OS generated files
-.DS_Store
-Thumbs.db
+# Demo files
+demo_*.json
+test_*.json
 ```
