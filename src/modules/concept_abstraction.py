@@ -296,7 +296,12 @@ class MetaPatternRecognizer:
             return result
         
         if 'root' in data:
-            return build_tree(data['root'])
+            tree = build_tree(data['root'])
+            return {
+                'type': 'hierarchy',
+                'tree': tree,
+                'depth': 0  # root depth
+            }
         return {'type': 'hierarchy', 'raw': data}
     
     def _extract_transformational_structure(self, data: Dict) -> Dict:
@@ -347,6 +352,8 @@ class MetaPatternRecognizer:
         """识别模式中的变量"""
         variables = []
         
+        import re
+        
         def find_vars(obj, path=""):
             if isinstance(obj, dict):
                 for k, v in obj.items():
@@ -356,8 +363,10 @@ class MetaPatternRecognizer:
             elif isinstance(obj, list):
                 for i, item in enumerate(obj):
                     find_vars(item, f"{path}[{i}]")
-            elif isinstance(obj, str) and obj.startswith('$'):
-                variables.append(obj)
+            elif isinstance(obj, str):
+                # 查找所有以$开头的变量（支持$var 或 $var + $var2 等表达式）
+                matches = re.findall(r'\$\w+', obj)
+                variables.extend(matches)
         
         find_vars(structure)
         return list(set(variables))
