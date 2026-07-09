@@ -599,7 +599,7 @@ class LogicValidator:
     ) -> bool:
         """检查结论与推理过程的一致性"""
         # 简化实现：检查结论长度和是否包含关键词
-        if len(conclusion) < 5:
+        if len(conclusion) <= 10:
             return False
         
         # 如果有步骤，检查结论是否与最后一步相关
@@ -609,7 +609,7 @@ class LogicValidator:
             if last_step.method == "verify":
                 return True
             # 或者结论长度合理即认为一致
-            return len(conclusion) >= 5
+            return len(conclusion) > 15
         
         return True
     
