@@ -28,6 +28,7 @@ __pycache__/
 .Python
 *.so
 .coverage
+coverage/
 htmlcov/
 .coverage.*
 .pytest_cache/
@@ -64,3 +65,7 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+
+# JSON and data files that might be temporary
+*.json.swp
+*.json.tmp
