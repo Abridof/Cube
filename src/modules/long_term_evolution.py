@@ -28,7 +28,7 @@ from pathlib import Path
 
 # 尝试导入系统编排器
 try:
-    from system_orchestrator import SystemOrchestrator, Task, Priority
+    from .system_orchestrator import SystemOrchestrator, Task, Priority
 except ImportError:
     # 如果不在同一目录，使用模拟类
     class SystemOrchestrator:
