@@ -1,58 +1,51 @@
 ```
-# Compiled Python files
+# Compiled and build artifacts
 *.pyc
 __pycache__/
-
-# Test and coverage reports
-*.pyc
-*.pyo
-*.pyd
-*.py.class
-*.py.$py.class
-*.so
-*.o
-*.a
-*.lib
-*.dll
-*.dylib
-*.exe
-*.out
-*.obj
-
-# Coverage reports
-.coverage
-.coverage.*
-htmlcov/
-.coverage.xml
-coverage.xml
-.pytest_cache/
-.mypy_cache/
 
 # Dependencies
 .venv/
 venv/
-.env
-.env.local
-*.env
-*.env.*
+node_modules/
+*.egg-info/
+dist/
+build/
+*.so
+*.dylib
+*.dll
 
-# IDE and editor files
-.vscode/
-.idea/
+# Logs and temp files
+*.log
+*.tmp
 *.swp
 *.swo
-*.tmp
-*.log
 
-# Build and distribution artifacts
-build/
-dist/
-*.egg-info/
-*.egg
-*.whl
-pip-wheel-metadata/
+# Environment
+.env
+.env.local
+.env.*
 
-# OS generated files
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+*.pytest.baseline
+
+# OS
 .DS_Store
 Thumbs.db
+
+# Backup files
+*~
+\#*\#
 ```
