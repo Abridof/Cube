@@ -1,20 +1,26 @@
-```
-# Python
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 
-# Logs and temp files
-*.log
-*.tmp
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
 
-# Environment
-.env
-.env.local
-*.env.*
-
-# Dependencies
+# Virtual environments
 .venv/
 venv/
-```
+ENV/
+env/
+
+# Editor directories
+.vscode/
+
+# Test cache
+.pytest_cache/
+
+# Logs
+*.log
