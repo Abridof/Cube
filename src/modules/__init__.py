@@ -15,7 +15,6 @@
 """
 
 from .ucr_layer import (
-    UCRLayer,
     CognitiveUnit,
     SymbolicNode,
     VectorEmbedding,
@@ -90,7 +89,6 @@ from .neural_backend import (
 
 __all__ = [
     # UCR Layer
-    'UCRLayer',
     'CognitiveUnit',
     'SymbolicNode',
     'VectorEmbedding',
