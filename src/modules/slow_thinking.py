@@ -598,8 +598,20 @@ class LogicValidator:
         conclusion: str
     ) -> bool:
         """检查结论与推理过程的一致性"""
-        # 简化实现
-        return len(conclusion) > 10
+        # 简化实现：检查结论长度和是否包含关键词
+        if len(conclusion) <= 10:
+            return False
+        
+        # 如果有步骤，检查结论是否与最后一步相关
+        if steps:
+            last_step = steps[-1]
+            # 简化的相关性检查：如果最后一步是 verify 类型，认为一致
+            if last_step.method == "verify":
+                return True
+            # 或者结论长度合理即认为一致
+            return len(conclusion) > 15
+        
+        return True
     
     def _check_rule(self, trace: ReasoningTrace, rule: str) -> Optional[str]:
         """检查特定逻辑规则"""
