@@ -63,4 +63,4 @@ target-version = ['py38', 'py39', 'py310', 'py311']
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
-addopts = "-v --cov=src --cov-report=term-missing"
+addopts = "-v"
