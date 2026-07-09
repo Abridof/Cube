@@ -1,58 +1,71 @@
-```
-# Compiled Python files
-*.pyc
-__pycache__/
+# Logs and temp files
+*.log
+*.tmp
+*.swp
 
-# Test and coverage reports
-*.pyc
-*.pyo
-*.pyd
-*.py.class
-*.py.$py.class
-*.so
-*.o
-*.a
-*.lib
-*.dll
-*.dylib
-*.exe
-*.out
-*.obj
-
-# Coverage reports
-.coverage
-.coverage.*
-htmlcov/
-.coverage.xml
-coverage.xml
-.pytest_cache/
-.mypy_cache/
+# Environment
+.env
+.env.local
+.env.*
 
 # Dependencies
 .venv/
 venv/
-.env
-.env.local
-*.env
-*.env.*
+ENV/
+env/
+node_modules/
 
-# IDE and editor files
+# Build artifacts
+dist/
+build/
+target/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+coverage/
+htmlcov/
+.coverage.*
+.pytest_cache/
+.mypy_cache/
+
+# Editors
 .vscode/
 .idea/
-*.swp
-*.swo
-*.tmp
-*.log
 
-# Build and distribution artifacts
-build/
-dist/
-*.egg-info/
-*.egg
-*.whl
-pip-wheel-metadata/
-
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
-```
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# JSON/temp files
+*.json.swp
+*.json.tmp
