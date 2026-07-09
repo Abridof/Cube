@@ -5,16 +5,25 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Checkpoints and models
-checkpoints/
-
 # Logs
 *.log
 
-# Test results
-test_results.log
+# Environment
+.env
+.env.local
+*.env.*
 
-# Demo files
-demo_*.json
-test_*.json
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
 ```
