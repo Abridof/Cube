@@ -542,7 +542,10 @@ class CodeModifier:
         self.proposed_modifications: List[CodeModification] = []
         self.modification_counter = 0
         
-    def propose_modification(self, hypothesis: SelfImprovementHypothesis) -> Optional[CodeModification]:
+    def propose_modification(
+        self, 
+        hypothesis: SelfImprovementHypothesis
+    ) -> Optional[CodeModification]:
         """Propose a code modification based on a hypothesis"""
         if not hypothesis.target_smell and not hypothesis.target_limitation:
             return None
@@ -706,7 +709,11 @@ class SelfReflectionEngine:
         self.sandbox = SafetySandbox()
         self.reflection_history: List[Dict] = []
         
-    def analyze_project(self, file_patterns: Optional[List[str]] = None, max_files: int = 20) -> Dict[str, Any]:
+    def analyze_project(
+        self, 
+        file_patterns: Optional[List[str]] = None, 
+        max_files: int = 20
+    ) -> Dict[str, Any]:
         """Analyze the entire project"""
         if file_patterns is None:
             file_patterns = ['*.py']
@@ -775,14 +782,20 @@ class SelfReflectionEngine:
             categories[lim_type] = categories.get(lim_type, 0) + 1
         return categories
     
-    def generate_improvement_plan(self, max_hypotheses: int = 10) -> List[SelfImprovementHypothesis]:
+    def generate_improvement_plan(
+        self, 
+        max_hypotheses: int = 10
+    ) -> List[SelfImprovementHypothesis]:
         """Generate a plan for self-improvement"""
         hypotheses = self.reflector.generate_hypotheses()
         prioritized = self.reflector.prioritize_hypotheses(max_risk=0.6)
         
         return prioritized[:max_hypotheses]
     
-    def propose_changes(self, hypotheses: List[SelfImprovementHypothesis]) -> List[CodeModification]:
+    def propose_changes(
+        self, 
+        hypotheses: List[SelfImprovementHypothesis]
+    ) -> List[CodeModification]:
         """Propose code changes for given hypotheses"""
         modifications = []
         for hypothesis in hypotheses:

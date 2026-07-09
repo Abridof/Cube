@@ -395,19 +395,9 @@ class WorldModel:
             prev_state = predicted_states[-1]
             
             # 找到适用的转移
-            applicable_transitions = []
-            for trans in self.transitions.values():
-                if trans.from_state_id == prev_state.state_id:
-                    if action is None or trans.action == action:
-                        applicable_transitions.append(trans)
-            
-            if not applicable_transitions:
-                # 没有已知转移，使用最相似状态的转移
-                similar_id = self._find_similar_state(prev_state)
-                if similar_id:
-                    for trans in self.transitions.values():
-                        if trans.from_state_id == similar_id:
-                            applicable_transitions.append(trans)
+            applicable_transitions = self._find_applicable_transitions(
+                prev_state, action
+            )
             
             if not applicable_transitions:
                 break
@@ -415,33 +405,96 @@ class WorldModel:
             # 选择最可能的转移
             best_trans = max(applicable_transitions, key=lambda t: t.support_count)
             
-            # 获取预测状态
-            next_state = self.states.get(best_trans.to_state_id)
-            if next_state:
-                # 复制并更新时间戳
-                new_state = State.from_dict(next_state.to_dict())
-                new_state.state_id = self._generate_id("pred")
-                new_state.timestamp = time.time()
+            # 处理预测状态
+            new_state = self._create_predicted_state(
+                best_trans, step
+            )
+            
+            if not new_state:
+                continue
                 
-                # 增加不确定性
-                for var in new_state.variables.values():
-                    var.uncertainty = min(1.0, var.uncertainty + 0.1 * (step + 1))
-                    var.source = "prediction"
-                
-                predicted_states.append(new_state)
-                uncertainties.append(best_trans.probability)
-                
-                # 生成替代结果（如果有概率性转移）
-                if best_trans.transition_type == TransitionType.PROBABILISTIC:
-                    for other_trans in applicable_transitions:
-                        if other_trans != best_trans:
-                            alt_state = self.states.get(other_trans.to_state_id)
-                            if alt_state:
-                                alternatives.append((alt_state, other_trans.probability))
+            predicted_states.append(new_state)
+            uncertainties.append(best_trans.probability)
+            
+            # 生成替代结果（如果有概率性转移）
+            if best_trans.transition_type == TransitionType.PROBABILISTIC:
+                self._add_alternative_outcomes(
+                    applicable_transitions, best_trans, alternatives
+                )
         
         if len(predicted_states) < 2:
             return None
         
+        return self._build_prediction(
+            predicted_states, uncertainties, alternatives, steps
+        )
+    
+    def _find_applicable_transitions(
+        self, 
+        state: State, 
+        action: Optional[str]
+    ) -> List[StateTransition]:
+        """查找适用于给定状态的转移"""
+        applicable = []
+        
+        for trans in self.transitions.values():
+            if trans.from_state_id == state.state_id:
+                if action is None or trans.action == action:
+                    applicable.append(trans)
+        
+        if not applicable:
+            # 没有已知转移，使用最相似状态的转移
+            similar_id = self._find_similar_state(state)
+            if similar_id:
+                for trans in self.transitions.values():
+                    if trans.from_state_id == similar_id:
+                        applicable.append(trans)
+        
+        return applicable
+    
+    def _create_predicted_state(
+        self,
+        transition: StateTransition,
+        step: int
+    ) -> Optional[State]:
+        """创建预测状态"""
+        next_state = self.states.get(transition.to_state_id)
+        if not next_state:
+            return None
+            
+        # 复制并更新时间戳
+        new_state = State.from_dict(next_state.to_dict())
+        new_state.state_id = self._generate_id("pred")
+        new_state.timestamp = time.time()
+        
+        # 增加不确定性
+        for var in new_state.variables.values():
+            var.uncertainty = min(1.0, var.uncertainty + 0.1 * (step + 1))
+            var.source = "prediction"
+        
+        return new_state
+    
+    def _add_alternative_outcomes(
+        self,
+        applicable_transitions: List[StateTransition],
+        best_trans: StateTransition,
+        alternatives: List[Tuple[State, float]]
+    ) -> None:
+        """添加替代结果到列表"""
+        for other_trans in applicable_transitions:
+            if other_trans != best_trans:
+                alt_state = self.states.get(other_trans.to_state_id)
+                if alt_state:
+                    alternatives.append((alt_state, other_trans.probability))
+    
+    def _build_prediction(
+        self,
+        predicted_states: List[State],
+        uncertainties: List[float],
+        alternatives: List[Tuple[State, float]],
+        steps: int
+    ) -> Prediction:
+        """构建预测结果"""
         final_state = predicted_states[-1]
         confidence = sum(uncertainties) / len(uncertainties) if uncertainties else 0.5
         confidence *= (self.prediction_decay ** steps)
@@ -544,26 +597,34 @@ class WorldModel:
             'total_changes': len(differences)
         }
     
-    def _calculate_plausibility(self, intervention: Dict[str, Any], 
-                               base_state: State) -> float:
+    def _calculate_plausibility(
+        self, 
+        intervention: Dict[str, Any], 
+        base_state: State
+    ) -> float:
         """计算反事实的合理性"""
         plausibility = 1.0
         
         for var_name, new_value in intervention.items():
             var = base_state.variables.get(var_name)
-            if var and var.domain:
-                # 检查是否在定义域内
-                if isinstance(var.domain, list) and len(var.domain) == 2:
-                    # 连续范围
-                    min_val, max_val = var.domain
-                    if not (min_val <= new_value <= max_val):
-                        plausibility *= 0.5
-                elif isinstance(var.domain, list):
-                    # 离散值
-                    if new_value not in var.domain:
-                        plausibility *= 0.3
+            if not var or not var.domain:
+                continue
+                
+            # 检查是否在定义域内
+            if self._is_continuous_domain(var.domain):
+                min_val, max_val = var.domain
+                if not (min_val <= new_value <= max_val):
+                    plausibility *= 0.5
+            elif isinstance(var.domain, list):
+                # 离散值
+                if new_value not in var.domain:
+                    plausibility *= 0.3
         
         return plausibility
+    
+    def _is_continuous_domain(self, domain: Any) -> bool:
+        """判断是否为连续范围定义域"""
+        return isinstance(domain, list) and len(domain) == 2
     
     # ========== 自我模型 ==========
     
