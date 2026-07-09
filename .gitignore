@@ -1,28 +1,26 @@
-```gitignore
-# Python cache files
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 
-# Test cache files
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Editor directories
+.vscode/
+
+# Test cache
 .pytest_cache/
 
 # Logs
 *.log
-
-# Environment files
-.env
-.env.local
-*.env.*
-
-# Coverage reports
-.coverage
-htmlcov/
-coverage/
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-```
