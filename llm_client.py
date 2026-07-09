@@ -2,6 +2,7 @@
 LLM 客户端模块
 提供与大型语言模型的交互接口
 支持多种后端（OpenAI、Anthropic、本地模型等）
+优化：延迟导入 requests，使用连接池复用
 """
 
 import os
@@ -27,6 +28,9 @@ class LLMResponse:
 class LLMClient:
     """LLM 客户端类，支持配置管理和多后端"""
     
+    __slots__ = ('api_key', 'api_base', 'model', 'max_tokens', 'temperature', 
+                 'timeout', 'retry_attempts', 'retry_delay', '_session')
+    
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -49,7 +53,7 @@ class LLMClient:
         self._session = None
     
     def _get_session(self):
-        """获取或创建 requests session"""
+        """获取或创建 requests session（延迟导入，连接池复用）"""
         if self._session is None:
             import requests
             self._session = requests.Session()
@@ -57,6 +61,15 @@ class LLMClient:
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json"
             })
+            # 配置连接池
+            adapter = requests.adapters.HTTPAdapter(
+                pool_connections=4,
+                pool_maxsize=10,
+                max_retries=2,
+                pool_block=False
+            )
+            self._session.mount('http://', adapter)
+            self._session.mount('https://', adapter)
         return self._session
     
     def call(

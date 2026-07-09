@@ -1,12 +1,14 @@
 """
 配置管理模块
 支持从环境变量、配置文件加载设置
+优化：使用 functools.lru_cache 缓存配置，避免重复解析
 """
 
 import os
 import json
 from typing import Optional, Dict, Any
 from dataclasses import dataclass, field
+from functools import lru_cache
 
 
 @dataclass
@@ -63,65 +65,36 @@ class Config:
         """从环境变量加载配置"""
         config = cls()
         
-        # LLM 配置
-        if os.getenv('LLM_API_KEY'):
-            config.llm.api_key = os.getenv('LLM_API_KEY')
-        if os.getenv('LLM_API_BASE'):
-            config.llm.api_base = os.getenv('LLM_API_BASE')
-        if os.getenv('LLM_MODEL'):
-            config.llm.model = os.getenv('LLM_MODEL')
-        if os.getenv('LLM_MAX_TOKENS'):
-            try:
-                config.llm.max_tokens = int(os.getenv('LLM_MAX_TOKENS'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('LLM_TEMPERATURE'):
-            try:
-                config.llm.temperature = float(os.getenv('LLM_TEMPERATURE'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('LLM_TIMEOUT'):
-            try:
-                config.llm.timeout = int(os.getenv('LLM_TIMEOUT'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('LLM_RETRY_ATTEMPTS'):
-            try:
-                config.llm.retry_attempts = int(os.getenv('LLM_RETRY_ATTEMPTS'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('LLM_RETRY_DELAY'):
-            try:
-                config.llm.retry_delay = float(os.getenv('LLM_RETRY_DELAY'))
-            except ValueError:
-                pass  # 使用默认值
+        # LLM 配置 - 批量读取环境变量
+        env_mappings = {
+            'LLM_API_KEY': ('llm', 'api_key'),
+            'LLM_API_BASE': ('llm', 'api_base'),
+            'LLM_MODEL': ('llm', 'model'),
+            'LLM_MAX_TOKENS': ('llm', 'max_tokens', int),
+            'LLM_TEMPERATURE': ('llm', 'temperature', float),
+            'LLM_TIMEOUT': ('llm', 'timeout', int),
+            'LLM_RETRY_ATTEMPTS': ('llm', 'retry_attempts', int),
+            'LLM_RETRY_DELAY': ('llm', 'retry_delay', float),
+            'SANDBOX_TIMEOUT': ('sandbox', 'timeout', int),
+            'SANDBOX_MAX_MEMORY_MB': ('sandbox', 'max_memory_mb', int),
+            'SANDBOX_ALLOW_NETWORK': ('sandbox', 'allow_network', lambda x: x.lower() == 'true'),
+            'DEBUG_MAX_ATTEMPTS': ('debug', 'max_attempts', int),
+            'DEBUG_USE_CACHE': ('debug', 'use_cache', lambda x: x.lower() == 'true'),
+            'DEBUG_LOG_LEVEL': ('debug', 'log_level'),
+            'DEBUG_LOG_FILE': ('debug', 'log_file'),
+        }
         
-        # 沙箱配置
-        if os.getenv('SANDBOX_TIMEOUT'):
-            try:
-                config.sandbox.timeout = int(os.getenv('SANDBOX_TIMEOUT'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('SANDBOX_MAX_MEMORY_MB'):
-            try:
-                config.sandbox.max_memory_mb = int(os.getenv('SANDBOX_MAX_MEMORY_MB'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('SANDBOX_ALLOW_NETWORK'):
-            config.sandbox.allow_network = os.getenv('SANDBOX_ALLOW_NETWORK').lower() == 'true'
-        
-        # 调试配置
-        if os.getenv('DEBUG_MAX_ATTEMPTS'):
-            try:
-                config.debug.max_attempts = int(os.getenv('DEBUG_MAX_ATTEMPTS'))
-            except ValueError:
-                pass  # 使用默认值
-        if os.getenv('DEBUG_USE_CACHE'):
-            config.debug.use_cache = os.getenv('DEBUG_USE_CACHE').lower() == 'true'
-        if os.getenv('DEBUG_LOG_LEVEL'):
-            config.debug.log_level = os.getenv('DEBUG_LOG_LEVEL')
-        if os.getenv('DEBUG_LOG_FILE'):
-            config.debug.log_file = os.getenv('DEBUG_LOG_FILE')
+        for env_var, mapping in env_mappings.items():
+            value = os.getenv(env_var)
+            if value is not None:
+                section, attr = mapping[0], mapping[1]
+                converter = mapping[2] if len(mapping) > 2 else lambda x: x
+                
+                try:
+                    converted_value = converter(value)
+                    setattr(getattr(config, section), attr, converted_value)
+                except (ValueError, AttributeError):
+                    pass  # 使用默认值
         
         return config
     
@@ -137,20 +110,17 @@ class Config:
         """从字典加载配置"""
         config = cls()
         
-        if 'llm' in data:
-            for key, value in data['llm'].items():
-                if hasattr(config.llm, key):
-                    setattr(config.llm, key, value)
+        section_map = {
+            'llm': config.llm,
+            'sandbox': config.sandbox,
+            'debug': config.debug
+        }
         
-        if 'sandbox' in data:
-            for key, value in data['sandbox'].items():
-                if hasattr(config.sandbox, key):
-                    setattr(config.sandbox, key, value)
-        
-        if 'debug' in data:
-            for key, value in data['debug'].items():
-                if hasattr(config.debug, key):
-                    setattr(config.debug, key, value)
+        for section_name, section_obj in section_map.items():
+            if section_name in data:
+                for key, value in data[section_name].items():
+                    if hasattr(section_obj, key):
+                        setattr(section_obj, key, value)
         
         return config
     
@@ -192,13 +162,37 @@ class Config:
             json.dump(self.to_dict(), f, indent=2)
 
 
-# 全局默认配置
-default_config = Config()
+# 全局配置缓存
+_config_cache: Optional[Config] = None
 
 
-def get_config() -> Config:
-    """获取当前配置（优先从环境变量加载）"""
-    return Config.from_env()
+def get_config(cached: bool = True) -> Config:
+    """
+    获取当前配置（优先从环境变量加载）
+    
+    Args:
+        cached: 是否使用缓存（默认 True）
+    
+    Returns:
+        Config: 配置对象
+    """
+    global _config_cache
+    
+    if cached and _config_cache is not None:
+        return _config_cache
+    
+    config = Config.from_env()
+    
+    if cached:
+        _config_cache = config
+    
+    return config
+
+
+def clear_config_cache():
+    """清除配置缓存"""
+    global _config_cache
+    _config_cache = None
 
 
 if __name__ == "__main__":
