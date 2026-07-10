@@ -1,35 +1,35 @@
-```
+```gitignore
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Logs
-*.log
-
-# Environment
+# Dependencies
+.venv/
+venv/
+env/
 .env
 .env.local
-*.env.*
+.env.*
 
-# Coverage
-.coverage
-coverage/
-htmlcov/
-
-# Temporary files
+# Logs and temporary files
+*.log
 *.tmp
+*.swp
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage/
+
+# IDE
+.vscode/
+.idea/
 *.swp
 *.swo
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Dependencies
-.venv/
-venv/
-.mypy_cache/
-.pytest_cache/
 ```
