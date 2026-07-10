@@ -186,7 +186,7 @@ class PredictionErrorCalculator:
         timestamp = str(time.time())
         random_suffix = str(random.random())[2:8]
         hash_input = f"{prefix}_{timestamp}_{random_suffix}"
-        return f"{prefix}_{hashlib.md5(hash_input.encode()).hexdigest()[:12]}"
+        return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     def calculate_error(
         self, predicted: Any, actual: Any, var_name: str = "default", context: Optional[Dict] = None
@@ -386,7 +386,7 @@ class InformationGainCalculator:
         timestamp = str(time.time())
         random_suffix = str(random.random())[2:8]
         hash_input = f"{prefix}_{timestamp}_{random_suffix}"
-        return f"{prefix}_{hashlib.md5(hash_input.encode()).hexdigest()[:12]}"
+        return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     def calculate_entropy(self, probabilities: List[float]) -> float:
         """
@@ -570,7 +570,7 @@ class IntrinsicMotivationEngine:
         timestamp = str(time.time())
         random_suffix = str(random.random())[2:8]
         hash_input = f"{prefix}_{timestamp}_{random_suffix}"
-        return f"{prefix}_{hashlib.md5(hash_input.encode()).hexdigest()[:12]}"
+        return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     def process_prediction(
         self, predicted: Any, actual: Any, var_name: str = "default", context: Optional[Dict] = None

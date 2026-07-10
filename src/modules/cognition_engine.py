@@ -288,7 +288,7 @@ class CognitionEngine:
             summary_prompt, system_prompt="You are a meta-learner. Extract wisdom."
         )
 
-        node_id = hashlib.md5(f"{domain}{datetime.now().isoformat()}".encode()).hexdigest()[:12]
+        node_id = hashlib.sha256(f"{domain}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
         new_node = KnowledgeNode(
             id=node_id,
             domain=domain,
