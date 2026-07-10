@@ -719,6 +719,18 @@ class IntrinsicMotivation:
 
         return len(candidates) - 1
 
+    def get_current_drive(self) -> str:
+        """
+        Get the current dominant motivation drive.
+        Returns one of: 'curiosity', 'competence', 'novelty'
+        """
+        drives = {
+            "curiosity": self.curiosity_weight,
+            "competence": self.competence_weight,
+            "novelty": self.novelty_weight,
+        }
+        return max(drives, key=drives.get)
+
 
 # ============================================================================
 # Part 7: Integrated Neural-Symbolic Learner
