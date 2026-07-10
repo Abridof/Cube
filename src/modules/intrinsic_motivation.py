@@ -18,11 +18,21 @@ import time
 import math
 import hashlib
 import random
-from typing import Dict, List, Any, Optional, Tuple, Set, Callable
+from typing import Dict, List, Any, Optional, Tuple, Set, Callable, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 from collections import defaultdict
 import copy
+
+# Import strict types for type safety and resource limits
+from src.core.strict_types import JsonValueT
+from src.core.types import (
+    validate_string_length,
+    validate_dict_size,
+    validate_list_length,
+    MAX_BATCH_SIZE,
+    MAX_THINKING_ITERATIONS,
+)
 
 # ==================== 核心数据结构 ====================
 
@@ -40,17 +50,28 @@ class MotivationType(Enum):
 
 @dataclass
 class PredictionError:
-    """预测误差 - 内在动机的核心信号"""
+    """预测误差 - 内在动机的核心信号
+    
+    类型安全改进:
+    - predicted_value/actual_value: Union[str, float, int, bool, None] 替代 Any
+    - context: Dict[str, JsonValueT] 替代 Dict[str, Any]
+    """
 
     error_id: str
-    predicted_value: Any
-    actual_value: Any
+    predicted_value: Union[str, float, int, bool, None]
+    actual_value: Union[str, float, int, bool, None]
     error_magnitude: float  # 误差大小
     normalized_error: float  # 归一化误差 [0, 1]
     surprise_level: float  # 惊讶程度 [0, 1]
     timestamp: float = field(default_factory=time.time)
-    context: Dict[str, Any] = field(default_factory=dict)
+    context: Dict[str, JsonValueT] = field(default_factory=dict)
     source_variable: str = ""  # 产生误差的变量名
+    
+    def __post_init__(self):
+        """验证字段类型和长度"""
+        validate_string_length(self.error_id, max_length=256, field_name="PredictionError.error_id")
+        validate_string_length(self.source_variable, max_length=256, field_name="PredictionError.source_variable")
+        validate_dict_size(self.context, max_size=MAX_BATCH_SIZE, field_name="PredictionError.context")
 
     def to_dict(self) -> Dict:
         return {
@@ -116,18 +137,27 @@ class IntrinsicReward:
 
 @dataclass
 class ExplorationGoal:
-    """自主探索目标"""
+    """自主探索目标
+    
+    类型安全改进:
+    - current_state/target_state: Union[str, float, int, bool, Dict[str, JsonValueT], None] 替代 Any
+    """
 
     goal_id: str
     description: str
     motivation_type: MotivationType
     priority: float  # 优先级 [0, 1]
     expected_information_gain: float  # 预期信息增益
-    current_state: Any = None  # 当前状态
-    target_state: Any = None  # 目标状态
+    current_state: Optional[Union[str, float, int, bool, Dict[str, JsonValueT]]] = None  # 当前状态
+    target_state: Optional[Union[str, float, int, bool, Dict[str, JsonValueT]]] = None  # 目标状态
     created_at: float = field(default_factory=time.time)
     achieved: bool = False
     achievement_time: Optional[float] = None
+    
+    def __post_init__(self):
+        """验证字段类型和长度"""
+        validate_string_length(self.goal_id, max_length=256, field_name="ExplorationGoal.goal_id")
+        validate_string_length(self.description, max_length=1000, field_name="ExplorationGoal.description")
 
     def to_dict(self) -> Dict:
         return {
@@ -189,10 +219,18 @@ class PredictionErrorCalculator:
         return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     def calculate_error(
-        self, predicted: Any, actual: Any, var_name: str = "default", context: Optional[Dict] = None
+        self, 
+        predicted: Union[str, float, int, bool, List[float], None], 
+        actual: Union[str, float, int, bool, List[float], None], 
+        var_name: str = "default", 
+        context: Optional[Dict[str, JsonValueT]] = None
     ) -> PredictionError:
         """
         计算预测误差
+        
+        类型安全改进:
+        - predicted/actual: Union[str, float, int, bool, List[float], None] 替代 Any
+        - context: Dict[str, JsonValueT] 替代 Dict
 
         Args:
             predicted: 预测值
@@ -203,6 +241,10 @@ class PredictionErrorCalculator:
         Returns:
             PredictionError 对象
         """
+        # 验证输入
+        validate_string_length(var_name, max_length=256, field_name="var_name")
+        if context:
+            validate_dict_size(context, max_size=MAX_BATCH_SIZE, field_name="context")
         # 计算原始误差
         if isinstance(predicted, (int, float)) and isinstance(actual, (int, float)):
             error_magnitude = abs(actual - predicted)

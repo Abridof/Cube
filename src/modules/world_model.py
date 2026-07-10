@@ -18,14 +18,29 @@ import time
 import json
 import hashlib
 import random
-from typing import Dict, List, Optional, Tuple, Set, Callable, Union
+from typing import Dict, List, Optional, Tuple, Set, Callable, Union, Any
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 from collections import defaultdict
 import copy
 
-# Import strict types
-from src.core.strict_types import JsonValueT, StateVariable as TypedStateVariable, WorldState
+# Import strict types - 使用精确类型替代 Any
+from src.core.strict_types import (
+    JsonValueT, 
+    StateVariable as TypedStateVariable, 
+    WorldState,
+    StateType as TypedStateType,
+)
+from src.core.types import (
+    validate_string_length,
+    validate_list_length,
+    validate_dict_size,
+    sanitize_input,
+    ResourceTracker,
+    MAX_GRAPH_NODES,
+    MAX_THINKING_ITERATIONS,
+    MAX_WORKING_MEMORY_ITEMS,
+)
 
 # ==================== 核心数据结构 ====================
 
@@ -53,16 +68,29 @@ class TransitionType(Enum):
 
 @dataclass
 class StateVariable:
-    """状态变量 - 世界模型的基本组成单元"""
+    """状态变量 - 世界模型的基本组成单元
+    
+    类型安全改进:
+    - value: Union[str, float, int, bool] 替代 Any
+    - domain: Optional[List[Union[str, float, int]]] 替代 List[Any]
+    """
 
     name: str
-    value: Any
+    value: Union[str, float, int, bool]
     var_type: StateType
-    domain: Optional[List[Any]] = None  # 离散值域或连续范围 [min, max]
+    domain: Optional[List[Union[str, float, int]]] = None  # 离散值域或连续范围 [min, max]
     uncertainty: float = 0.0  # 不确定性 [0, 1]
     timestamp: float = field(default_factory=time.time)
     source: str = "sensor"  # 来源：sensor, inference, prediction
     confidence: float = 1.0  # 置信度
+    
+    def __post_init__(self):
+        """验证字段类型和长度"""
+        validate_string_length(self.name, max_length=256, field_name="StateVariable.name")
+        if isinstance(self.value, str):
+            validate_string_length(self.value, max_length=10000, field_name="StateVariable.value")
+        if self.domain and len(self.domain) > MAX_GRAPH_NODES:
+            raise ValueError(f"Domain size {len(self.domain)} exceeds limit {MAX_GRAPH_NODES}")
 
     def to_dict(self) -> Dict:
         return {
@@ -92,24 +120,43 @@ class StateVariable:
 
 @dataclass
 class State:
-    """完整状态 - 所有状态变量的集合"""
+    """完整状态 - 所有状态变量的集合
+    
+    类型安全改进:
+    - context: Dict[str, JsonValueT] 替代 Dict[str, Any]
+    - get_value 返回 Union[str, float, int, bool, None] 替代 Any
+    - set_value 接受 Union[str, float, int, bool] 替代 Any
+    """
 
     state_id: str
     variables: Dict[str, StateVariable] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
-    context: Dict[str, Any] = field(default_factory=dict)
+    context: Dict[str, JsonValueT] = field(default_factory=dict)
 
-    def add_variable(self, var: StateVariable):
+    def __post_init__(self):
+        """验证状态 ID 和上下文大小"""
+        validate_string_length(self.state_id, max_length=256, field_name="State.state_id")
+        validate_dict_size(self.context, max_size=MAX_BATCH_SIZE, field_name="State.context")
+
+    def add_variable(self, var: StateVariable) -> None:
+        """添加状态变量，检查资源限制"""
+        if len(self.variables) >= MAX_GRAPH_NODES:
+            raise ValueError(f"Cannot add more variables: limit {MAX_GRAPH_NODES} reached")
         self.variables[var.name] = var
 
-    def get_value(self, var_name: str) -> Any:
-        return (
-            self.variables.get(var_name, {}).value
-            if isinstance(self.variables.get(var_name), StateVariable)
-            else None
-        )
+    def get_value(self, var_name: str) -> Optional[Union[str, float, int, bool]]:
+        """获取变量值，类型安全的返回值"""
+        var = self.variables.get(var_name)
+        if isinstance(var, StateVariable):
+            return var.value
+        return None
 
-    def set_value(self, var_name: str, value: Any, var_type: StateType = StateType.ABSTRACT):
+    def set_value(
+        self, 
+        var_name: str, 
+        value: Union[str, float, int, bool], 
+        var_type: StateType = StateType.ABSTRACT
+    ) -> None:
         if var_name in self.variables:
             self.variables[var_name].value = value
             self.variables[var_name].timestamp = time.time()
@@ -160,18 +207,29 @@ class State:
 
 @dataclass
 class Transition:
-    """状态转移 - 描述从一个状态到另一个状态的变化"""
+    """状态转移 - 描述从一个状态到另一个状态的变化
+    
+    类型安全改进:
+    - conditions: Dict[str, JsonValueT] 替代 Dict[str, Any]
+    - causal_graph: Dict[str, List[JsonValueT]] 替代 Dict[str, List[str]]
+    """
 
     transition_id: str
     from_state_id: str
     to_state_id: str
     action: Optional[str] = None  # 触发动作
-    conditions: Dict[str, Any] = field(default_factory=dict)  # 触发条件
+    conditions: Dict[str, JsonValueT] = field(default_factory=dict)  # 触发条件
     probability: float = 1.0  # 转移概率
     transition_type: TransitionType = TransitionType.DETERMINISTIC
-    causal_graph: Dict[str, List[str]] = field(default_factory=dict)  # 因果图
+    causal_graph: Dict[str, List[JsonValueT]] = field(default_factory=dict)  # 因果图
     learned_at: float = field(default_factory=time.time)
     support_count: int = 0  # 支持此转移的观测次数
+    
+    def __post_init__(self):
+        """验证资源限制"""
+        validate_string_length(self.transition_id, max_length=256, field_name="Transition.transition_id")
+        validate_dict_size(self.conditions, max_size=MAX_BATCH_SIZE, field_name="Transition.conditions")
+        validate_dict_size(self.causal_graph, max_size=MAX_BATCH_SIZE, field_name="Transition.causal_graph")
 
     def to_dict(self) -> Dict:
         return {
@@ -227,14 +285,25 @@ class Prediction:
 
 @dataclass
 class Counterfactual:
-    """反事实推理结果"""
+    """反事实推理结果
+    
+    类型安全改进:
+    - difference_analysis: Dict[str, JsonValueT] 替代 Dict[str, Any]
+    - causal_chain: List[str] 保持精确类型
+    """
 
     premise: str  # 前提："如果 X 发生"
     actual_outcome: State  # 实际结果
     counterfactual_outcome: State  # 反事实结果
-    difference_analysis: Dict[str, Any]  # 差异分析
+    difference_analysis: Dict[str, JsonValueT]  # 差异分析
     causal_chain: List[str] = field(default_factory=list)  # 因果链
     plausibility: float = 0.0  # 合理性评分
+    
+    def __post_init__(self):
+        """验证资源限制"""
+        validate_string_length(self.premise, max_length=1000, field_name="Counterfactual.premise")
+        validate_dict_size(self.difference_analysis, max_size=MAX_BATCH_SIZE, field_name="Counterfactual.difference_analysis")
+        validate_list_length(self.causal_chain, max_length=MAX_THINKING_ITERATIONS, field_name="Counterfactual.causal_chain")
 
 
 # ==================== 世界模型核心引擎 ====================
@@ -480,10 +549,15 @@ class WorldModel:
     # ========== 反事实推理 ==========
 
     def counterfactual(
-        self, intervention: Dict[str, Any], compare_to: str = "actual"
+        self, 
+        intervention: Dict[str, Union[str, float, int, bool]], 
+        compare_to: str = "actual"
     ) -> Counterfactual:
         """
         反事实推理："如果 X 发生，会怎样？"
+        
+        类型安全改进:
+        - intervention: Dict[str, Union[str, float, int, bool]] 替代 Dict[str, Any]
 
         Args:
             intervention: {var_name: new_value} 干预措施
@@ -492,6 +566,8 @@ class WorldModel:
         Returns:
             Counterfactual 对象
         """
+        # 验证输入大小
+        validate_dict_size(intervention, max_size=MAX_BATCH_SIZE, field_name="intervention")
         current = self.get_current_state()
         if not current:
             raise ValueError("No current state available")
@@ -532,9 +608,15 @@ class WorldModel:
             plausibility=self._calculate_plausibility(intervention, current),
         )
 
-    def _analyze_difference(self, state1: State, state2: State) -> Dict[str, Any]:
-        """分析两个状态的差异"""
-        differences = {}
+    def _analyze_difference(
+        self, state1: State, state2: State
+    ) -> Dict[str, Union[List[str], Dict[str, Union[str, float, int, None]], int]]:
+        """分析两个状态的差异
+        
+        类型安全改进:
+        - 返回精确的 Dict 类型替代 Dict[str, Any]
+        """
+        differences: Dict[str, Dict[str, Union[str, float, int, None]]] = {}
 
         all_vars = set(state1.variables.keys()) | set(state2.variables.keys())
 
@@ -543,14 +625,14 @@ class WorldModel:
             v2 = state2.get_value(var_name)
 
             if v1 != v2:
+                change_val: Union[str, float, int, None] = "N/A"
+                if isinstance(v1, (int, float)) and isinstance(v2, (int, float)):
+                    change_val = v2 - v1
+                    
                 differences[var_name] = {
-                    "before": v1,
-                    "after": v2,
-                    "change": (
-                        v2 - v1
-                        if isinstance(v1, (int, float)) and isinstance(v2, (int, float))
-                        else "N/A"
-                    ),
+                    "before": v1 if v1 is not None else "None",
+                    "after": v2 if v2 is not None else "None",
+                    "change": change_val,
                 }
 
         return {
@@ -559,7 +641,11 @@ class WorldModel:
             "total_changes": len(differences),
         }
 
-    def _calculate_plausibility(self, intervention: Dict[str, Any], base_state: State) -> float:
+    def _calculate_plausibility(
+        self, 
+        intervention: Dict[str, Union[str, float, int, bool]], 
+        base_state: State
+    ) -> float:
         """计算反事实的合理性"""
         plausibility = 1.0
 
@@ -582,9 +668,17 @@ class WorldModel:
     # ========== 自我模型 ==========
 
     def update_self_model(
-        self, capability: str = None, limitation: str = None, belief: Dict[str, Any] = None
-    ):
-        """更新自我模型"""
+        self, 
+        capability: Optional[str] = None, 
+        limitation: Optional[str] = None, 
+        belief: Optional[Dict[str, JsonValueT]] = None
+    ) -> None:
+        """更新自我模型
+        
+        类型安全改进:
+        - belief: Dict[str, JsonValueT] 替代 Dict[str, Any]
+        - 添加明确的返回类型
+        """
         if capability and capability not in self.self_model["capabilities"]:
             self.self_model["capabilities"].append(capability)
 
