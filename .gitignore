@@ -1,14 +1,35 @@
 ```
-# Compiled Python files
-*.pyc
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Logs and temporary files
+# Logs
 *.log
-*.tmp
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
 ```

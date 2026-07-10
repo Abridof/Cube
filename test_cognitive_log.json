@@ -1,45 +1,45 @@
 [
   {
     "phase": "perceive",
-    "timestamp": 1783697026.1639078,
+    "timestamp": 1783697256.9829557,
     "input_type": "str",
     "output_type": "CognitiveUnit",
     "metadata": {
-      "processing_time": 0.00014448165893554688
+      "processing_time": 0.0001506805419921875
     }
   },
   {
     "phase": "reason",
-    "timestamp": 1783697026.1640563,
+    "timestamp": 1783697256.9831128,
     "input_type": "CognitiveUnit",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 6.4373016357421875e-06,
+      "processing_time": 6.198883056640625e-06,
       "evidence_count": 0
     }
   },
   {
     "phase": "decide",
-    "timestamp": 1783697026.1640651,
+    "timestamp": 1783697256.9831212,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 1.0251998901367188e-05
+      "processing_time": 9.059906005859375e-06
     }
   },
   {
     "phase": "act",
-    "timestamp": 1783697026.1640768,
+    "timestamp": 1783697256.9831316,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 3.504753112792969e-05,
+      "processing_time": 3.7670135498046875e-05,
       "action_type": "explore"
     }
   },
   {
     "phase": "learn",
-    "timestamp": 1783697026.164115,
+    "timestamp": 1783697256.9831724,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
@@ -48,11 +48,11 @@
   },
   {
     "phase": "reflect",
-    "timestamp": 1783697026.1641204,
+    "timestamp": 1783697256.9831774,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 7.62939453125e-06
+      "processing_time": 7.3909759521484375e-06
     }
   }
 ]
