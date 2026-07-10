@@ -24,6 +24,8 @@ import re
 import sys
 import difflib
 import hashlib
+import resource
+import time
 from typing import Dict, List, Optional, Tuple, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
@@ -614,24 +616,68 @@ class CodeModifier:
 
 
 class SafetySandbox:
-    """Secure execution environment for testing changes"""
+    """Secure execution environment for testing changes with AST validation and resource limits"""
 
-    def __init__(self):
-        self.allowed_modules: Set[str] = {"os", "sys", "re", "ast", "math", "random"}
-        self.forbidden_operations: Set[str] = {"eval", "exec", "__import__", "open"}
+    # 禁止的 AST 节点类型
+    FORBIDDEN_AST_NODES = {
+        'Import', 'ImportFrom',  # 禁止动态导入
+        'Eval', 'Exec',  # 禁止 eval/exec
+        'Open',  # 禁止文件操作（通过 __import__ 间接禁止）
+    }
+    
+    # 禁止的属性访问（防止绕过）
+    FORBIDDEN_ATTRIBUTES = {
+        '__subclasses__', '__mro__', '__globals__', '__code__', 
+        '__builtins__', '__import__', 'func_globals', 'gi_frame'
+    }
+    
+    # 允许的标准库模块白名单
+    ALLOWED_MODULES = {"math", "random", "re", "ast", "typing", "dataclasses", "enum", "json", "collections"}
+
+    def __init__(self, timeout_seconds: int = 5, max_memory_mb: int = 100):
+        self.allowed_modules: Set[str] = self.ALLOWED_MODULES
         self.execution_log: List[str] = []
+        self.timeout_seconds = timeout_seconds
+        self.max_memory_mb = max_memory_mb
+
+    def _validate_ast(self, code: str) -> Tuple[bool, Optional[str]]:
+        """使用 AST 静态分析验证代码安全性"""
+        try:
+            tree = ast.parse(code)
+        except SyntaxError as e:
+            return False, f"Syntax error: {e}"
+        
+        for node in ast.walk(tree):
+            # 检查禁止的节点类型
+            if type(node).__name__ in self.FORBIDDEN_AST_NODES:
+                return False, f"Forbidden AST node: {type(node).__name__}"
+            
+            # 检查禁止的属性访问
+            if isinstance(node, ast.Attribute):
+                if node.attr in self.FORBIDDEN_ATTRIBUTES:
+                    return False, f"Forbidden attribute access: {node.attr}"
+            
+            # 检查函数调用
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    if node.func.id in ['eval', 'exec', 'open', '__import__']:
+                        return False, f"Forbidden function call: {node.func.id}"
+                elif isinstance(node.func, ast.Attribute):
+                    if node.func.attr in ['__subclasses__', '__mro__', '__globals__']:
+                        return False, f"Forbidden method call: {node.func.attr}"
+        
+        return True, None
 
     def execute_in_sandbox(self, code: str, context: Optional[Dict] = None) -> Any:
-        """Execute code in a restricted environment"""
-        # This is a simplified sandbox - a real implementation would use more sophisticated isolation
+        """在受限环境中执行代码，带有 AST 验证和资源限制"""
         self.execution_log.append(f"Executing code snippet ({len(code)} chars)")
 
-        # Check for forbidden operations
-        for op in self.forbidden_operations:
-            if op in code:
-                raise SecurityError(f"Forbidden operation detected: {op}")
+        # Step 1: AST 静态分析
+        is_safe, error_msg = self._validate_ast(code)
+        if not is_safe:
+            raise SecurityError(f"AST validation failed: {error_msg}")
 
-        # Create restricted globals
+        # Step 2: 创建受限的全局命名空间
         safe_globals = {
             "__builtins__": {
                 "print": print,
@@ -650,10 +696,16 @@ class SafetySandbox:
                 "sum": sum,
                 "abs": abs,
                 "round": round,
+                "enumerate": enumerate,
+                "zip": zip,
+                "map": map,
+                "filter": filter,
+                "sorted": sorted,
+                "reversed": reversed,
             }
         }
 
-        # Add allowed modules
+        # Step 3: 添加允许的模块
         for module_name in self.allowed_modules:
             try:
                 module = __import__(module_name)
@@ -662,11 +714,44 @@ class SafetySandbox:
                 pass
 
         if context:
-            safe_globals.update(context)
+            # 过滤上下文中的危险项
+            for key, value in context.items():
+                if key not in self.FORBIDDEN_ATTRIBUTES:
+                    safe_globals[key] = value
 
-        # Execute in restricted environment
-        local_vars = {}
-        exec(code, safe_globals, local_vars)
+        # Step 4: 设置资源限制并执行
+        local_vars: Dict[str, Any] = {}
+        
+        # 保存原始资源限制
+        old_cpu_limit = resource.getrlimit(resource.RLIMIT_CPU)
+        old_mem_limit = resource.getrlimit(resource.RLIMIT_AS)
+        
+        try:
+            # 设置 CPU 时间限制
+            resource.setrlimit(
+                resource.RLIMIT_CPU, 
+                (self.timeout_seconds, self.timeout_seconds + 1)
+            )
+            # 设置内存限制 (字节)
+            memory_limit_bytes = self.max_memory_mb * 1024 * 1024
+            resource.setrlimit(
+                resource.RLIMIT_AS,
+                (memory_limit_bytes, memory_limit_bytes)
+            )
+            
+            # 执行代码
+            exec(code, safe_globals, local_vars)
+            
+        except MemoryError:
+            raise SecurityError(f"Memory limit exceeded ({self.max_memory_mb}MB)")
+        except Exception as e:
+            if "timed out" in str(e).lower() or isinstance(e, ResourceError):
+                raise SecurityError(f"Execution timeout ({self.timeout_seconds}s)")
+            raise
+        finally:
+            # 恢复原始资源限制
+            resource.setrlimit(resource.RLIMIT_CPU, old_cpu_limit)
+            resource.setrlimit(resource.RLIMIT_AS, old_mem_limit)
 
         return local_vars
 

@@ -226,7 +226,7 @@ class NeuralUCREncoder:
         # Symbolic hash features
         symbol = ucr_data.get("symbol", "")
         if symbol:
-            h = hashlib.md5(symbol.encode()).hexdigest()
+            h = hashlib.sha256(symbol.encode()).hexdigest()
             for i, c in enumerate(h[: min(16, len(h))]):
                 features[(i + 8) % self.input_dim] = int(c, 16) / 15.0
 

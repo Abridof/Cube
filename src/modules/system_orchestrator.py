@@ -20,13 +20,14 @@ import threading
 import queue
 import logging
 from datetime import datetime
-from typing import Dict, List, Any, Optional, Callable, Type
+from typing import Dict, List, Any, Optional, Callable, Type, Set
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import importlib
 import traceback
 import hashlib
-import pickle
+import hmac
+import json
 from pathlib import Path
 
 # 配置日志
@@ -309,41 +310,104 @@ class HealthMonitor:
             logger.warning(f"High memory usage: {usage['memory_usage']*100:.1f}%")
 
 
-class CheckpointManager:
-    """检查点管理器"""
+class CheckpointSecurityError(Exception):
+    """检查点安全异常"""
+    pass
 
-    def __init__(self, checkpoint_dir: str = "./checkpoints"):
+
+class RestrictedJSONEncoder(json.JSONEncoder):
+    """受限的 JSON 编码器，只允许安全类型"""
+    
+    SAFE_TYPES = (str, int, float, bool, list, dict, type(None))
+    
+    def default(self, obj):
+        if isinstance(obj, self.SAFE_TYPES):
+            return super().default(obj)
+        # 将非安全类型转换为字符串表示
+        return f"<{type(obj).__name__}:{str(obj)}>"
+
+
+class CheckpointManager:
+    """检查点管理器 - 使用 JSON 替代 Pickle 以避免 RCE 漏洞"""
+
+    # 检查点文件版本
+    CHECKPOINT_VERSION = "1.0"
+    
+    def __init__(self, checkpoint_dir: str = "./checkpoints", secret_key: Optional[str] = None):
         self.checkpoint_dir = Path(checkpoint_dir)
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        # HMAC 密钥（生产环境应从环境变量加载）
+        self._secret_key = (secret_key or os.environ.get("CHECKPOINT_SECRET_KEY", "dev-secret-key-change-in-production")).encode()
+
+    def _compute_hmac(self, data: bytes) -> bytes:
+        """计算数据的 HMAC 签名"""
+        return hmac.new(self._secret_key, data, hashlib.sha256).digest()
 
     def save_checkpoint(self, state: Dict[str, Any], name: str = "auto") -> str:
-        """保存检查点"""
+        """保存检查点为 JSON 格式并添加 HMAC 签名"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{name}_{timestamp}.ckpt"
+        filename = f"{name}_{timestamp}.json"
         filepath = self.checkpoint_dir / filename
 
-        # 序列化状态
-        with open(filepath, "wb") as f:
-            pickle.dump(state, f)
+        # 序列化为 JSON
+        json_data = json.dumps(
+            {
+                "version": self.CHECKPOINT_VERSION,
+                "timestamp": timestamp,
+                "state": state
+            },
+            cls=RestrictedJSONEncoder,
+            indent=2
+        ).encode('utf-8')
 
-        logger.info(f"Checkpoint saved: {filepath}")
+        # 计算 HMAC 签名
+        signature = self._compute_hmac(json_data)
+
+        # 写入文件：先写签名 (64 字节), 再写数据
+        with open(filepath, "wb") as f:
+            f.write(signature)
+            f.write(json_data)
+
+        logger.info(f"Checkpoint saved: {filepath} (with HMAC signature)")
         return str(filepath)
 
     def load_checkpoint(self, filepath: str) -> Dict[str, Any]:
-        """加载检查点"""
+        """加载检查点并验证 HMAC 签名"""
         path = Path(filepath)
         if not path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {filepath}")
 
         with open(path, "rb") as f:
-            state = pickle.load(f)
+            # 读取签名 (64 字节)
+            stored_signature = f.read(64)
+            if len(stored_signature) != 64:
+                raise CheckpointSecurityError(f"Invalid checkpoint format: missing signature in {filepath}")
+            
+            # 读取数据
+            json_data = f.read()
+        
+        # 验证 HMAC 签名
+        expected_signature = self._compute_hmac(json_data)
+        if not hmac.compare_digest(stored_signature, expected_signature):
+            raise CheckpointSecurityError(f"Checkpoint integrity check failed: {filepath} (possible tampering)")
 
-        logger.info(f"Checkpoint loaded: {filepath}")
-        return state
+        # 解析 JSON
+        try:
+            data = json.loads(json_data.decode('utf-8'))
+        except json.JSONDecodeError as e:
+            raise CheckpointSecurityError(f"Invalid checkpoint JSON in {filepath}: {e}")
+
+        # 验证版本
+        version = data.get("version")
+        if version != self.CHECKPOINT_VERSION:
+            logger.warning(f"Checkpoint version mismatch: expected {self.CHECKPOINT_VERSION}, got {version}")
+
+        logger.info(f"Checkpoint loaded: {filepath} (HMAC verified)")
+        return data.get("state", {})
 
     def list_checkpoints(self) -> List[str]:
         """列出所有检查点"""
-        return [str(p) for p in self.checkpoint_dir.glob("*.ckpt")]
+        return [str(p) for p in self.checkpoint_dir.glob("*.json")]
 
 
 class CognitivePipeline:
