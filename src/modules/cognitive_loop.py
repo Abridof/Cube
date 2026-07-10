@@ -19,6 +19,7 @@ import random
 from typing import Dict, List, Any, Optional, Tuple, TypedDict
 from dataclasses import dataclass, field
 from enum import Enum
+from collections import deque
 
 # 导入前序模块
 try:
@@ -172,7 +173,8 @@ class CognitiveLoopController:
 
         # 状态追踪
         self.current_state: Optional[State] = None
-        self.event_log: List[CognitiveEvent] = []
+        # [极客视角] 使用环形缓冲区防止内存泄漏，最大容量 10000 条事件
+        self.event_log: deque[CognitiveEvent] = deque(maxlen=10000)
         self.loop_count = 0
         self.is_running = False
 

@@ -1,35 +1,25 @@
-```gitignore
+```
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py~
 
 # Dependencies
 .venv/
 venv/
-env/
 .env
 .env.local
 .env.*
 
-# Logs and temporary files
+# Logs and temp files
 *.log
 *.tmp
-*.swp
 
-# Coverage reports
-.coverage
-htmlcov/
-coverage/
+# Tests
+.pytest_cache/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+# Original rules preserved
+*.log
 ```
