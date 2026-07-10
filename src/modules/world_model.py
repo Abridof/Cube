@@ -18,11 +18,14 @@ import time
 import json
 import hashlib
 import random
-from typing import Dict, List, Any, Optional, Tuple, Set, Callable
+from typing import Dict, List, Optional, Tuple, Set, Callable, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 from collections import defaultdict
 import copy
+
+# Import strict types
+from src.core.strict_types import JsonValueT, StateVariable as TypedStateVariable, WorldState
 
 # ==================== 核心数据结构 ====================
 
