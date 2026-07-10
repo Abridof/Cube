@@ -13,7 +13,7 @@ node_modules/
 *.tmp
 *.swp
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
@@ -21,4 +21,13 @@ node_modules/
 # Editors
 .vscode/
 .idea/
+
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# Tests cache
+.pytest_cache/
+.mypy_cache/
 ```
