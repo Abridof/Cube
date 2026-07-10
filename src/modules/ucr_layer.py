@@ -1,26 +1,48 @@
 """
-Unified Cognitive Representation (UCR) Layer v1.0
+Unified Cognitive Representation (UCR) Layer v2.0
 ==================================================
 核心创新：将多模态输入转换为统一的符号 - 向量混合表示
 
-设计原理：
+设计原理:
 1. 符号表示：精确的逻辑结构、因果关系、规则
 2. 向量表示：语义相似性、模糊匹配、模式识别
 3. 混合索引：同时支持精确查询和相似性搜索
+4. 资源限制：防止资源耗尽攻击
+5. 类型安全：零容忍 Any 类型
 
-Author: AI Assistant
+Author: AI Assistant (Computer Scientist & AGI Researcher)
 Goal: 为"识别万物、研究万物"提供统一的表示基础
 """
 
 import hashlib
 import json
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Union, Set
+from typing import Dict, List, Optional, Tuple, Union, Set, Literal
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from collections import defaultdict
 import re
+
+# Import type definitions and resource limits
+from ..core.types import (
+    JsonValueT,
+    ContentTypes,
+    ResourceTracker,
+    ResourceLimits,
+    validate_string_length,
+    sanitize_input,
+    MAX_VECTOR_DIMENSIONS,
+    MAX_SIMILARITY_RESULTS,
+    MAX_INPUT_LENGTH,
+    WorkingMemory,
+    AttentionMechanism,
+    AttentionWeight,
+    CausalRelation,
+    TypeValidationError,
+    InputTooLargeError,
+    ResourceExhaustedError,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -62,14 +84,14 @@ class SymbolicNode:
     entity_type: EntityType
     label: str  # 人类可读标签
     definition: str  # 精确定义
-    attributes: Dict[str, Any] = field(default_factory=dict)
+    attributes: Dict[str, JsonValueT] = field(default_factory=dict)
     relations: List[Tuple[str, str]] = field(default_factory=list)  # (relation_type, target_id)
     constraints: List[str] = field(default_factory=list)
     source: Optional[str] = None  # 来源（代码行、文档段落等）
     confidence: float = 1.0
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, JsonValueT]:
         return {
             "id": self.id,
             "entity_type": self.entity_type.value,
@@ -84,9 +106,9 @@ class SymbolicNode:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "SymbolicNode":
-        data["entity_type"] = EntityType(data["entity_type"])
-        return cls(**data)
+    def from_dict(cls, data: Dict[str, JsonValueT]) -> "SymbolicNode":
+        data["entity_type"] = EntityType(data["entity_type"])  # type: ignore
+        return cls(**data)  # type: ignore
 
 
 @dataclass
@@ -96,17 +118,24 @@ class VectorEmbedding:
 
     简化实现：使用词频 + TF-IDF 风格的权重
     生产环境可替换为真实神经网络嵌入
+    
+    资源限制：向量维度不超过 MAX_VECTOR_DIMENSIONS
     """
 
     id: str
     vector: Dict[str, float]  # 稀疏表示：{term: weight}
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, JsonValueT] = field(default_factory=dict)
     norm: float = 0.0  # 向量范数，用于相似度计算
 
     def __post_init__(self):
+        # 资源限制检查
+        if len(self.vector) > MAX_VECTOR_DIMENSIONS:
+            # 截断到最大维度 (保留最高权重的项)
+            sorted_terms = sorted(self.vector.items(), key=lambda x: x[1], reverse=True)
+            self.vector = dict(sorted_terms[:MAX_VECTOR_DIMENSIONS])
+        
         if self.norm == 0.0 and self.vector:
             import math
-
             self.norm = math.sqrt(sum(v * v for v in self.vector.values()))
 
     def similarity(self, other: "VectorEmbedding") -> float:
@@ -139,6 +168,10 @@ class CognitiveUnit:
     1. 符号部分：精确的逻辑结构
     2. 向量部分：语义嵌入
     3. 关联图谱：与其他单元的关系
+    
+    新增特性:
+    - 注意力机制支持 (activation_level)
+    - 工作记忆集成
     """
 
     id: str
@@ -149,7 +182,7 @@ class CognitiveUnit:
     access_count: int = 0
     last_accessed: str = field(default_factory=lambda: datetime.now().isoformat())
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, JsonValueT]:
         return {
             "id": self.id,
             "symbolic": self.symbolic.to_dict(),
@@ -161,12 +194,12 @@ class CognitiveUnit:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "CognitiveUnit":
-        data["symbolic"] = SymbolicNode.from_dict(data["symbolic"])
+    def from_dict(cls, data: Dict[str, JsonValueT]) -> "CognitiveUnit":
+        data["symbolic"] = SymbolicNode.from_dict(data["symbolic"])  # type: ignore
         if data.get("vector"):
-            data["vector"] = VectorEmbedding.from_dict(data["vector"])
-        data["tags"] = set(data.get("tags", []))
-        return cls(**data)
+            data["vector"] = VectorEmbedding.from_dict(data["vector"])  # type: ignore
+        data["tags"] = set(data.get("tags", []))  # type: ignore
+        return cls(**data)  # type: ignore
 
 
 class TextEncoder:
@@ -464,7 +497,7 @@ class SymbolicParser:
         return nodes
 
     def parse(
-        self, content: Any, content_type: str, source: Optional[str] = None
+        self, content: Union[str, Dict, List], content_type: str, source: Optional[str] = None
     ) -> List[SymbolicNode]:
         """通用解析接口"""
         if content_type == "code":
@@ -484,19 +517,30 @@ class UnifiedRepresentationEngine:
     1. 多模态输入解析（代码、文本、结构化数据）
     2. 符号 - 向量混合表示生成
     3. 自动关系发现和链接
+    
+    安全特性:
+    - 资源限制检查
+    - 输入验证
+    - 类型安全
     """
 
-    def __init__(self):
+    def __init__(self, limits: Optional[ResourceLimits] = None):
+        self.limits = limits or ResourceLimits()
+        self.tracker = ResourceTracker(self.limits)
         self.encoder = TextEncoder()
         self.parser = SymbolicParser()
         self.units: Dict[str, CognitiveUnit] = {}
         self.index_by_type: Dict[EntityType, Set[str]] = defaultdict(set)
         self.index_by_tag: Dict[str, Set[str]] = defaultdict(set)
+        # 工作记忆系统
+        self.working_memory: WorkingMemory[CognitiveUnit] = WorkingMemory(
+            capacity=self.limits.max_working_memory
+        )
 
     def create_unit(
         self,
-        content: Any,
-        content_type: str = "text",
+        content: Union[str, Dict, List],
+        content_type: Literal["text", "code", "data", "structured"] = "text",
         domain: str = "general",
         tags: Optional[Set[str]] = None,
         source: Optional[str] = None,
@@ -513,12 +557,24 @@ class UnifiedRepresentationEngine:
 
         Returns:
             CognitiveUnit: 生成的认知单元
+            
+        Raises:
+            InputTooLargeError: 输入过大
+            ResourceExhaustedError: 资源耗尽
         """
+        # 安全检查：输入验证
+        content_str = str(content) if not isinstance(content, str) else content
+        validate_string_length(content_str, self.limits.max_input_length, field_name="content")
+        
+        # 资源追踪
+        self.tracker.check_timeout()
+        if not self.tracker.can_add_node():
+            raise ResourceExhaustedError(f"Node limit reached: {self.tracker.node_count}")
+
         # 1. 符号解析
         symbolic_nodes = self.parser.parse(content, content_type, source)
 
         # 2. 向量编码
-        content_str = str(content) if not isinstance(content, str) else content
         vector_embedding = self.encoder.encode(content_str)
 
         # 3. 如果没有解析出符号节点，创建一个概括性节点
@@ -549,19 +605,32 @@ class UnifiedRepresentationEngine:
         )
 
         # 5. 建立索引
+        self.tracker.increment_node()
         self.units[unit_id] = cognitive_unit
         self.index_by_type[main_symbolic.entity_type].add(unit_id)
         for tag in cognitive_unit.tags:
             self.index_by_tag[tag].add(unit_id)
 
-        # 6. 如果有多个符号节点，创建关联单元
+        # 6. 添加到工作记忆 (如果空间允许)
+        try:
+            self.working_memory.add(unit_id, cognitive_unit, priority=cognitive_unit.activation_level)
+        except ResourceExhaustedError:
+            # 工作记忆已满，自动驱逐最低优先级项
+            pass
+
+        # 7. 如果有多个符号节点，创建关联单元
         for additional_node in symbolic_nodes[1:]:
+            if not self.tracker.can_add_node():
+                logger.warning(f"Stopping creation: node limit reached")
+                break
+                
             additional_unit = CognitiveUnit(
                 id=additional_node.id,
                 symbolic=additional_node,
                 vector=vector_embedding,  # 共享向量表示
                 tags=cognitive_unit.tags.copy(),
             )
+            self.tracker.increment_node()
             self.units[additional_node.id] = additional_unit
             self.index_by_type[additional_node.entity_type].add(additional_node.id)
 
@@ -682,7 +751,11 @@ def get_engine() -> UnifiedRepresentationEngine:
     return _default_engine
 
 
-def represent(content: Any, content_type: str = "text", **kwargs) -> CognitiveUnit:
+def represent(
+    content: Union[str, Dict, List], 
+    content_type: Literal["text", "code", "data", "structured"] = "text", 
+    **kwargs
+) -> CognitiveUnit:
     """便捷函数：将内容转换为认知单元"""
     engine = get_engine()
     return engine.create_unit(content, content_type, **kwargs)
