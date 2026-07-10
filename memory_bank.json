@@ -9,7 +9,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:09.625234",
-    "last_accessed": "2026-07-10T14:43:26.288506"
+    "last_accessed": "2026-07-10T15:52:21.128375"
   },
   "768092ab49f1": {
     "id": "768092ab49f1",
@@ -21,7 +21,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:09.636209",
-    "last_accessed": "2026-07-10T14:43:26.288516"
+    "last_accessed": "2026-07-10T15:52:21.128383"
   },
   "prior_1": {
     "id": "prior_1",
@@ -30,8 +30,8 @@
     "description": "Known pattern",
     "examples": [],
     "confidence_score": 0.5,
-    "created_at": "2026-07-10T14:43:26.306162",
-    "last_accessed": "2026-07-10T14:43:26.306170"
+    "created_at": "2026-07-10T15:52:21.148148",
+    "last_accessed": "2026-07-10T15:52:21.148154"
   },
   "025f3328afc4": {
     "id": "025f3328afc4",
@@ -43,7 +43,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:13.597319",
-    "last_accessed": "2026-07-10T14:43:26.288517"
+    "last_accessed": "2026-07-10T15:52:21.128385"
   },
   "1a0be34c1479": {
     "id": "1a0be34c1479",
@@ -55,7 +55,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:13.598338",
-    "last_accessed": "2026-07-10T14:43:26.288519"
+    "last_accessed": "2026-07-10T15:52:21.128387"
   },
   "5f5c461725f5": {
     "id": "5f5c461725f5",
@@ -67,7 +67,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:17.961591",
-    "last_accessed": "2026-07-10T14:43:26.288520"
+    "last_accessed": "2026-07-10T15:52:21.128389"
   },
   "cc054b0e8749": {
     "id": "cc054b0e8749",
@@ -79,7 +79,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:17.962503",
-    "last_accessed": "2026-07-10T14:43:26.288521"
+    "last_accessed": "2026-07-10T15:52:21.128391"
   },
   "e955624de839": {
     "id": "e955624de839",
@@ -91,7 +91,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:22.281263",
-    "last_accessed": "2026-07-10T14:43:26.288522"
+    "last_accessed": "2026-07-10T15:52:21.128393"
   },
   "e4ce8a01a44a": {
     "id": "e4ce8a01a44a",
@@ -103,7 +103,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:22.282228",
-    "last_accessed": "2026-07-10T14:43:26.288523"
+    "last_accessed": "2026-07-10T15:52:21.128394"
   },
   "cb754895ce1a": {
     "id": "cb754895ce1a",
@@ -115,7 +115,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:35.376228",
-    "last_accessed": "2026-07-10T14:43:26.288524"
+    "last_accessed": "2026-07-10T15:52:21.128396"
   },
   "7c446002075e": {
     "id": "7c446002075e",
@@ -127,7 +127,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:35.377427",
-    "last_accessed": "2026-07-10T14:43:26.288525"
+    "last_accessed": "2026-07-10T15:52:21.128398"
   },
   "581c39bd0529": {
     "id": "581c39bd0529",
@@ -139,7 +139,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:40.763562",
-    "last_accessed": "2026-07-10T14:43:26.288526"
+    "last_accessed": "2026-07-10T15:52:21.128400"
   },
   "77bd723cf464": {
     "id": "77bd723cf464",
@@ -151,7 +151,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:40.775551",
-    "last_accessed": "2026-07-10T14:43:26.288527"
+    "last_accessed": "2026-07-10T15:52:21.128401"
   },
   "f9de5dfb9877": {
     "id": "f9de5dfb9877",
@@ -163,7 +163,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:56.698950",
-    "last_accessed": "2026-07-10T14:43:26.288528"
+    "last_accessed": "2026-07-10T15:52:21.128403"
   },
   "612528edabf5": {
     "id": "612528edabf5",
@@ -175,7 +175,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T15:08:56.700074",
-    "last_accessed": "2026-07-10T14:43:26.288529"
+    "last_accessed": "2026-07-10T15:52:21.128405"
   },
   "5bd05ab78b8c": {
     "id": "5bd05ab78b8c",
@@ -187,7 +187,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:21:31.457237",
-    "last_accessed": "2026-07-10T14:43:26.288530"
+    "last_accessed": "2026-07-10T15:52:21.128406"
   },
   "3f11bdfb9463": {
     "id": "3f11bdfb9463",
@@ -199,7 +199,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:21:31.469156",
-    "last_accessed": "2026-07-10T14:43:26.288531"
+    "last_accessed": "2026-07-10T15:52:21.128408"
   },
   "74c94dd22726": {
     "id": "74c94dd22726",
@@ -211,7 +211,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:22:43.434547",
-    "last_accessed": "2026-07-10T14:43:26.288532"
+    "last_accessed": "2026-07-10T15:52:21.128410"
   },
   "e81971f1d744": {
     "id": "e81971f1d744",
@@ -223,7 +223,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:22:43.436603",
-    "last_accessed": "2026-07-10T14:43:26.288533"
+    "last_accessed": "2026-07-10T15:52:21.128412"
   },
   "2ae8b48984b1": {
     "id": "2ae8b48984b1",
@@ -235,7 +235,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:36:03.249446",
-    "last_accessed": "2026-07-10T14:43:26.288534"
+    "last_accessed": "2026-07-10T15:52:21.128413"
   },
   "a17bf06e9c6b": {
     "id": "a17bf06e9c6b",
@@ -247,7 +247,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:36:03.251805",
-    "last_accessed": "2026-07-10T14:43:26.288535"
+    "last_accessed": "2026-07-10T15:52:21.128415"
   },
   "001d9a961853": {
     "id": "001d9a961853",
@@ -259,7 +259,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:36:43.009226",
-    "last_accessed": "2026-07-10T14:43:26.288536"
+    "last_accessed": "2026-07-10T15:52:21.128417"
   },
   "c4a62557b20a": {
     "id": "c4a62557b20a",
@@ -271,7 +271,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:36:43.011547",
-    "last_accessed": "2026-07-10T14:43:26.288537"
+    "last_accessed": "2026-07-10T15:52:21.128418"
   },
   "cc5e8b8d8b62": {
     "id": "cc5e8b8d8b62",
@@ -283,7 +283,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:39:32.489190",
-    "last_accessed": "2026-07-10T14:43:26.288538"
+    "last_accessed": "2026-07-10T15:52:21.128420"
   },
   "437e31a7c80f": {
     "id": "437e31a7c80f",
@@ -295,7 +295,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:39:32.491814",
-    "last_accessed": "2026-07-10T14:43:26.288539"
+    "last_accessed": "2026-07-10T15:52:21.128422"
   },
   "aa99679168b8": {
     "id": "aa99679168b8",
@@ -307,7 +307,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:40:15.091372",
-    "last_accessed": "2026-07-10T14:43:26.288540"
+    "last_accessed": "2026-07-10T15:52:21.128423"
   },
   "ee8bde0bc971": {
     "id": "ee8bde0bc971",
@@ -319,7 +319,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T17:40:15.093595",
-    "last_accessed": "2026-07-10T14:43:26.288541"
+    "last_accessed": "2026-07-10T15:52:21.128425"
   },
   "631ea9dd079d": {
     "id": "631ea9dd079d",
@@ -331,7 +331,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:16:02.554348",
-    "last_accessed": "2026-07-10T14:43:26.288542"
+    "last_accessed": "2026-07-10T15:52:21.128427"
   },
   "d54ef2956172": {
     "id": "d54ef2956172",
@@ -343,7 +343,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:16:02.556546",
-    "last_accessed": "2026-07-10T14:43:26.288543"
+    "last_accessed": "2026-07-10T15:52:21.128429"
   },
   "288556d11b82": {
     "id": "288556d11b82",
@@ -355,7 +355,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:16:17.017475",
-    "last_accessed": "2026-07-10T14:43:26.288544"
+    "last_accessed": "2026-07-10T15:52:21.128430"
   },
   "dd697ec6866a": {
     "id": "dd697ec6866a",
@@ -367,7 +367,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:16:17.030681",
-    "last_accessed": "2026-07-10T14:43:26.288545"
+    "last_accessed": "2026-07-10T15:52:21.128432"
   },
   "bb6b8604a21c": {
     "id": "bb6b8604a21c",
@@ -379,7 +379,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:19:33.615629",
-    "last_accessed": "2026-07-10T14:43:26.288546"
+    "last_accessed": "2026-07-10T15:52:21.128434"
   },
   "70926f749536": {
     "id": "70926f749536",
@@ -391,7 +391,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:19:33.628677",
-    "last_accessed": "2026-07-10T14:43:26.288547"
+    "last_accessed": "2026-07-10T15:52:21.128436"
   },
   "a2fa1814f1c2": {
     "id": "a2fa1814f1c2",
@@ -403,7 +403,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:20:11.855787",
-    "last_accessed": "2026-07-10T14:43:26.288548"
+    "last_accessed": "2026-07-10T15:52:21.128437"
   },
   "2057f8f4f308": {
     "id": "2057f8f4f308",
@@ -415,7 +415,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:20:11.868756",
-    "last_accessed": "2026-07-10T14:43:26.288549"
+    "last_accessed": "2026-07-10T15:52:21.128439"
   },
   "e9724d788b96": {
     "id": "e9724d788b96",
@@ -427,7 +427,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:26:21.992822",
-    "last_accessed": "2026-07-10T14:43:26.288550"
+    "last_accessed": "2026-07-10T15:52:21.128441"
   },
   "7275d810546a": {
     "id": "7275d810546a",
@@ -439,7 +439,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:26:21.995219",
-    "last_accessed": "2026-07-10T14:43:26.288551"
+    "last_accessed": "2026-07-10T15:52:21.128443"
   },
   "55266b5dab7e": {
     "id": "55266b5dab7e",
@@ -451,7 +451,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:37:46.815642",
-    "last_accessed": "2026-07-10T14:43:26.288552"
+    "last_accessed": "2026-07-10T15:52:21.128444"
   },
   "ad30e6b146b1": {
     "id": "ad30e6b146b1",
@@ -463,7 +463,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:37:46.828782",
-    "last_accessed": "2026-07-10T14:43:26.288553"
+    "last_accessed": "2026-07-10T15:52:21.128446"
   },
   "cc1881d8ace2": {
     "id": "cc1881d8ace2",
@@ -475,7 +475,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:40:10.875923",
-    "last_accessed": "2026-07-10T14:43:26.288554"
+    "last_accessed": "2026-07-10T15:52:21.128448"
   },
   "1dc3d33bf73c": {
     "id": "1dc3d33bf73c",
@@ -487,7 +487,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:40:10.889514",
-    "last_accessed": "2026-07-10T14:43:26.288555"
+    "last_accessed": "2026-07-10T15:52:21.128449"
   },
   "fe5bc0d6083d": {
     "id": "fe5bc0d6083d",
@@ -499,7 +499,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:00.351895",
-    "last_accessed": "2026-07-10T14:43:26.288556"
+    "last_accessed": "2026-07-10T15:52:21.128451"
   },
   "7449f95485cf": {
     "id": "7449f95485cf",
@@ -511,7 +511,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:00.354405",
-    "last_accessed": "2026-07-10T14:43:26.288558"
+    "last_accessed": "2026-07-10T15:52:21.128453"
   },
   "e9bb0f5ea31f": {
     "id": "e9bb0f5ea31f",
@@ -523,7 +523,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:14.996915",
-    "last_accessed": "2026-07-10T14:43:26.288559"
+    "last_accessed": "2026-07-10T15:52:21.128455"
   },
   "04b258984673": {
     "id": "04b258984673",
@@ -535,7 +535,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:15.010188",
-    "last_accessed": "2026-07-10T14:43:26.288560"
+    "last_accessed": "2026-07-10T15:52:21.128456"
   },
   "d653999e3010": {
     "id": "d653999e3010",
@@ -547,7 +547,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:31.237263",
-    "last_accessed": "2026-07-10T14:43:26.288561"
+    "last_accessed": "2026-07-10T15:52:21.128458"
   },
   "5218f5ec4796": {
     "id": "5218f5ec4796",
@@ -559,7 +559,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T18:54:31.249694",
-    "last_accessed": "2026-07-10T14:43:26.288562"
+    "last_accessed": "2026-07-10T15:52:21.128460"
   },
   "05ba66c44a6f": {
     "id": "05ba66c44a6f",
@@ -571,7 +571,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:10:18.596375",
-    "last_accessed": "2026-07-10T14:43:26.288563"
+    "last_accessed": "2026-07-10T15:52:21.128461"
   },
   "ee3c9a1e8eb8": {
     "id": "ee3c9a1e8eb8",
@@ -583,7 +583,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:10:18.609848",
-    "last_accessed": "2026-07-10T14:43:26.288564"
+    "last_accessed": "2026-07-10T15:52:21.128463"
   },
   "824ea0f7b8ab": {
     "id": "824ea0f7b8ab",
@@ -595,7 +595,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:10:34.094502",
-    "last_accessed": "2026-07-10T14:43:26.288565"
+    "last_accessed": "2026-07-10T15:52:21.128465"
   },
   "c296063ff2da": {
     "id": "c296063ff2da",
@@ -607,7 +607,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:10:34.108872",
-    "last_accessed": "2026-07-10T14:43:26.288566"
+    "last_accessed": "2026-07-10T15:52:21.128466"
   },
   "74ebe4a82b33": {
     "id": "74ebe4a82b33",
@@ -619,7 +619,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:24:04.031165",
-    "last_accessed": "2026-07-10T14:43:26.288567"
+    "last_accessed": "2026-07-10T15:52:21.128468"
   },
   "66f81854a019": {
     "id": "66f81854a019",
@@ -631,7 +631,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:24:04.033790",
-    "last_accessed": "2026-07-10T14:43:26.288568"
+    "last_accessed": "2026-07-10T15:52:21.128470"
   },
   "34e9f1f53645": {
     "id": "34e9f1f53645",
@@ -643,7 +643,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:24:35.074742",
-    "last_accessed": "2026-07-10T14:43:26.288569"
+    "last_accessed": "2026-07-10T15:52:21.128472"
   },
   "ffe61a986604": {
     "id": "ffe61a986604",
@@ -655,7 +655,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-09T19:24:35.093063",
-    "last_accessed": "2026-07-10T14:43:26.288570"
+    "last_accessed": "2026-07-10T15:52:21.128473"
   },
   "f3f1c6482472": {
     "id": "f3f1c6482472",
@@ -667,7 +667,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:17:18.231800",
-    "last_accessed": "2026-07-10T14:43:26.288571"
+    "last_accessed": "2026-07-10T15:52:21.128475"
   },
   "a4ee199a837c": {
     "id": "a4ee199a837c",
@@ -679,7 +679,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:17:18.234416",
-    "last_accessed": "2026-07-10T14:43:26.288572"
+    "last_accessed": "2026-07-10T15:52:21.128477"
   },
   "d0baa8272df2": {
     "id": "d0baa8272df2",
@@ -691,7 +691,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:18:14.270060",
-    "last_accessed": "2026-07-10T14:43:26.288573"
+    "last_accessed": "2026-07-10T15:52:21.128479"
   },
   "2c35048a1e03": {
     "id": "2c35048a1e03",
@@ -703,7 +703,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:18:14.272748",
-    "last_accessed": "2026-07-10T14:43:26.288574"
+    "last_accessed": "2026-07-10T15:52:21.128480"
   },
   "b75765e07e88": {
     "id": "b75765e07e88",
@@ -715,7 +715,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:18:27.409526",
-    "last_accessed": "2026-07-10T14:43:26.288575"
+    "last_accessed": "2026-07-10T15:52:21.128482"
   },
   "41f957839dd3": {
     "id": "41f957839dd3",
@@ -727,7 +727,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T00:18:27.429738",
-    "last_accessed": "2026-07-10T14:43:26.288576"
+    "last_accessed": "2026-07-10T15:52:21.128484"
   },
   "d7c5d2ae2bea": {
     "id": "d7c5d2ae2bea",
@@ -739,7 +739,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:09.318535",
-    "last_accessed": "2026-07-10T14:43:26.288577"
+    "last_accessed": "2026-07-10T15:52:21.128486"
   },
   "d3da46cd6ed5": {
     "id": "d3da46cd6ed5",
@@ -751,7 +751,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:09.335130",
-    "last_accessed": "2026-07-10T14:43:26.288578"
+    "last_accessed": "2026-07-10T15:52:21.128487"
   },
   "91ee31776e55": {
     "id": "91ee31776e55",
@@ -763,7 +763,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:22.814991",
-    "last_accessed": "2026-07-10T14:43:26.288579"
+    "last_accessed": "2026-07-10T15:52:21.128489"
   },
   "83655f23152c": {
     "id": "83655f23152c",
@@ -775,7 +775,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:22.823052",
-    "last_accessed": "2026-07-10T14:43:26.288580"
+    "last_accessed": "2026-07-10T15:52:21.128491"
   },
   "e8d56c61a6df": {
     "id": "e8d56c61a6df",
@@ -787,7 +787,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:29.018970",
-    "last_accessed": "2026-07-10T14:43:26.288581"
+    "last_accessed": "2026-07-10T15:52:21.128492"
   },
   "73cd06bfe414": {
     "id": "73cd06bfe414",
@@ -799,7 +799,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:33:29.038185",
-    "last_accessed": "2026-07-10T14:43:26.288582"
+    "last_accessed": "2026-07-10T15:52:21.128495"
   },
   "cc295b605204": {
     "id": "cc295b605204",
@@ -811,7 +811,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:41:02.506541",
-    "last_accessed": "2026-07-10T14:43:26.288583"
+    "last_accessed": "2026-07-10T15:52:21.128496"
   },
   "1378f6d85eeb": {
     "id": "1378f6d85eeb",
@@ -823,7 +823,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:41:02.509432",
-    "last_accessed": "2026-07-10T14:43:26.288584"
+    "last_accessed": "2026-07-10T15:52:21.128498"
   },
   "5008f446082b": {
     "id": "5008f446082b",
@@ -835,7 +835,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:43:09.605729",
-    "last_accessed": "2026-07-10T14:43:26.288585"
+    "last_accessed": "2026-07-10T15:52:21.128500"
   },
   "bdcd3b81d8b0": {
     "id": "bdcd3b81d8b0",
@@ -847,7 +847,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:43:09.608607",
-    "last_accessed": "2026-07-10T14:43:26.288586"
+    "last_accessed": "2026-07-10T15:52:21.128501"
   },
   "c31b765502eb": {
     "id": "c31b765502eb",
@@ -859,7 +859,7 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:43:26.300511",
-    "last_accessed": "2026-07-10T14:43:26.300514"
+    "last_accessed": "2026-07-10T15:52:21.128503"
   },
   "4541d60ca496": {
     "id": "4541d60ca496",
@@ -871,6 +871,678 @@
     ],
     "confidence_score": 0.6,
     "created_at": "2026-07-10T14:43:26.303480",
-    "last_accessed": "2026-07-10T14:43:26.303482"
+    "last_accessed": "2026-07-10T15:52:21.128505"
+  },
+  "69b3bfb33812": {
+    "id": "69b3bfb33812",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:49:38.229795",
+    "last_accessed": "2026-07-10T15:52:21.128506"
+  },
+  "ffe9a7375eb4": {
+    "id": "ffe9a7375eb4",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:49:38.243392",
+    "last_accessed": "2026-07-10T15:52:21.128508"
+  },
+  "8c00418e66d9": {
+    "id": "8c00418e66d9",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:49:50.728645",
+    "last_accessed": "2026-07-10T15:52:21.128510"
+  },
+  "a1a10383095b": {
+    "id": "a1a10383095b",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:49:50.731851",
+    "last_accessed": "2026-07-10T15:52:21.128511"
+  },
+  "8a394df0d23d": {
+    "id": "8a394df0d23d",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:54:49.110701",
+    "last_accessed": "2026-07-10T15:52:21.128513"
+  },
+  "c60a7af47069": {
+    "id": "c60a7af47069",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:54:49.124932",
+    "last_accessed": "2026-07-10T15:52:21.128515"
+  },
+  "77137ed3233d": {
+    "id": "77137ed3233d",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:55:30.931687",
+    "last_accessed": "2026-07-10T15:52:21.128517"
+  },
+  "40d08362540f": {
+    "id": "40d08362540f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:55:30.945745",
+    "last_accessed": "2026-07-10T15:52:21.128519"
+  },
+  "7cd25cd1db0c": {
+    "id": "7cd25cd1db0c",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:57:32.310543",
+    "last_accessed": "2026-07-10T15:52:21.128520"
+  },
+  "1ef1ad81771d": {
+    "id": "1ef1ad81771d",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:57:32.324203",
+    "last_accessed": "2026-07-10T15:52:21.128522"
+  },
+  "9efa08e88b6f": {
+    "id": "9efa08e88b6f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:57:49.784449",
+    "last_accessed": "2026-07-10T15:52:21.128524"
+  },
+  "a9f196408cfa": {
+    "id": "a9f196408cfa",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:57:49.787786",
+    "last_accessed": "2026-07-10T15:52:21.128525"
+  },
+  "991bd9b6bf4f": {
+    "id": "991bd9b6bf4f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:58:14.348977",
+    "last_accessed": "2026-07-10T15:52:21.128527"
+  },
+  "7835f3171a97": {
+    "id": "7835f3171a97",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:58:14.363722",
+    "last_accessed": "2026-07-10T15:52:21.128529"
+  },
+  "a547ef5deda5": {
+    "id": "a547ef5deda5",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:58:35.070227",
+    "last_accessed": "2026-07-10T15:52:21.128530"
+  },
+  "f7216a3e7bc0": {
+    "id": "f7216a3e7bc0",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T14:58:35.106857",
+    "last_accessed": "2026-07-10T15:52:21.128532"
+  },
+  "35627d7320c0": {
+    "id": "35627d7320c0",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:02:23.228381",
+    "last_accessed": "2026-07-10T15:52:21.128534"
+  },
+  "7e8d74acf9e2": {
+    "id": "7e8d74acf9e2",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:02:23.244369",
+    "last_accessed": "2026-07-10T15:52:21.128535"
+  },
+  "19710c05b9f1": {
+    "id": "19710c05b9f1",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:02:28.789959",
+    "last_accessed": "2026-07-10T15:52:21.128537"
+  },
+  "b73bd7a830be": {
+    "id": "b73bd7a830be",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:02:28.804124",
+    "last_accessed": "2026-07-10T15:52:21.128539"
+  },
+  "96f371d1315a": {
+    "id": "96f371d1315a",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:03:34.742805",
+    "last_accessed": "2026-07-10T15:52:21.128540"
+  },
+  "fef6ba1d35d5": {
+    "id": "fef6ba1d35d5",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:03:34.747258",
+    "last_accessed": "2026-07-10T15:52:21.128542"
+  },
+  "0ef67fa21b4814d8": {
+    "id": "0ef67fa21b4814d8",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:13:06.267036",
+    "last_accessed": "2026-07-10T15:52:21.128544"
+  },
+  "c4a550fd421edb0d": {
+    "id": "c4a550fd421edb0d",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:13:06.271094",
+    "last_accessed": "2026-07-10T15:52:21.128546"
+  },
+  "05207ecdb3f81e9e": {
+    "id": "05207ecdb3f81e9e",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:14:22.464308",
+    "last_accessed": "2026-07-10T15:52:21.128547"
+  },
+  "ccb44d701c0f660c": {
+    "id": "ccb44d701c0f660c",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:14:22.468211",
+    "last_accessed": "2026-07-10T15:52:21.128549"
+  },
+  "0b1fc15577656035": {
+    "id": "0b1fc15577656035",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:22:26.090199",
+    "last_accessed": "2026-07-10T15:52:21.128551"
+  },
+  "951bc922e0450fd2": {
+    "id": "951bc922e0450fd2",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:22:26.104864",
+    "last_accessed": "2026-07-10T15:52:21.128552"
+  },
+  "fda051effff0c7a5": {
+    "id": "fda051effff0c7a5",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:23:23.824028",
+    "last_accessed": "2026-07-10T15:52:21.128554"
+  },
+  "7750bc759797b9b3": {
+    "id": "7750bc759797b9b3",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:23:23.828065",
+    "last_accessed": "2026-07-10T15:52:21.128556"
+  },
+  "1191c3a267e9ceee": {
+    "id": "1191c3a267e9ceee",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:23:43.451248",
+    "last_accessed": "2026-07-10T15:52:21.128557"
+  },
+  "2877f70ab3896db5": {
+    "id": "2877f70ab3896db5",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:23:43.466996",
+    "last_accessed": "2026-07-10T15:52:21.128559"
+  },
+  "5a25a49ba41663a7": {
+    "id": "5a25a49ba41663a7",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:25:51.728515",
+    "last_accessed": "2026-07-10T15:52:21.128561"
+  },
+  "c312f73803eca0b4": {
+    "id": "c312f73803eca0b4",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:25:51.744029",
+    "last_accessed": "2026-07-10T15:52:21.128563"
+  },
+  "a4879634dac494d3": {
+    "id": "a4879634dac494d3",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:25:57.306358",
+    "last_accessed": "2026-07-10T15:52:21.128564"
+  },
+  "a3e4404dca686e9e": {
+    "id": "a3e4404dca686e9e",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:25:57.311381",
+    "last_accessed": "2026-07-10T15:52:21.128566"
+  },
+  "3a13b79163d8f862": {
+    "id": "3a13b79163d8f862",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:27:34.264154",
+    "last_accessed": "2026-07-10T15:52:21.128568"
+  },
+  "b2b4da409bf9e4ab": {
+    "id": "b2b4da409bf9e4ab",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:27:34.268346",
+    "last_accessed": "2026-07-10T15:52:21.128569"
+  },
+  "d4ab40061eee52ac": {
+    "id": "d4ab40061eee52ac",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:38:29.669395",
+    "last_accessed": "2026-07-10T15:52:21.128571"
+  },
+  "250567e960b9642c": {
+    "id": "250567e960b9642c",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:38:29.683993",
+    "last_accessed": "2026-07-10T15:52:21.128573"
+  },
+  "c54ab46d059ee910": {
+    "id": "c54ab46d059ee910",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:38:42.848196",
+    "last_accessed": "2026-07-10T15:52:21.128574"
+  },
+  "a37d1197135fb82d": {
+    "id": "a37d1197135fb82d",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:38:42.852346",
+    "last_accessed": "2026-07-10T15:52:21.128576"
+  },
+  "2e8e09c859c4d2a9": {
+    "id": "2e8e09c859c4d2a9",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:39:49.311457",
+    "last_accessed": "2026-07-10T15:52:21.128578"
+  },
+  "f7353b0d1d16740f": {
+    "id": "f7353b0d1d16740f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:39:49.327081",
+    "last_accessed": "2026-07-10T15:52:21.128580"
+  },
+  "626ad3fd2a113b53": {
+    "id": "626ad3fd2a113b53",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:45:56.970514",
+    "last_accessed": "2026-07-10T15:52:21.128581"
+  },
+  "476a709c4a43ad26": {
+    "id": "476a709c4a43ad26",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:45:56.986363",
+    "last_accessed": "2026-07-10T15:52:21.128591"
+  },
+  "a6a56c8a2aee4a01": {
+    "id": "a6a56c8a2aee4a01",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:46:56.248952",
+    "last_accessed": "2026-07-10T15:52:21.128592"
+  },
+  "d0a9e12c14e13e04": {
+    "id": "d0a9e12c14e13e04",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:46:56.265506",
+    "last_accessed": "2026-07-10T15:52:21.128594"
+  },
+  "e2207ecf1d687c4f": {
+    "id": "e2207ecf1d687c4f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:47:39.366217",
+    "last_accessed": "2026-07-10T15:52:21.128596"
+  },
+  "7ea9f9e8e0464f55": {
+    "id": "7ea9f9e8e0464f55",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:47:39.370514",
+    "last_accessed": "2026-07-10T15:52:21.128598"
+  },
+  "6cdad544a1ead6f9": {
+    "id": "6cdad544a1ead6f9",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:48:02.923213",
+    "last_accessed": "2026-07-10T15:52:21.128599"
+  },
+  "a40c94214a4e683f": {
+    "id": "a40c94214a4e683f",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:48:02.927700",
+    "last_accessed": "2026-07-10T15:52:21.128601"
+  },
+  "21c6250f57012b99": {
+    "id": "21c6250f57012b99",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:52:09.544041",
+    "last_accessed": "2026-07-10T15:52:21.128603"
+  },
+  "b81857a32416ccbb": {
+    "id": "b81857a32416ccbb",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:52:09.548446",
+    "last_accessed": "2026-07-10T15:52:21.128605"
+  },
+  "020b05dc0047c3ce": {
+    "id": "020b05dc0047c3ce",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Check for missing colons.",
+    "examples": [
+      "{'code': \"print('hello'\"}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:52:21.128880",
+    "last_accessed": "2026-07-10T15:52:21.128883"
+  },
+  "b37d505f9b4a2ae7": {
+    "id": "b37d505f9b4a2ae7",
+    "domain": "coding",
+    "pattern_type": "success_pattern",
+    "description": "Always check for off-by-one errors in loops.",
+    "examples": [
+      "{'code': 'for i in range(n): ...'}"
+    ],
+    "confidence_score": 0.6,
+    "created_at": "2026-07-10T15:52:21.143598",
+    "last_accessed": "2026-07-10T15:52:21.143602"
   }
 }

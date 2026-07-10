@@ -330,7 +330,7 @@ class TextEncoder:
             idf = 1.0 + (self.document_count / (doc_freq + 1))
             vector[term] = tf * idf
 
-        embedding_id = hashlib.md5(text.encode()).hexdigest()[:12]
+        embedding_id = hashlib.sha256(text.encode()).hexdigest()[:16]
         return VectorEmbedding(id=embedding_id, vector=vector, metadata={"text_length": len(text)})
 
     def batch_encode(self, texts: List[str]) -> List[VectorEmbedding]:
@@ -378,7 +378,7 @@ class SymbolicParser:
             params = match.group(2)
 
             node = SymbolicNode(
-                id=f"func_{func_name}_{hashlib.md5(code.encode()).hexdigest()[:8]}",
+                id=f"func_{func_name}_{hashlib.sha256(code.encode()).hexdigest()[:16]}",
                 entity_type=EntityType.ACTION,
                 label=f"Function: {func_name}",
                 definition=f"Function '{func_name}' with parameters: {params}",
@@ -397,7 +397,7 @@ class SymbolicParser:
             bases = match.group(2) or ""
 
             node = SymbolicNode(
-                id=f"class_{class_name}_{hashlib.md5(code.encode()).hexdigest()[:8]}",
+                id=f"class_{class_name}_{hashlib.sha256(code.encode()).hexdigest()[:16]}",
                 entity_type=EntityType.CONCEPT,
                 label=f"Class: {class_name}",
                 definition=f"Class '{class_name}' inheriting from: {bases}",
@@ -414,7 +414,7 @@ class SymbolicParser:
         for match in re.finditer(r"assert\s+(.+?)(?:\n|$)", code):
             constraint = match.group(1)
             node = SymbolicNode(
-                id=f"constraint_{hashlib.md5(constraint.encode()).hexdigest()[:8]}",
+                id=f"constraint_{hashlib.sha256(constraint.encode()).hexdigest()[:16]}",
                 entity_type=EntityType.CONSTRAINT,
                 label="Assertion",
                 definition=f"Runtime constraint: {constraint}",
@@ -436,7 +436,7 @@ class SymbolicParser:
             context = text[start:end]
 
             node = SymbolicNode(
-                id=f"causation_{hashlib.md5(context.encode()).hexdigest()[:8]}",
+                id=f"causation_{hashlib.sha256(context.encode()).hexdigest()[:16]}",
                 entity_type=EntityType.RELATION,
                 label="Causal Relationship",
                 definition=context.strip(),
@@ -452,7 +452,7 @@ class SymbolicParser:
             context = text[start:end]
 
             node = SymbolicNode(
-                id=f"condition_{hashlib.md5(context.encode()).hexdigest()[:8]}",
+                id=f"condition_{hashlib.sha256(context.encode()).hexdigest()[:16]}",
                 entity_type=EntityType.CONSTRAINT,
                 label="Conditional Statement",
                 definition=context.strip(),

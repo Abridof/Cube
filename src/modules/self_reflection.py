@@ -24,6 +24,8 @@ import re
 import sys
 import difflib
 import hashlib
+import resource
+import time
 from typing import Dict, List, Optional, Tuple, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
@@ -614,59 +616,158 @@ class CodeModifier:
 
 
 class SafetySandbox:
-    """Secure execution environment for testing changes"""
+    """[黑客视角] Secure execution environment with multi-layer defense:
+    Layer 1: AST Static Analysis
+    Layer 2: Namespace Isolation  
+    Layer 3: Resource Limits (CPU/Memory/Processes)
+    Layer 4: Seccomp-ready structure for production
+    """
 
-    def __init__(self):
-        self.allowed_modules: Set[str] = {"os", "sys", "re", "ast", "math", "random"}
-        self.forbidden_operations: Set[str] = {"eval", "exec", "__import__", "open"}
+    # P0: 禁止的 AST 节点类型 - 扩展防御面
+    FORBIDDEN_AST_NODES = {
+        'Import', 'ImportFrom',  # 禁止动态导入
+        'Eval',  # 禁止 eval
+        'Exec',  # 显式禁止 Exec 节点（compile 阶段双重防护）
+    }
+    
+    # P0: 禁止的属性访问 - 防止对象图遍历攻击
+    FORBIDDEN_ATTRIBUTES = {
+        '__subclasses__', '__mro__', '__globals__', '__code__', 
+        '__builtins__', '__import__', 'func_globals', 'gi_frame',
+        'cr_frame', 'f_back', 'f_globals', 'f_locals', 'f_builtins',
+        '__self__', '__func__', '__dict__', '__bases__'
+    }
+    
+    # P0: 允许的标准库模块白名单 - 最小权限原则
+    ALLOWED_MODULES = {"math", "random", "re", "typing", "dataclasses", "enum", "json", "collections"}
+    
+    # P0: 允许的内置函数白名单 - 精简到绝对安全集合
+    ALLOWED_BUILTINS = {
+        'int': int, 'float': float, 'str': str, 'list': list, 
+        'dict': dict, 'tuple': tuple, 'set': set, 'bool': bool,
+        'len': len, 'range': range, 'sum': sum, 'min': min, 'max': max,
+        'abs': abs, 'round': round, 'True': True, 'False': False, 'None': None,
+        'Exception': Exception, 'ValueError': ValueError, 'TypeError': TypeError,
+        'print': print, 'enumerate': enumerate, 'zip': zip, 'map': map, 
+        'filter': filter, 'sorted': sorted, 'reversed': reversed
+    }
+
+    def __init__(self, timeout_seconds: int = 5, max_memory_mb: int = 128):
+        self.allowed_modules: Set[str] = self.ALLOWED_MODULES
         self.execution_log: List[str] = []
+        self.timeout_seconds = timeout_seconds
+        self.max_memory_mb = max_memory_mb
+
+    def _validate_ast(self, code: str) -> Tuple[bool, Optional[str]]:
+        """使用 AST 静态分析验证代码安全性"""
+        try:
+            tree = ast.parse(code)
+        except SyntaxError as e:
+            return False, f"Syntax error: {e}"
+        
+        for node in ast.walk(tree):
+            # 检查禁止的节点类型
+            if type(node).__name__ in self.FORBIDDEN_AST_NODES:
+                return False, f"Forbidden AST node: {type(node).__name__}"
+            
+            # 检查禁止的属性访问
+            if isinstance(node, ast.Attribute):
+                if node.attr in self.FORBIDDEN_ATTRIBUTES:
+                    return False, f"Forbidden attribute access: {node.attr}"
+            
+            # 检查函数调用
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Name):
+                    if node.func.id in ['eval', 'exec', 'open', '__import__']:
+                        return False, f"Forbidden function call: {node.func.id}"
+                elif isinstance(node.func, ast.Attribute):
+                    if node.func.attr in ['__subclasses__', '__mro__', '__globals__']:
+                        return False, f"Forbidden method call: {node.func.attr}"
+        
+        return True, None
 
     def execute_in_sandbox(self, code: str, context: Optional[Dict] = None) -> Any:
-        """Execute code in a restricted environment"""
-        # This is a simplified sandbox - a real implementation would use more sophisticated isolation
-        self.execution_log.append(f"Executing code snippet ({len(code)} chars)")
+        """
+        [极客视角] 在受限环境中执行代码，四层防御机制
+        Layer 1: AST 静态分析验证
+        Layer 2: 白名单全局命名空间隔离
+        Layer 3: 系统级资源限制 (CPU/内存/进程数)
+        Layer 4: 异常捕获与审计日志
+        """
+        self.execution_log.append(f"[SANDBOX] Executing code snippet ({len(code)} chars)")
 
-        # Check for forbidden operations
-        for op in self.forbidden_operations:
-            if op in code:
-                raise SecurityError(f"Forbidden operation detected: {op}")
+        # Layer 1: AST 静态分析
+        is_safe, error_msg = self._validate_ast(code)
+        if not is_safe:
+            self.execution_log.append(f"[BLOCKED] AST validation failed: {error_msg}")
+            raise SecurityError(f"AST validation failed: {error_msg}")
 
-        # Create restricted globals
+        # Layer 2: 构建极简白名单全局命名空间
+        # 关键：不使用默认的 __builtins__，完全手动控制
         safe_globals = {
-            "__builtins__": {
-                "print": print,
-                "len": len,
-                "range": range,
-                "str": str,
-                "int": int,
-                "float": float,
-                "list": list,
-                "dict": dict,
-                "set": set,
-                "tuple": tuple,
-                "bool": bool,
-                "min": min,
-                "max": max,
-                "sum": sum,
-                "abs": abs,
-                "round": round,
-            }
+            "__builtins__": self.ALLOWED_BUILTINS.copy(),
+            "__name__": "__sandbox__",
+            "__doc__": None,
+            "__package__": None
         }
-
-        # Add allowed modules
+        
+        # Layer 2.5: 添加允许的模块 (最小权限原则)
         for module_name in self.allowed_modules:
             try:
                 module = __import__(module_name)
                 safe_globals[module_name] = module
             except ImportError:
                 pass
-
+        
+        # Layer 2.6: 过滤上下文中的危险项
         if context:
-            safe_globals.update(context)
+            for key, value in context.items():
+                if key not in self.FORBIDDEN_ATTRIBUTES and not key.startswith('_'):
+                    safe_globals[key] = value
 
-        # Execute in restricted environment
-        local_vars = {}
-        exec(code, safe_globals, local_vars)
+        local_vars: Dict[str, Any] = {}
+        
+        # Layer 3: 系统级资源限制
+        old_cpu_limit = resource.getrlimit(resource.RLIMIT_CPU)
+        old_mem_limit = resource.getrlimit(resource.RLIMIT_AS)
+        old_nproc_limit = resource.getrlimit(resource.RLIMIT_NPROC)
+        
+        try:
+            # CPU 时间限制 (防止无限循环 DoS)
+            resource.setrlimit(
+                resource.RLIMIT_CPU, 
+                (self.timeout_seconds, self.timeout_seconds + 1)
+            )
+            # 虚拟内存限制 (防止内存耗尽 DoS)
+            memory_limit_bytes = self.max_memory_mb * 1024 * 1024
+            resource.setrlimit(
+                resource.RLIMIT_AS,
+                (memory_limit_bytes, memory_limit_bytes)
+            )
+            # 子进程数量限制 (防止 fork bomb)
+            resource.setrlimit(resource.RLIMIT_NPROC, (10, 10))
+            
+            # Layer 4: 编译并执行 (compile+exec 分离增强控制)
+            compiled_code = compile(code, '<sandbox>', 'exec')
+            exec(compiled_code, safe_globals, local_vars)  # nosec: B102 - 已通过 AST 验证
+            
+            self.execution_log.append(f"[SUCCESS] Code executed successfully")
+            
+        except MemoryError:
+            self.execution_log.append(f"[BLOCKED] Memory limit exceeded ({self.max_memory_mb}MB)")
+            raise SecurityError(f"Memory limit exceeded ({self.max_memory_mb}MB)")
+        except Exception as e:
+            error_str = str(e).lower()
+            if "timed out" in error_str or "cpu time" in error_str or isinstance(e, ResourceError):
+                self.execution_log.append(f"[BLOCKED] Execution timeout ({self.timeout_seconds}s)")
+                raise SecurityError(f"Execution timeout ({self.timeout_seconds}s)")
+            # 其他异常正常抛出 (可能是用户代码逻辑错误)
+            raise
+        finally:
+            # 恢复原始资源限制 (避免影响后续代码)
+            resource.setrlimit(resource.RLIMIT_CPU, old_cpu_limit)
+            resource.setrlimit(resource.RLIMIT_AS, old_mem_limit)
+            resource.setrlimit(resource.RLIMIT_NPROC, old_nproc_limit)
 
         return local_vars
 

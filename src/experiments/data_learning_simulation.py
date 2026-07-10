@@ -49,7 +49,7 @@ class DataSample:
 
     def get_hash(self) -> str:
         """获取内容哈希"""
-        return hashlib.md5(self.content.encode()).hexdigest()[:16]
+        return hashlib.sha256(self.content.encode()).hexdigest()[:16]
 
 
 class WikipediaSimulator:
@@ -394,7 +394,7 @@ class ScientificPaperSimulator:
         return DataSample(
             content=content,
             source_type=DataSourceType.SCIENTIFIC_PAPER,
-            source_id=f"paper_{hashlib.md5(title.encode()).hexdigest()[:8]}",
+            source_id=f"paper_{hashlib.sha256(title.encode()).hexdigest()[:8]}",
             metadata={
                 "title": title,
                 "field": field,

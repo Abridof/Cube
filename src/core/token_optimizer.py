@@ -185,7 +185,7 @@ class TokenOptimizer:
     def get_cache_key(self, code: str, error_message: str) -> str:
         """生成缓存 Key"""
         content = f"{code}|||{error_message}"
-        return hashlib.md5(content.encode()).hexdigest()
+        return hashlib.sha256(content.encode()).hexdigest()
 
     def check_cache(self, code: str, error_message: str) -> Optional[str]:
         """检查缓存中是否有修复方案"""

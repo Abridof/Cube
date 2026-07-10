@@ -203,7 +203,7 @@ class SmartDebugLoop:
     def _get_error_hash(self, error: str, code_snippet: str) -> str:
         """生成错误的唯一哈希用于缓存"""
         content = f"{error}|||{code_snippet}"
-        return hashlib.md5(content.encode()).hexdigest()
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
 
     def _estimate_tokens(self, text: str) -> int:
         """粗略估算 Token 数 (1 token ≈ 4 chars)"""

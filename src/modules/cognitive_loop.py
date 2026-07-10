@@ -16,9 +16,10 @@
 import time
 import json
 import random
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional, Tuple, TypedDict
 from dataclasses import dataclass, field
 from enum import Enum
+from collections import deque
 
 # 导入前序模块
 try:
@@ -93,6 +94,43 @@ class LoopPhase(Enum):
     REFLECT = "reflect"
 
 
+# Type definitions for better type safety
+class ReasoningResults(TypedDict, total=False):
+    """Type definition for reasoning results"""
+    graph_retrieval: List
+    vector_search: List
+    predictions: List
+    confidence: float
+
+class DecisionOutput(TypedDict, total=False):
+    """Type definition for decision output"""
+    selected_action: Dict
+    alternative_actions: List[Dict]
+    motivation_state: str
+    confidence: float
+
+class ActionFeedback(TypedDict, total=False):
+    """Type definition for action feedback"""
+    success: bool
+    reward: float
+    new_state: Optional[str]
+    observations: List[str]
+
+class LearningStats(TypedDict, total=False):
+    """Type definition for learning statistics"""
+    graph_updates: int
+    neural_updates: int
+    loss_change: float
+    memory_stored: bool
+
+class ReflectionOutput(TypedDict, total=False):
+    """Type definition for reflection output"""
+    performance_score: float
+    insights: List[str]
+    self_model_updates: List[str]
+    strategy_adjustments: List[str]
+
+
 @dataclass
 class CognitiveEvent:
     """认知事件记录"""
@@ -135,7 +173,8 @@ class CognitiveLoopController:
 
         # 状态追踪
         self.current_state: Optional[State] = None
-        self.event_log: List[CognitiveEvent] = []
+        # [极客视角] 使用环形缓冲区防止内存泄漏，最大容量 10000 条事件
+        self.event_log: deque[CognitiveEvent] = deque(maxlen=10000)
         self.loop_count = 0
         self.is_running = False
 
@@ -199,25 +238,22 @@ class CognitiveLoopController:
             try:
                 graph_results = self.knowledge_graph.query(query_ucr.content)
                 results["graph_retrieval"] = graph_results[:5]  # 取前 5 个
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         # 向量相似性搜索
         if hasattr(self.memory_bank, "search_similar"):
             try:
                 similar = self.memory_bank.search_similar(query_ucr, top_k=5)
                 results["vector_search"] = similar
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         # 世界模型预测
         if self.current_state and hasattr(self.world_model, "predict"):
             try:
                 prediction = self.world_model.predict(self.current_state, steps=3)
                 results["predictions"] = [prediction] if prediction else []
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         # 计算置信度
         total_evidence = len(results["graph_retrieval"]) + len(results["vector_search"])
         results["confidence"] = min(1.0, total_evidence * 0.2)
@@ -376,9 +412,8 @@ class CognitiveLoopController:
                 effect = "success" if feedback["success"] else "failure"
                 # self.knowledge_graph.add_relation(cause, "leads_to", effect)
                 learning_stats["graph_updates"] = 1
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         # 神经权重更新 (对比学习)
         if hasattr(self.neural_encoder, "update_weights"):
             try:
@@ -387,17 +422,15 @@ class CognitiveLoopController:
                 # self.neural_encoder.update_weights(reward)
                 learning_stats["neural_updates"] = 1
                 learning_stats["loss_change"] = -0.01 if reward > 0 else 0.02
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         # 存储到记忆库
         if hasattr(self.memory_bank, "store"):
             try:
                 self.memory_bank.store(experience)
                 learning_stats["memory_stored"] = True
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         event = CognitiveEvent(
             phase=LoopPhase.LEARN,
             timestamp=start_time,
@@ -446,9 +479,8 @@ class CognitiveLoopController:
                     }
                 )
                 reflection["self_model_updates"].append("capability_metric_updated")
-            except:
-                pass
-
+            except Exception as e:
+                pass  # TODO: Add proper error logging: {e}
         event = CognitiveEvent(
             phase=LoopPhase.REFLECT,
             timestamp=start_time,

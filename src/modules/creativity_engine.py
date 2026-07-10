@@ -773,23 +773,29 @@ class CreativityGenerator:
         return ideas[:num_ideas]
 
     def _find_related_concepts(self, concept_name: str, top_k: int = 5) -> List[str]:
-        """查找相关概念"""
+        """查找相关概念 - 基于关系、类别和激活水平"""
         concept = self.concept_space.get_concept(concept_name)
         if not concept:
             return []
 
-        # 基于关系和类别查找
         related = []
 
-        # 直接相关的概念
+        # 1. 直接相关的概念 (通过关系)
         for rel_type, target in concept.relations:
             if target in self.concept_space.concepts:
                 related.append((target, 0.9))
 
-        # 同类别的概念
+        # 2. 同类别的概念
         for name, c in self.concept_space.concepts.items():
             if name != concept_name and c.category == concept.category:
                 related.append((name, 0.6))
+
+        # 3. 如果没有找到关系或同类概念，返回所有其他概念 (降级策略)
+        if not related:
+            for name, c in self.concept_space.concepts.items():
+                if name != concept_name:
+                    # 按激活水平排序
+                    related.append((name, c.activation_level * 0.5))
 
         # 排序并返回
         related.sort(key=lambda x: x[1], reverse=True)

@@ -106,8 +106,9 @@ class ImagePerceiver:
             try:
                 # 尝试 base64 解码
                 image_bytes = base64.b64decode(image_data)
-            except:
+            except Exception as e:
                 # 可能是文件路径或 URL，这里简化处理
+                # TODO: Add proper error logging: {e}
                 image_bytes = image_data.encode("utf-8")
         elif isinstance(image_data, bytes):
             image_bytes = image_data
@@ -127,7 +128,7 @@ class ImagePerceiver:
             features = extractor(image_bytes, metadata)
             for feat in features:
                 obj = PerceivedObject(
-                    object_id=f"img_{feature_name}_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                    object_id=f"img_{feature_name}_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                     modality=ModalityType.IMAGE,
                     category=feature_name,
                     features=[feat],
@@ -171,7 +172,7 @@ class ImagePerceiver:
 
             # 创建整体图像对象
             obj = PerceivedObject(
-                object_id=f"img_struct_{hashlib.md5(str(image_dict).encode()).hexdigest()[:8]}",
+                object_id=f"img_struct_{hashlib.sha256(str(image_dict).encode()).hexdigest()[:16]}",
                 modality=ModalityType.IMAGE,
                 category="scene",
                 features=[
@@ -391,7 +392,7 @@ class ImagePerceiver:
             scene_features.extend(obj.features)
 
         scene = PerceivedObject(
-            object_id=f"img_scene_{hashlib.md5(str(metadata).encode()).hexdigest()[:8]}",
+            object_id=f"img_scene_{hashlib.sha256(str(metadata).encode()).hexdigest()[:16]}",
             modality=ModalityType.IMAGE,
             category="integrated_scene",
             features=scene_features,
@@ -434,7 +435,8 @@ class AudioPerceiver:
         if isinstance(audio_data, str):
             try:
                 audio_bytes = base64.b64decode(audio_data)
-            except:
+            except Exception as e:
+                # TODO: Add proper error logging: {e}
                 audio_bytes = audio_data.encode("utf-8")
 
             # 转换为样本（假设为 16-bit PCM）
@@ -459,7 +461,7 @@ class AudioPerceiver:
         temporal_features = self._extract_temporal_features(samples, metadata)
         for feat in temporal_features:
             obj = PerceivedObject(
-                object_id=f"aud_temporal_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                object_id=f"aud_temporal_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                 modality=ModalityType.AUDIO,
                 category="temporal_pattern",
                 features=[feat],
@@ -472,7 +474,7 @@ class AudioPerceiver:
         spectral_features = self._extract_spectral_features(samples, metadata)
         for feat in spectral_features:
             obj = PerceivedObject(
-                object_id=f"aud_spectral_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                object_id=f"aud_spectral_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                 modality=ModalityType.AUDIO,
                 category="spectral_pattern",
                 features=[feat],
@@ -485,7 +487,7 @@ class AudioPerceiver:
         rhythm_features = self._extract_rhythm_features(samples, metadata)
         for feat in rhythm_features:
             obj = PerceivedObject(
-                object_id=f"aud_rhythm_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                object_id=f"aud_rhythm_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                 modality=ModalityType.AUDIO,
                 category="rhythm_pattern",
                 features=[feat],
@@ -708,7 +710,8 @@ class StructuredDataPerceiver:
                 # 尝试自动检测
                 try:
                     parsed_data = json.loads(data)
-                except:
+                except Exception as e:
+                    # TODO: Add proper error logging: {e}
                     parsed_data = {"raw": data}
         else:
             parsed_data = data
@@ -717,7 +720,7 @@ class StructuredDataPerceiver:
         structure_features = self._analyze_structure(parsed_data)
         for feat in structure_features:
             obj = PerceivedObject(
-                object_id=f"struct_{feat.name}_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                object_id=f"struct_{feat.name}_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                 modality=ModalityType.STRUCTURED_DATA,
                 category="structure",
                 features=[feat],
@@ -730,7 +733,7 @@ class StructuredDataPerceiver:
             stats_features = self._analyze_list_statistics(parsed_data)
             for feat in stats_features:
                 obj = PerceivedObject(
-                    object_id=f"struct_stats_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                    object_id=f"struct_stats_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                     modality=ModalityType.STRUCTURED_DATA,
                     category="statistics",
                     features=[feat],
@@ -742,7 +745,7 @@ class StructuredDataPerceiver:
             dict_features = self._analyze_dict_structure(parsed_data)
             for feat in dict_features:
                 obj = PerceivedObject(
-                    object_id=f"struct_dict_{hashlib.md5(str(feat.value).encode()).hexdigest()[:8]}",
+                    object_id=f"struct_dict_{hashlib.sha256(str(feat.value).encode()).hexdigest()[:16]}",
                     modality=ModalityType.STRUCTURED_DATA,
                     category="dictionary",
                     features=[feat],
@@ -946,7 +949,7 @@ class MultimodalFusionEngine:
         ]
 
         obj = PerceivedObject(
-            object_id=f"text_{hashlib.md5(text.encode()).hexdigest()[:8]}",
+            object_id=f"text_{hashlib.sha256(text.encode()).hexdigest()[:16]}",
             modality=ModalityType.TEXT,
             category="text_segment",
             features=features,

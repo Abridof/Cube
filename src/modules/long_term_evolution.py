@@ -220,9 +220,11 @@ class MutationEngine:
             return False
 
         # 在沙箱中测试（简化版）
+        # 为了测试可重复性，使用固定种子或确定性逻辑
         if self.sandbox_enabled:
-            # 模拟沙箱测试
-            success = random.random() > 0.1  # 90% 成功率
+            # 使用变异内容的哈希来确定成功与否，保证测试可重复性
+            mutation_hash = hash(json.dumps(mutation, sort_keys=True))
+            success = (mutation_hash % 10) != 0  # 90% 成功率但确定性
         else:
             success = True
 

@@ -259,10 +259,22 @@ class TestGridWorldEnvironment(unittest.TestCase):
         self.assertEqual(reward, -10.0)
 
     def test_step_goal_reached(self):
-        """测试到达目标"""
-        # 在 (0, 1) 放置目标
+        """测试到达目标 - 固定随机种子确保可重复性"""
+        # 使用固定种子避免随机障碍物覆盖目标位置
+        import random
+        random.seed(42)
+        self.env.reset()
+        
+        # 清除所有障碍和目标，然后精确设置
+        self.env.obstacles.clear()
+        self.env.goals.clear()
+        self.env.rewards.clear()
+        
+        # 在 (0, 1) 放置唯一目标
         self.env.goals.add((0, 1))
+        self.env.state.obstacles = self.env.obstacles
         self.env.state.goals = self.env.goals
+        self.env.state.rewards = self.env.rewards
 
         state, reward, done = self.env.step(GridWorldAction.UP)
 

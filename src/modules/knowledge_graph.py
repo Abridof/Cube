@@ -525,7 +525,7 @@ class MetaLearner:
 
     def generate_hypothesis(self, observation: str, related_concepts: List[str]) -> Hypothesis:
         """基于观察生成假设"""
-        hypothesis_id = f"hyp_{hashlib.md5(observation.encode()).hexdigest()[:12]}"
+        hypothesis_id = f"hyp_{hashlib.sha256(observation.encode()).hexdigest()[:16]}"
 
         hypothesis = Hypothesis(
             id=hypothesis_id,

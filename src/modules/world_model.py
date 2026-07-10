@@ -280,7 +280,7 @@ class WorldModel:
         timestamp = str(time.time())
         random_suffix = str(random.random())[2:8]
         hash_input = f"{prefix}_{timestamp}_{random_suffix}"
-        return f"{prefix}_{hashlib.md5(hash_input.encode()).hexdigest()[:12]}"
+        return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     # ========== 状态管理 ==========
 
