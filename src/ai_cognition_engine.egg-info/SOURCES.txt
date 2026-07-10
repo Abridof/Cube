@@ -19,6 +19,7 @@ tests/test_lifelong_learning.py
 tests/test_llm_client.py
 tests/test_metacognition.py
 tests/test_multimodal_perception.py
+tests/test_performance.py
 tests/test_self_reflection.py
 tests/test_slow_thinking.py
 tests/test_smart_debug.py

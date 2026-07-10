@@ -160,15 +160,19 @@ class CognitiveLoopController:
 
         # 创建 UCR
         ucr = self.ucr_layer.create_unit(
-            entity_type=EntityType.CONCEPT,
             content=str(raw_input)[:100],  # 截断避免过长
-            metadata={"modality": modality, "raw_length": len(str(raw_input))},
+            content_type="text",
+            domain="general",
+            tags={modality},
         )
 
         # 生成神经嵌入
         if hasattr(self.neural_encoder, "encode"):
             embedding = self.neural_encoder.encode(str(raw_input))
-            ucr.vector_embedding = embedding
+            if hasattr(ucr, 'vector'):
+                ucr.vector = embedding
+            else:
+                ucr["vector_embedding"] = embedding
 
         event = CognitiveEvent(
             phase=LoopPhase.PERCEIVE,
@@ -335,7 +339,8 @@ class CognitiveLoopController:
 
         # 更新世界模型状态
         if feedback.get("success"):
-            self.current_state = State() if not self.current_state else self.current_state
+            import uuid
+            self.current_state = State(state_id=f"state_{uuid.uuid4().hex[:8]}") if not self.current_state else self.current_state
             # 在实际实现中会更新状态变量
 
         event = CognitiveEvent(

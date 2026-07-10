@@ -20,21 +20,20 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-venv/
-ENV/
-env.bak/
-venv.bak/
 
-# Testing
-.pytest_cache/
+# Test and coverage
 .coverage
+coverage/
 htmlcov/
 .nox/
-.coverage.*
+.tox/
 
-# Miscellaneous
-*.log
-*.tmp
-.DS_Store
-Thumbs.db
+# Environment
+.env
+.env.local
+.env.*
+.venv
+venv/
+ENV/
+env.bak
 ```
