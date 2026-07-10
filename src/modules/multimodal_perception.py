@@ -106,8 +106,9 @@ class ImagePerceiver:
             try:
                 # 尝试 base64 解码
                 image_bytes = base64.b64decode(image_data)
-            except:
+            except Exception as e:
                 # 可能是文件路径或 URL，这里简化处理
+                # TODO: Add proper error logging: {e}
                 image_bytes = image_data.encode("utf-8")
         elif isinstance(image_data, bytes):
             image_bytes = image_data
@@ -434,7 +435,8 @@ class AudioPerceiver:
         if isinstance(audio_data, str):
             try:
                 audio_bytes = base64.b64decode(audio_data)
-            except:
+            except Exception as e:
+                # TODO: Add proper error logging: {e}
                 audio_bytes = audio_data.encode("utf-8")
 
             # 转换为样本（假设为 16-bit PCM）
@@ -708,7 +710,8 @@ class StructuredDataPerceiver:
                 # 尝试自动检测
                 try:
                     parsed_data = json.loads(data)
-                except:
+                except Exception as e:
+                    # TODO: Add proper error logging: {e}
                     parsed_data = {"raw": data}
         else:
             parsed_data = data
