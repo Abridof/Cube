@@ -8,7 +8,7 @@ import sys
 import os
 
 # 添加 src 到路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
 @pytest.fixture
@@ -36,6 +36,7 @@ def sample_error():
 @pytest.fixture
 def mock_llm_response():
     """Mock LLM 响应"""
+
     class MockResponse:
         text = "```python\nprint('Fixed!')\n```"
         tokens_used = 25
@@ -43,6 +44,7 @@ def mock_llm_response():
         latency_ms = 10
         success = True
         error = None
+
     return MockResponse()
 
 
