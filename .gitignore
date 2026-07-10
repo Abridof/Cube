@@ -21,19 +21,31 @@ wheels/
 .installed.cfg
 *.egg
 
-# Test and coverage
+# Testing
+.pytest_cache/
 .coverage
-coverage/
 htmlcov/
-.nox/
-.tox/
+coverage/
 
 # Environment
 .env
 .env.local
 .env.*
-.venv
+.venv/
 venv/
 ENV/
-env.bak
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
+# System
+.DS_Store
+Thumbs.db
 ```
