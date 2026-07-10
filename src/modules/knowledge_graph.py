@@ -17,7 +17,7 @@ Goal: 创造真正通用智慧认知引擎
 import json
 import hashlib
 import logging
-from typing import Dict, List, Optional, Tuple, Set, Callable, Union
+from typing import Dict, List, Optional, Tuple, Set, Callable, Union, Any
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
