@@ -360,10 +360,10 @@ class CheckpointManager:
             indent=2
         ).encode('utf-8')
 
-        # 计算 HMAC 签名
+        # 计算 HMAC 签名 (SHA256 = 32 bytes)
         signature = self._compute_hmac(json_data)
 
-        # 写入文件：先写签名 (64 字节), 再写数据
+        # 写入文件：先写签名 (32 字节), 再写数据
         with open(filepath, "wb") as f:
             f.write(signature)
             f.write(json_data)
@@ -378,9 +378,9 @@ class CheckpointManager:
             raise FileNotFoundError(f"Checkpoint not found: {filepath}")
 
         with open(path, "rb") as f:
-            # 读取签名 (64 字节)
-            stored_signature = f.read(64)
-            if len(stored_signature) != 64:
+            # 读取签名 (32 字节，SHA256)
+            stored_signature = f.read(32)
+            if len(stored_signature) != 32:
                 raise CheckpointSecurityError(f"Invalid checkpoint format: missing signature in {filepath}")
             
             # 读取数据
