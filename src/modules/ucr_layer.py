@@ -759,3 +759,14 @@ class Calculator:
     print(f"Imported into new engine: {len(new_engine.units)} units")
 
     print("\n=== All Tests Complete ===")
+
+
+# ============================================================================
+# 导出别名（用于兼容其他模块的导入）
+# ============================================================================
+
+# UCR 是 CognitiveUnit 的别名，用于简化导入
+UCR = CognitiveUnit
+
+# UCRLayer 是 UnifiedRepresentationEngine 的别名，用于保持接口一致性
+UCRLayer = UnifiedRepresentationEngine
