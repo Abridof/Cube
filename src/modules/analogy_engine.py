@@ -10,10 +10,15 @@
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Union
 from collections import defaultdict
 import numpy as np
 from enum import Enum
+
+# 从核心类型系统导入精确类型
+import sys
+sys.path.insert(0, '/workspace/src')
+from core.strict_types import JsonValueT
 
 
 class AnalogyType(Enum):
@@ -56,10 +61,10 @@ class AnalogyMapping:
     analogy_type: AnalogyType
     mappings: List[MappingHypothesis]
     structural_alignments: List[Tuple[str, str]]  # (source_structure, target_structure)
-    transferable_knowledge: List[Dict[str, Any]]
+    transferable_knowledge: List[Dict[str, JsonValueT]]
     overall_confidence: float
     creativity_score: float = 0.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, JsonValueT] = field(default_factory=dict)
 
     def to_dict(self) -> Dict:
         return {
@@ -295,12 +300,12 @@ class AnalogyGenerator:
 
     def _extract_transferable_knowledge(
         self, mappings: List[MappingHypothesis], analogy_type: AnalogyType
-    ) -> List[Dict[str, Any]]:
+    ) -> List[Dict[str, JsonValueT]]:
         """提取可迁移的知识"""
-        transferable = []
+        transferable: List[Dict[str, JsonValueT]] = []
 
         for mapping in mappings:
-            knowledge = {
+            knowledge: Dict[str, JsonValueT] = {
                 "principle": f"{mapping.relation_type}关系可从{mapping.source_element}迁移到{mapping.target_element}",
                 "confidence": mapping.confidence,
                 "type": analogy_type.value,
@@ -328,9 +333,9 @@ class KnowledgeTransferEngine:
     def transfer_knowledge(
         self,
         analogy: AnalogyMapping,
-        source_knowledge: Dict[str, Any],
-        target_context: Dict[str, Any],
-    ) -> Dict[str, Any]:
+        source_knowledge: Dict[str, JsonValueT],
+        target_context: Dict[str, JsonValueT],
+    ) -> Dict[str, JsonValueT]:
         """
         执行知识迁移
 
@@ -342,7 +347,7 @@ class KnowledgeTransferEngine:
         Returns:
             迁移后的知识
         """
-        transferred = {}
+        transferred: Dict[str, JsonValueT] = {}
 
         # 对每个映射假设应用知识迁移
         for mapping in analogy.mappings:
@@ -358,7 +363,7 @@ class KnowledgeTransferEngine:
         return transferred
 
     def _select_transfer_strategy(
-        self, mapping: MappingHypothesis, knowledge: Any, context: Dict[str, Any]
+        self, mapping: MappingHypothesis, knowledge: JsonValueT, context: Dict[str, JsonValueT]
     ) -> str:
         """选择最佳迁移策略"""
         # 简化实现：基于置信度选择策略
@@ -373,11 +378,11 @@ class KnowledgeTransferEngine:
 
     def _apply_transfer(
         self,
-        source_knowledge: Any,
+        source_knowledge: JsonValueT,
         mapping: MappingHypothesis,
         strategy: str,
-        target_context: Dict[str, Any],
-    ) -> Any:
+        target_context: Dict[str, JsonValueT],
+    ) -> JsonValueT:
         """应用知识迁移"""
         if strategy == "direct_mapping":
             return source_knowledge
@@ -392,24 +397,24 @@ class KnowledgeTransferEngine:
             return self._specialize_knowledge(source_knowledge, target_context)
 
     def _adapt_knowledge(
-        self, knowledge: Any, mapping: MappingHypothesis, context: Dict[str, Any]
-    ) -> Any:
+        self, knowledge: JsonValueT, mapping: MappingHypothesis, context: Dict[str, JsonValueT]
+    ) -> JsonValueT:
         """适应性调整知识"""
         # 简化实现
         if isinstance(knowledge, dict):
             adapted = knowledge.copy()
-            adapted["_adapted_for"] = mapping.target_element
+            adapted["_adapted_for"] = mapping.target_element  # type: ignore
             return adapted
         return knowledge
 
-    def _generalize_knowledge(self, knowledge: Any) -> Any:
+    def _generalize_knowledge(self, knowledge: JsonValueT) -> JsonValueT:
         """泛化知识"""
         # 简化实现：提取核心原理
         if isinstance(knowledge, dict):
             return {"_generalized": True, "core_principle": str(knowledge)}
         return {"_generalized": True, "core_principle": str(knowledge)}
 
-    def _specialize_knowledge(self, knowledge: Any, context: Dict[str, Any]) -> Any:
+    def _specialize_knowledge(self, knowledge: JsonValueT, context: Dict[str, JsonValueT]) -> JsonValueT:
         """特化知识"""
         # 简化实现：应用具体上下文
         if isinstance(knowledge, dict):
@@ -434,10 +439,10 @@ class AnalogyReasoningEngine:
         self,
         source_domain: str,
         target_domain: str,
-        source_structure: Dict[str, Any],
-        target_structure: Dict[str, Any],
+        source_structure: Dict[str, JsonValueT],
+        target_structure: Dict[str, JsonValueT],
         analogy_type: AnalogyType = AnalogyType.STRUCTURAL,
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Optional[Dict[str, JsonValueT]]:
         """
         执行类比推理
 
@@ -467,8 +472,12 @@ class AnalogyReasoningEngine:
         self.analogy_history.append(analogy)
 
         # 执行知识迁移
-        source_knowledge = source_structure.get("knowledge", {})
-        target_context = target_structure.get("context", {})
+        source_knowledge_raw = source_structure.get("knowledge", {})
+        target_context_raw = target_structure.get("context", {})
+        
+        # 类型安全转换
+        source_knowledge: Dict[str, JsonValueT] = source_knowledge_raw if isinstance(source_knowledge_raw, dict) else {}
+        target_context: Dict[str, JsonValueT] = target_context_raw if isinstance(target_context_raw, dict) else {}
 
         transferred_knowledge = self.transfer_engine.transfer_knowledge(
             analogy, source_knowledge, target_context
@@ -477,15 +486,16 @@ class AnalogyReasoningEngine:
         # 生成推理结论
         conclusion = self._generate_conclusion(analogy, transferred_knowledge)
 
-        return {
+        result: Dict[str, JsonValueT] = {
             "analogy": analogy.to_dict(),
             "transferred_knowledge": transferred_knowledge,
             "conclusion": conclusion,
             "insights": self._extract_insights(analogy),
         }
+        return result
 
     def _generate_conclusion(
-        self, analogy: AnalogyMapping, transferred_knowledge: Dict[str, Any]
+        self, analogy: AnalogyMapping, transferred_knowledge: Dict[str, JsonValueT]
     ) -> str:
         """生成推理结论"""
         source = analogy.source_domain
@@ -528,7 +538,7 @@ class AnalogyReasoningEngine:
         return insights
 
     def find_creative_analogies(
-        self, domains: List[Tuple[str, Dict[str, Any]]], min_creativity: float = 0.6
+        self, domains: List[Tuple[str, Dict[str, JsonValueT]]], min_creativity: float = 0.6
     ) -> List[AnalogyMapping]:
         """
         在多个领域间寻找创造性类比
@@ -540,7 +550,7 @@ class AnalogyReasoningEngine:
         Returns:
             创造性类比列表
         """
-        creative_analogies = []
+        creative_analogies: List[AnalogyMapping] = []
 
         # 两两比较所有领域
         for i in range(len(domains)):

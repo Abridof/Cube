@@ -17,12 +17,17 @@ Goal: 创造真正通用智慧认知引擎
 import json
 import hashlib
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Set, Callable
+from typing import Dict, List, Optional, Tuple, Set, Callable, Union, Any
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
 from collections import defaultdict, deque
 import math
+
+# 从核心类型系统导入精确类型
+import sys
+sys.path.insert(0, '/workspace/src')
+from core.strict_types import JsonValueT
 
 # Import UCR components
 try:

@@ -14,9 +14,10 @@ import math
 import random
 import hashlib
 import json
-from typing import Dict, List, Tuple, Optional, Any, Callable
+from typing import Dict, List, Tuple, Optional, Callable, Union
 from dataclasses import dataclass, field
 from collections import defaultdict
+from src.core.strict_types import JsonValueT, DataContent, UCRTyped, GraphNode, GraphEdge
 
 # ============================================================================
 # Part 1: Neural Network Primitives (Pure Python Implementation)
@@ -108,7 +109,7 @@ class NeuralUCREncoder:
     b2: List[float] = field(default_factory=list)
 
     # Activation cache for backprop
-    _cache: Dict[str, Any] = field(default_factory=dict)
+    _cache: Dict[str, JsonValueT] = field(default_factory=dict)
 
     def __post_init__(self):
         if not self.W1:
@@ -185,7 +186,7 @@ class NeuralUCREncoder:
 
         return {"W1": grad_W1, "b1": grad_b1, "W2": grad_W2, "b2": grad_b2}
 
-    def update_weights(self, grads: Dict[str, Any]):
+    def update_weights(self, grads: Dict[str, List[List[float]]]):
         """Update weights using gradient descent"""
         for i in range(self.hidden_dim):
             for j in range(self.input_dim):
@@ -197,13 +198,13 @@ class NeuralUCREncoder:
                 self.W2[i][j] -= self.learning_rate * grads["W2"][i][j]
             self.b2[i] -= self.learning_rate * grads["b2"][i]
 
-    def encode_ucr(self, ucr_data: Dict[str, Any]) -> List[float]:
+    def encode_ucr(self, ucr_data: UCRTyped) -> List[float]:
         """Encode a UCR object into neural vector"""
         # Convert UCR to feature vector
         features = self._ucr_to_features(ucr_data)
         return self.forward(features)
 
-    def _ucr_to_features(self, ucr_data: Dict[str, Any]) -> List[float]:
+    def _ucr_to_features(self, ucr_data: UCRTyped) -> List[float]:
         """Convert UCR dictionary to input feature vector"""
         features = [0.0] * self.input_dim
 
@@ -360,12 +361,12 @@ class DataConnector:
     """Base class for real-world data connectors"""
 
     name: str
-    cache: Dict[str, Any] = field(default_factory=dict)
+    cache: Dict[str, JsonValueT] = field(default_factory=dict)
 
     def fetch(self, query: str) -> List[Dict]:
         raise NotImplementedError
 
-    def parse_to_ucr(self, raw_data: Any) -> List[Dict]:
+    def parse_to_ucr(self, raw_data: Union[str, Dict, List]) -> List[Dict]:
         raise NotImplementedError
 
 
@@ -394,7 +395,7 @@ class WikipediaConnector(DataConnector):
         ]
         return templates
 
-    def parse_to_ucr(self, raw_data: Any) -> List[Dict]:
+    def parse_to_ucr(self, raw_data: Union[str, Dict, List]) -> List[Dict]:
         """Parse Wikipedia data to UCR objects"""
         ucrs = []
         for article in raw_data if isinstance(raw_data, list) else [raw_data]:
@@ -451,7 +452,7 @@ class GitHubConnector(DataConnector):
         ]
         return templates
 
-    def parse_to_ucr(self, raw_data: Any) -> List[Dict]:
+    def parse_to_ucr(self, raw_data: Union[str, Dict, List]) -> List[Dict]:
         """Parse GitHub data to UCR objects"""
         ucrs = []
         for repo in raw_data if isinstance(raw_data, list) else [raw_data]:
@@ -509,7 +510,7 @@ class ArXivConnector(DataConnector):
         ]
         return templates
 
-    def parse_to_ucr(self, raw_data: Any) -> List[Dict]:
+    def parse_to_ucr(self, raw_data: Union[str, Dict, List]) -> List[Dict]:
         """Parse arXiv data to UCR objects"""
         ucrs = []
         for paper in raw_data if isinstance(raw_data, list) else [raw_data]:
@@ -577,7 +578,7 @@ class DataManager:
         self.ingested_ucrs.extend(ucrs)
         return len(ucrs)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> Dict[str, JsonValueT]:
         """Get ingestion statistics"""
         by_type = defaultdict(int)
         by_source = defaultdict(int)
@@ -754,7 +755,7 @@ class NeuralSymbolicLearner:
         self.contrastive_learner = ContrastiveLearner(self.encoder)
         self.distiller = KnowledgeDistiller(self.encoder)
 
-    def ingest_and_learn(self, source: str, query: str, train_epochs: int = 5) -> Dict[str, Any]:
+    def ingest_and_learn(self, source: str, query: str, train_epochs: int = 5) -> Dict[str, JsonValueT]:
         """
         Ingest data from source and perform learning.
         Returns comprehensive learning metrics.
@@ -812,7 +813,7 @@ class NeuralSymbolicLearner:
 
         return pairs
 
-    def explore_with_motivation(self, queries: List[str]) -> Dict[str, Any]:
+    def explore_with_motivation(self, queries: List[str]) -> Dict[str, JsonValueT]:
         """
         Explore multiple queries driven by intrinsic motivation.
         Returns exploration trajectory and metrics.

@@ -12,10 +12,15 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple, Any, Union
 import time
 import math
 from datetime import datetime
+
+# 从核心类型系统导入精确类型
+import sys
+sys.path.insert(0, '/workspace/src')
+from core.strict_types import JsonValueT
 
 
 class CognitiveState(Enum):
@@ -79,7 +84,7 @@ class MetacognitiveLog:
     strategy_applied: Optional[RegulationStrategy]
     outcome: Optional[str] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, JsonValueT]:
         return {
             "timestamp": self.timestamp.isoformat(),
             "state": self.state.name,
@@ -229,7 +234,7 @@ class StrategySelector:
         }
 
     def select_strategy(
-        self, current_state: CognitiveState, context: Dict[str, Any]
+        self, current_state: CognitiveState, context: Dict[str, JsonValueT]
     ) -> RegulationStrategy:
         """根据当前状态选择调节策略"""
 
@@ -345,7 +350,7 @@ class MetacognitiveMonitor:
         self.monitoring_interval = 1.0  # 秒
         self.last_check_time = time.time()
 
-    def monitor(self, metrics: CognitiveMetrics, task_context: Dict[str, Any]) -> Dict[str, Any]:
+    def monitor(self, metrics: CognitiveMetrics, task_context: Dict[str, JsonValueT]) -> Dict[str, JsonValueT]:
         """执行一次完整的监控循环"""
 
         # 1. 计算认知负荷（如果上下文中没有提供预计算的负荷）
@@ -427,7 +432,7 @@ class MetacognitiveMonitor:
 
         return report
 
-    def _apply_regulation(self, strategy: RegulationStrategy, context: Dict[str, Any]) -> str:
+    def _apply_regulation(self, strategy: RegulationStrategy, context: Dict[str, JsonValueT]) -> str:
         """应用调节策略"""
         actions = {
             RegulationStrategy.INCREASE_CHALLENGE: "增加任务复杂度或引入新约束",
@@ -458,7 +463,7 @@ class MetacognitiveMonitor:
 
         return min(0.9, probability)
 
-    def get_session_summary(self) -> Dict[str, Any]:
+    def get_session_summary(self) -> Dict[str, JsonValueT]:
         """获取会话总结"""
         if not self.log_history:
             return {"status": "no_data"}
@@ -504,10 +509,10 @@ class MetaLearner:
 
     def __init__(self, monitor: MetacognitiveMonitor):
         self.monitor = monitor
-        self.patterns_discovered: List[Dict[str, Any]] = []
+        self.patterns_discovered: List[Dict[str, JsonValueT]] = []
         self.optimal_parameters: Dict[str, float] = {}
 
-    def analyze_patterns(self) -> List[Dict[str, Any]]:
+    def analyze_patterns(self) -> List[Dict[str, JsonValueT]]:
         """分析监控历史中的模式"""
         logs = self.monitor.log_history
 
