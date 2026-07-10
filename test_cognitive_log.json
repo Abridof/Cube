@@ -1,58 +1,58 @@
 [
   {
     "phase": "perceive",
-    "timestamp": 1783698485.665895,
+    "timestamp": 1783698743.7886899,
     "input_type": "str",
     "output_type": "CognitiveUnit",
     "metadata": {
-      "processing_time": 0.0001506805419921875
+      "processing_time": 0.0001366138458251953
     }
   },
   {
     "phase": "reason",
-    "timestamp": 1783698485.6660502,
+    "timestamp": 1783698743.788832,
     "input_type": "CognitiveUnit",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 5.4836273193359375e-06,
+      "processing_time": 6.4373016357421875e-06,
       "evidence_count": 0
     }
   },
   {
     "phase": "decide",
-    "timestamp": 1783698485.666058,
+    "timestamp": 1783698743.7888405,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 9.5367431640625e-06
+      "processing_time": 9.059906005859375e-06
     }
   },
   {
     "phase": "act",
-    "timestamp": 1783698485.6660695,
+    "timestamp": 1783698743.788852,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 3.4809112548828125e-05,
+      "processing_time": 3.4332275390625e-05,
       "action_type": "explore"
     }
   },
   {
     "phase": "learn",
-    "timestamp": 1783698485.6661074,
+    "timestamp": 1783698743.7888892,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 3.814697265625e-06
+      "processing_time": 3.5762786865234375e-06
     }
   },
   {
     "phase": "reflect",
-    "timestamp": 1783698485.6661136,
+    "timestamp": 1783698743.788895,
     "input_type": "dict",
     "output_type": "dict",
     "metadata": {
-      "processing_time": 8.106231689453125e-06
+      "processing_time": 9.298324584960938e-06
     }
   }
 ]
