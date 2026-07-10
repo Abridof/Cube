@@ -615,7 +615,11 @@ class IntrinsicMotivationEngine:
         return f"{prefix}_{hashlib.sha256(hash_input.encode()).hexdigest()[:16]}"
 
     def process_prediction(
-        self, predicted: Any, actual: Any, var_name: str = "default", context: Optional[Dict] = None
+        self, 
+        predicted: Union[str, float, int, bool], 
+        actual: Union[str, float, int, bool], 
+        var_name: str = "default", 
+        context: Optional[Dict[str, JsonValueT]] = None
     ) -> IntrinsicReward:
         """
         处理预测结果，生成内在奖励
@@ -707,7 +711,7 @@ class IntrinsicMotivationEngine:
         description: str,
         motivation_type: MotivationType,
         expected_gain: float,
-        target_state: Any = None,
+        target_state: Optional[Dict[str, JsonValueT]] = None,
     ) -> ExplorationGoal:
         """
         生成探索目标
@@ -737,7 +741,7 @@ class IntrinsicMotivationEngine:
 
         return goal
 
-    def auto_generate_goals(self, context: Dict[str, Any] = None) -> List[ExplorationGoal]:
+    def auto_generate_goals(self, context: Optional[Dict[str, JsonValueT]] = None) -> List[ExplorationGoal]:
         """
         自动生成探索目标
 
@@ -812,7 +816,7 @@ class IntrinsicMotivationEngine:
             if self.active_goal_id == goal_id:
                 self.active_goal_id = None
 
-    def get_motivation_summary(self) -> Dict[str, Any]:
+    def get_motivation_summary(self) -> Dict[str, JsonValueT]:
         """获取动机状态摘要"""
         return {
             "total_intrinsic_reward": self.total_intrinsic_reward,
