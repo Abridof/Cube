@@ -11,23 +11,23 @@ from typing import Dict, Any
 
 class SecureSandbox:
     """安全沙箱类，提供安全的代码执行环境"""
-    
+
     def __init__(self, timeout: int = 5):
         """
         初始化安全沙箱
-        
+
         Args:
             timeout: 执行超时时间（秒）
         """
         self.timeout = timeout
-    
+
     def run_code(self, code: str) -> Dict[str, Any]:
         """
         在沙箱环境中安全执行 Python 代码
-        
+
         Args:
             code: 要执行的 Python 代码
-        
+
         Returns:
             dict: {
                 'success': bool,      # 是否执行成功
@@ -37,11 +37,11 @@ class SecureSandbox:
         """
         with tempfile.TemporaryDirectory() as tmpdir:
             script_path = os.path.join(tmpdir, "sandbox_script.py")
-            
+
             # 写入代码到临时文件
             with open(script_path, "w", encoding="utf-8") as f:
                 f.write(code)
-            
+
             try:
                 # 使用 subprocess 执行，限制权限
                 result = subprocess.run(
@@ -49,47 +49,35 @@ class SecureSandbox:
                     capture_output=True,
                     text=True,
                     timeout=self.timeout,
-                    cwd=tmpdir
+                    cwd=tmpdir,
                 )
-                
+
                 if result.returncode == 0:
-                    return {
-                        'success': True,
-                        'output': result.stdout,
-                        'error': None
-                    }
+                    return {"success": True, "output": result.stdout, "error": None}
                 else:
                     error_msg = result.stderr.strip()
                     if not error_msg and result.returncode != 0:
                         error_msg = f"Exit code: {result.returncode}"
-                    return {
-                        'success': False,
-                        'output': result.stdout,
-                        'error': error_msg
-                    }
-                    
+                    return {"success": False, "output": result.stdout, "error": error_msg}
+
             except subprocess.TimeoutExpired:
                 return {
-                    'success': False,
-                    'output': "",
-                    'error': f"TimeoutError: Execution exceeded {self.timeout} seconds"
+                    "success": False,
+                    "output": "",
+                    "error": f"TimeoutError: Execution exceeded {self.timeout} seconds",
                 }
             except Exception as e:
-                return {
-                    'success': False,
-                    'output': "",
-                    'error': f"{type(e).__name__}: {str(e)}"
-                }
+                return {"success": False, "output": "", "error": f"{type(e).__name__}: {str(e)}"}
 
 
 def run_secure_code(code: str, timeout: int = 5) -> Dict[str, Any]:
     """
     在沙箱环境中安全执行 Python 代码（便捷函数）
-    
+
     Args:
         code: 要执行的 Python 代码
         timeout: 执行超时时间（秒）
-    
+
     Returns:
         dict: {
             'success': bool,      # 是否执行成功
