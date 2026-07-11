@@ -1,24 +1,55 @@
 ```
-# Python
-__pycache__/
+# Compiled Python files
 *.pyc
-*.pyo
-*.pyd
+__pycache__/
 
-# Logs
-*.log
-
-# Environment
+# Environment files
 .env
 .env.local
 *.env.*
 
-# Coverage
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
 .coverage
 coverage/
 htmlcov/
 
+# Python specific
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
+
 # Testing
 .pytest_cache/
 .mypy_cache/
+
+# Build artifacts
+dist/
+build/
+*.egg
+
+# JSON logs and temporary data files
+*.json
+!*.json  # Allow JSON files unless they're specifically log/cache files
+
+# Specific files detected in changes
+memory_bank.json
+test_cognitive_log.json
 ```
