@@ -573,7 +573,7 @@ class WorkingMemory(Generic[T]):
             reverse=True
         )
     
-    def get_status(self) -> Dict[str, any]:
+    def get_status(self) -> Dict[str, Any]:
         """获取状态"""
         return {
             "size": len(self._items),
@@ -620,7 +620,7 @@ class SymbolGrounding(Protocol):
     def ground_symbol(
         self,
         symbol: str,
-        context: Dict[str, any]
+        context: Dict[str, Any]
     ) -> List[Tuple[str, float]]:
         """将符号接地到感知经验"""
         ...
