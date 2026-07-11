@@ -14,6 +14,7 @@ Author: AI Assistant (Computer Scientist & AGI Researcher)
 
 from __future__ import annotations
 from typing import (
+    Any,
     Dict,
     List,
     Optional,
@@ -312,7 +313,7 @@ class ResourceTracker:
             )
         return True
     
-    def get_status(self) -> Dict[str, Union[int, float]]:
+    def get_status(self) -> Dict[str, Union[str, int, float]]:
         """获取资源使用状态"""
         elapsed = 0.0
         if self.start_time:
@@ -650,7 +651,7 @@ class CausalInferenceEngine(Protocol):
     def infer_cause(
         self,
         effect: str,
-        context: Dict[str, any]
+        context: Dict[str, Any]
     ) -> List[CausalRelation]:
         """推断原因"""
         ...
@@ -658,7 +659,7 @@ class CausalInferenceEngine(Protocol):
     def infer_effect(
         self,
         cause: str,
-        context: Dict[str, any]
+        context: Dict[str, Any]
     ) -> List[CausalRelation]:
         """推断结果"""
         ...
@@ -666,8 +667,8 @@ class CausalInferenceEngine(Protocol):
     def do_intervention(
         self,
         variable: str,
-        value: any
-    ) -> Dict[str, any]:
+        value: Any
+    ) -> Dict[str, Any]:
         """执行 do-演算干预"""
         ...
 
