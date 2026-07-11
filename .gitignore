@@ -1,55 +1,52 @@
 ```
-# Compiled Python files
-*.pyc
-__pycache__/
+# Logs and temp files
+*.log
+*.tmp
+*.swp
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
 
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-*.swp
+# Dependencies
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+build/
+dist/
+.eggs/
+.coverage
+htmlcov/
+.coverage.*
+.nox/
+.tox/
 
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# System files
+# OS
 .DS_Store
 Thumbs.db
 
-# Coverage reports
-.coverage
-coverage/
-htmlcov/
-
 # Python specific
-*.pyo
-*.pyd
-.Python
+__pycache__/
+*.py[cod]
+*$py.class
 *.so
-*.egg-info/
-.eggs/
-
-# Testing
+.Python
+env/
+venv/
+.venv/
+.venv-bak/
+.venv-py3/
 .pytest_cache/
 .mypy_cache/
-
-# Build artifacts
-dist/
-build/
-*.egg
-
-# JSON logs and temporary data files
-*.json
-!*.json  # Allow JSON files unless they're specifically log/cache files
-
-# Specific files detected in changes
-memory_bank.json
-test_cognitive_log.json
+.hypothesis/
 ```
