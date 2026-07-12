@@ -172,15 +172,23 @@ class AestheticDiscriminator:
         # Too ordered = boring, too chaotic = noise. Sweet spot in middle-high.
         complexity_score = 1.0 - abs(normalized_entropy - 0.7)  # Peak at 0.7
         
-        final_score = (symmetry * 0.3) + (complexity_score * 0.7)
+        # Gestalt completeness proxy: check for sentence structure completion
+        gestalt_score = 0.5
+        if content and content[-1] in '.!?':
+            gestalt_score += 0.3
+        if len(content.split()) > 3:  # Has some structure
+            gestalt_score += 0.2
+        gestalt_score = min(gestalt_score, 1.0)
+        
+        final_score = (symmetry * 0.2) + (complexity_score * 0.5) + (gestalt_score * 0.3)
         
         return {
-            "score": round(final_score, 4),
-            "components": {
-                "entropy": round(entropy, 4),
-                "symmetry": round(symmetry, 4),
-                "complexity_balance": round(complexity_score, 4)
-            },
+            "overall_score": round(final_score, 4),
+            "score": round(final_score, 4),  # Keep backward compatibility
+            "entropy": round(entropy, 4),
+            "symmetry": round(symmetry, 4),
+            "gestalt_completeness": round(gestalt_score, 4),
+            "complexity_balance": round(complexity_score, 4),
             "verdict": "Beautiful" if final_score > 0.7 else "Interesting" if final_score > 0.4 else "Ordinary"
         }
 
@@ -201,10 +209,25 @@ class WisdomSynthesizer:
         # In a real AGI, this would use deep reasoning. 
         # Here we simulate the structure of multi-perspective analysis.
         
-        perspectives = {}
-        for framework in self.FRAMEWORKS:
-            # Placeholder for actual reasoning logic
-            perspectives[framework] = f"Analyzed via {framework}: Consider the greater good vs individual rights."
+        # Simple heuristic scoring based on keywords
+        scenario_lower = scenario.lower()
+        utilitarian_score = 0.5
+        deontological_score = 0.5
+        virtue_ethics_score = 0.5
+        
+        if "protect" in scenario_lower or "feelings" in scenario_lower:
+            utilitarian_score = 0.7  # Protecting feelings has utilitarian value
+        if "lie" in scenario_lower:
+            deontological_score = 0.3  # Lying violates deontological duty
+        if "honest" in scenario_lower or "truth" in scenario_lower:
+            virtue_ethics_score = 0.8  # Honesty is a virtue
+        
+        perspectives = {
+            "Utilitarianism": f"Score: {utilitarian_score:.2f} - Focus on maximizing overall well-being and minimizing harm.",
+            "Deontology": f"Score: {deontological_score:.2f} - Focus on moral duties and universal principles.",
+            "Virtue Ethics": f"Score: {virtue_ethics_score:.2f} - Focus on character development and virtuous action.",
+            "Care Ethics": "Score: 0.60 - Focus on relationships and contextual care."
+        }
         
         # Synthesis: Look for common ground or highlight tension
         synthesis = (
@@ -217,7 +240,11 @@ class WisdomSynthesizer:
         return {
             "scenario": scenario,
             "perspectives": perspectives,
+            "utilitarian_score": utilitarian_score,
+            "deontological_score": deontological_score,
+            "virtue_ethics_score": virtue_ethics_score,
             "synthesis": synthesis,
+            "synthesized_wisdom": synthesis,
             "confidence": 0.85  # Simulated confidence
         }
 
