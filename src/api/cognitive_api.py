@@ -201,6 +201,9 @@ def check_rate_limit(user_id: str, tier: UserTier = UserTier.FREE) -> None:
     
     config = configs.get(tier, configs[UserTier.FREE])
     
+    # 为用户设置自定义配置
+    rate_limiter.set_config(user_id, config)
+    
     allowed, info = rate_limiter.allow_request(user_id)
     
     if not allowed:
@@ -312,8 +315,8 @@ async def process_query(
                 prompt=request.query,
                 context=request.context
             )
-            result = response['response']
-            confidence = response.get('confidence', 0.0)
+            result = response.text
+            confidence = getattr(response, 'confidence', 0.8) if hasattr(response, 'confidence') else 0.8
         
         processing_time = (time.time() - start_time) * 1000
         
