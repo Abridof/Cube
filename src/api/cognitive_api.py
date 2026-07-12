@@ -259,6 +259,7 @@ async def create_access_token(request_data: Dict[str, str]):
     """创建访问令牌（简化版，生产环境应使用 proper auth）"""
     username = request_data.get("username")
     password = request_data.get("password")
+    tier_str = request_data.get("tier", "basic")  # 允许指定 tier
     
     # 简化认证（生产环境应从数据库验证）
     if not username or not password:
@@ -268,11 +269,17 @@ async def create_access_token(request_data: Dict[str, str]):
     now = datetime.now(timezone.utc)
     expire = now + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
     
+    # 将 tier 字符串转换为 UserTier 枚举
+    try:
+        tier = UserTier(tier_str.lower()) if tier_str else UserTier.BASIC
+    except ValueError:
+        tier = UserTier.BASIC
+    
     payload = {
         "sub": username,
         "exp": expire,
         "iat": now,
-        "tier": UserTier.BASIC.value  # 默认 tier
+        "tier": tier.value
     }
     
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
@@ -280,7 +287,8 @@ async def create_access_token(request_data: Dict[str, str]):
     return {
         "access_token": token,
         "token_type": "bearer",
-        "expires_in": TOKEN_EXPIRE_MINUTES * 60
+        "expires_in": TOKEN_EXPIRE_MINUTES * 60,
+        "tier": tier.value
     }
 
 

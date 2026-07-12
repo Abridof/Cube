@@ -231,10 +231,11 @@ class TestAPIRateLimiting:
     
     def test_rate_limit_exceeded(self, client):
         """测试速率限制触发"""
-        # 快速发送多个请求
+        # 快速发送多个请求，使用 FREE tier（burst_size=15）
         auth_response = client.post("/auth/token", json={
             "username": "ratelimituser",
-            "password": "testpass"
+            "password": "testpass",
+            "tier": "free"  # 明确指定 FREE tier
         })
         token = auth_response.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
