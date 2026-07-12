@@ -1,5 +1,5 @@
 ```
-# Compiled and build artifacts
+# Compiled Python files
 *.pyc
 __pycache__/
 
@@ -16,37 +16,23 @@ node_modules/
 # Environment
 .env
 .env.local
-.env.*
+*.env.*
 
 # Editors
 .vscode/
 .idea/
 
 # Coverage reports
+.coverage
 coverage/
 htmlcov/
-.coverage
 
-# Python specific
-*.pyo
-*.pyd
-.Python
-*.so
-
-# Test related
+# Testing
 .pytest_cache/
 .mypy_cache/
-.hypothesis/
 
-# Distribution / packaging
+# Distribution artifacts
 dist/
 build/
-*.egg
 *.egg-info/
-pip-log.txt
-pip-delete-this-directory.txt
-
-# System files
-.DS_Store
-Thumbs.db
 ```
