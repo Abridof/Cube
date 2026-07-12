@@ -201,8 +201,9 @@ def check_rate_limit(user_id: str, tier: UserTier = UserTier.FREE) -> None:
     
     config = configs.get(tier, configs[UserTier.FREE])
     
-    # 为用户设置自定义配置
-    rate_limiter.set_config(user_id, config)
+    # 仅为新用户设置配置（避免重置现有 bucket）
+    if user_id not in rate_limiter._config_overrides:
+        rate_limiter.set_config(user_id, config)
     
     allowed, info = rate_limiter.allow_request(user_id)
     
