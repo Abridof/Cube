@@ -15,18 +15,18 @@ Cognitive Engine REST API Service
 Author: AI Assistant (Security Researcher & AGI Scientist)
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Security, status, Request, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, Security, status, Request, BackgroundTasks, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict, Any, List
 import jwt
 import time
 import hashlib
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 import logging
 
@@ -110,7 +110,8 @@ class QueryRequest(BaseModel):
     use_sandbox: bool = False
     security_level: str = "high"
     
-    @validator('query')
+    @field_validator('query')
+    @classmethod
     def sanitize_query(cls, v):
         # 基本的 XSS 防护
         dangerous_patterns = ['<script', 'javascript:', 'onerror=', 'onload=']
@@ -134,7 +135,7 @@ class KnowledgeGraphRequest(BaseModel):
 class ResponseBase(BaseModel):
     success: bool
     message: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     request_id: Optional[str] = None
 
 
@@ -192,19 +193,22 @@ def get_api_key_user(api_key: str = Security(api_key_header)) -> Optional[str]:
 def check_rate_limit(user_id: str, tier: UserTier = UserTier.FREE) -> None:
     """检查速率限制"""
     configs = {
-        UserTier.FREE: RateLimitConfig(requests_per_minute=10, burst_size=15),
-        UserTier.BASIC: RateLimitConfig(requests_per_minute=60, burst_size=100),
-        UserTier.PRO: RateLimitConfig(requests_per_minute=300, burst_size=500),
-        UserTier.ENTERPRISE: RateLimitConfig(requests_per_minute=1000, burst_size=2000),
+        UserTier.FREE: RateLimitConfig(max_requests=10, window_seconds=60.0, burst_size=15),
+        UserTier.BASIC: RateLimitConfig(max_requests=60, window_seconds=60.0, burst_size=100),
+        UserTier.PRO: RateLimitConfig(max_requests=300, window_seconds=60.0, burst_size=500),
+        UserTier.ENTERPRISE: RateLimitConfig(max_requests=1000, window_seconds=60.0, burst_size=2000),
     }
     
     config = configs.get(tier, configs[UserTier.FREE])
     
-    if not rate_limiter.is_allowed(user_id, config):
+    allowed, info = rate_limiter.allow_request(user_id)
+    
+    if not allowed:
+        retry_after = info.get("retry_after", 60)
         raise HTTPException(
             status_code=429,
             detail="Rate limit exceeded. Please upgrade your plan or wait.",
-            headers={"X-RateLimit-Reset": str(int(time.time()) + 60)}
+            headers={"X-RateLimit-Reset": str(int(time.time()) + int(retry_after))}
         )
 
 
@@ -219,7 +223,7 @@ async def health_check():
     """健康检查端点"""
     return {
         "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "version": "2.0.0",
         "services": {
             "llm": "connected",
@@ -247,14 +251,17 @@ async def get_metrics():
 
 
 @app.post("/auth/token", response_model=Dict[str, Any], tags=["Authentication"])
-async def create_access_token(username: str, password: str):
+async def create_access_token(request_data: Dict[str, str]):
     """创建访问令牌（简化版，生产环境应使用 proper auth）"""
+    username = request_data.get("username")
+    password = request_data.get("password")
+    
     # 简化认证（生产环境应从数据库验证）
     if not username or not password:
         raise HTTPException(status_code=400, detail="Username and password required")
     
     # 创建 token
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     expire = now + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
     
     payload = {
@@ -301,7 +308,7 @@ async def process_query(
             confidence = 1.0
         else:
             # 使用 LLM 处理
-            response = await llm_client.generate_async(
+            response = llm_client.call(
                 prompt=request.query,
                 context=request.context
             )

@@ -7,46 +7,27 @@
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
-# Dependencies
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.so
-*.egg-info/
-build/
-dist/
-.eggs/
-.coverage
-htmlcov/
-.coverage.*
-.nox/
-.tox/
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Python specific
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
 .Python
 env/
 venv/
 .venv/
-.venv-bak/
-.venv-py3/
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
+pip-log.txt
+pip-selfcheck.json
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.DS_Store
+Thumbs.db
 ```
