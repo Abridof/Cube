@@ -1,3 +1,39 @@
-(docs/COGNITIVE_RESONANCE_ENGINE.md, src/modules/cognitive_resonance.py, tests/test_cognitive_resonance.py are all source/documentation files)
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-(empty)
+# Testing
+.pytest_cache/
+.coverage
+coverage/
+htmlcov/
+
+# Dependencies
+.venv/
+venv/
+env/
+.env
+.env.local
+.env.*
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+```
