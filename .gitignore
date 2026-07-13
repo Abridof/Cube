@@ -1,1 +1,28 @@
-(src/modules/multimodal_synesthesia.py)
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+.env
+.env.local
+*.env.*
+
+# Build and distribution artifacts
+dist/
+build/
+*.egg-info/
+
+# Tests
+.tests.py
+test_*.py
+```
