@@ -457,6 +457,8 @@ class AuditoryEmotionMapper:
             "intimate": (10, 5, 5),
             "excited": (25, 20, -10),
             "gentle": (5, 10, 15),
+            "bright": (15, 15, -5),
+            "neutral": (0, 0, 0),
         }
         
         adj = emotion_adjustment.get(features.emotional_tone, (0, 0, 0))
@@ -466,6 +468,28 @@ class AuditoryEmotionMapper:
         b = max(0, min(255, base_color[2] + adj[2]))
         
         return (int(r), int(g), int(b))
+    
+    def map_audio_to_visual(self, description: str) -> VisualFeatures:
+        """
+        将音频描述直接映射为视觉特征
+        
+        Args:
+            description: 音频描述
+            
+        Returns:
+            VisualFeatures: 视觉特征
+        """
+        features = self.parse_audio_description(description)
+        color = self.audio_to_color_synesthesia(features)
+        
+        return VisualFeatures(
+            dominant_color=color,
+            brightness=features.loudness * 0.7 + 0.15,
+            temperature=ColorPalette.rgb_to_temperature(color),
+            saturation=features.timbre_complexity,
+            harmony=features.harmonic_content,
+            complexity=features.timbre_complexity
+        )
     
     def calculate_emotional_resonance(self, features: AuditoryFeatures) -> float:
         """

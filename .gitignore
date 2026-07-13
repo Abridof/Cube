@@ -4,25 +4,15 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-*.so
-.coverage
-coverage/
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-.venv/
-venv/
-.env
-.env.local
-*.env.*
 
-# Build and distribution artifacts
-dist/
+# Build artifacts
 build/
+dist/
 *.egg-info/
 
-# Tests
-.tests.py
-test_*.py
+# Virtual environments
+venv/
+.venv/
+.env
+.env.local
 ```
