@@ -253,6 +253,24 @@ class VisualSemanticsEncoder:
                 features.dominant_color = ColorPalette.emotion_to_rgb(props["emotion"])
                 break
         
+        # 特殊处理"red"等直接颜色词
+        if "red" in desc_lower:
+            features.dominant_color = (255, 0, 0)
+        elif "blue" in desc_lower:
+            features.dominant_color = (0, 0, 255)
+        elif "green" in desc_lower:
+            features.dominant_color = (0, 255, 0)
+        elif "yellow" in desc_lower:
+            features.dominant_color = (255, 255, 0)
+        elif "orange" in desc_lower:
+            features.dominant_color = (255, 165, 0)
+        elif "purple" in desc_lower or "violet" in desc_lower:
+            features.dominant_color = (128, 0, 128)
+        elif "white" in desc_lower:
+            features.dominant_color = (255, 255, 255)
+        elif "black" in desc_lower:
+            features.dominant_color = (0, 0, 0)
+        
         # 计算复杂度 (基于描述长度和词汇多样性)
         word_count = len(description.split())
         unique_words = len(set(description.lower().split()))
@@ -363,6 +381,16 @@ class AuditoryEmotionMapper:
                 features.emotional_tone = props["emotion"]
                 features.loudness = props["brightness"]
                 break
+        
+        # 特殊处理"sad"和"minor"关键词
+        if "sad" in desc_lower or ("minor" in desc_lower and features.emotional_tone == "neutral"):
+            features.emotional_tone = "melancholic"
+            features.pitch = 0.3
+            features.loudness = 0.4
+        elif "happy" in desc_lower or ("major" in desc_lower and features.emotional_tone == "neutral"):
+            features.emotional_tone = "happy"
+            features.pitch = 0.6
+            features.loudness = 0.7
         
         # 检测音高描述
         if any(word in desc_lower for word in ["high", "treble", "soprano"]):
@@ -490,8 +518,10 @@ class HapticTextureSimulator:
         "dry": {"moisture": 0.1, "temperature": 0.6, "roughness": 0.5},
         "heavy": {"weight": 0.9, "pressure": 0.7, "hardness": 0.8},
         "light": {"weight": 0.1, "pressure": 0.1, "hardness": 0.2},
-        "sharp": {"roughness": 0.7, "hardness": 0.8, "pressure": 0.6},
+        "sharp": {"roughness": 0.8, "hardness": 0.8, "pressure": 0.6},
         "blunt": {"roughness": 0.5, "hardness": 0.6, "pressure": 0.4},
+        "harsh": {"roughness": 0.85, "hardness": 0.7, "pressure": 0.6},
+        "gentle": {"roughness": 0.1, "hardness": 0.15, "temperature": 0.7},
     }
     
     # 材质触感档案
