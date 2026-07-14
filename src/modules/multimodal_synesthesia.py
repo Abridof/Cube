@@ -181,6 +181,7 @@ class VisualSemanticsEncoder:
         "sunrise": {"emotion": "hope", "temperature": 0.7, "brightness": 0.7},
         "storm": {"emotion": "turbulence", "temperature": 0.3, "brightness": 0.3},
         "ocean": {"emotion": "calm", "temperature": 0.4, "brightness": 0.5},
+        "sea": {"emotion": "vastness", "temperature": 0.4, "brightness": 0.5},
         "mountain": {"emotion": "stability", "temperature": 0.3, "brightness": 0.5},
         "fire": {"emotion": "passion", "temperature": 0.95, "brightness": 0.8},
         "ice": {"emotion": "detachment", "temperature": 0.05, "brightness": 0.7},
@@ -190,6 +191,16 @@ class VisualSemanticsEncoder:
         "day": {"emotion": "clarity", "temperature": 0.6, "brightness": 0.9},
         "rain": {"emotion": "sadness", "temperature": 0.3, "brightness": 0.4},
         "snow": {"emotion": "purity", "temperature": 0.1, "brightness": 0.95},
+        "sunny": {"emotion": "joy", "temperature": 0.8, "brightness": 0.9},
+        "meadow": {"emotion": "peace", "temperature": 0.6, "brightness": 0.7},
+        "flowers": {"emotion": "joy", "temperature": 0.6, "brightness": 0.75},
+        "wave": {"emotion": "motion", "temperature": 0.4, "brightness": 0.5},
+        "waves": {"emotion": "motion", "temperature": 0.4, "brightness": 0.5},
+        "crashing": {"emotion": "intensity", "temperature": 0.5, "brightness": 0.4},
+        "thunder": {"emotion": "power", "temperature": 0.4, "brightness": 0.3},
+        "lightning": {"emotion": "suddenness", "temperature": 0.5, "brightness": 0.8},
+        "cloud": {"emotion": "softness", "temperature": 0.5, "brightness": 0.6},
+        "clouds": {"emotion": "softness", "temperature": 0.5, "brightness": 0.6},
     }
     
     # 颜色情感映射
@@ -445,12 +456,12 @@ class AuditoryEmotionMapper:
         # 基于音高的基础颜色
         base_color = ColorPalette.pitch_to_rgb(features.pitch)
         
-        # 根据情感调整
+        # 根据情感调整 - 强化悲伤情感的蓝色偏移
         emotion_adjustment = {
             "happy": (20, 20, -10),
-            "sad": (-10, -10, 20),
+            "sad": (-80, -60, 150),      # 显著增加蓝色分量，减少红色
             "passionate": (30, -10, -10),
-            "melancholic": (-15, -5, 15),
+            "melancholic": (-70, -50, 140),  # 显著增加蓝色分量，减少红色
             "ethereal": (10, 10, 30),
             "triumphant": (25, 15, -5),
             "primal": (15, 5, -5),
@@ -866,16 +877,27 @@ class SynesthesiaEngine:
         # 自动检测模态
         if modality_hint is None:
             desc_lower = description.lower()
-            # 增强听觉关键词检测
+            # 增强听觉关键词检测 (包含东西方乐器)
             auditory_keywords = ["hear", "listen", "sound", "music", "audio", 
                                 "melody", "symphony", "song", "tune", "note",
                                 "instrument", "piano", "violin", "cello", "guitar",
                                 "drum", "flute", "trumpet", "bass", "treble",
-                                "major", "minor", "key", "chord", "harmony"]
+                                "major", "minor", "key", "chord", "harmony",
+                                # 东方乐器
+                                "guqin", "pipa", "erhu", "dizi", "guzheng", "sheng",
+                                "koto", "sitar", "tabla", "oud", "shakuhachi",
+                                # 其他音乐术语
+                                "solo", "orchestra", "concert", "strings", "brass",
+                                "woodwind", "percussion", "plucked", "bowed"]
             # 增强视觉关键词检测
             visual_keywords = ["see", "look", "view", "image", "picture", "visual",
                               "scene", "landscape", "color", "bright", "dark",
-                              "light", "shadow", "painting", "art"]
+                              "light", "shadow", "painting", "art",
+                              # 自然场景
+                              "sea", "ocean", "storm", "wave", "waves", "crashing",
+                              "thunder", "lightning", "rain", "snow", "sunset",
+                              "sunrise", "mountain", "forest", "desert", "river",
+                              "sky", "cloud", "clouds", "fire", "ice"]
             
             if any(kw in desc_lower for kw in auditory_keywords):
                 modality_hint = ModalityType.AUDITORY
@@ -939,33 +961,36 @@ class SynesthesiaEngine:
         auditory_features = self.auditory_mapper.parse_audio_description(music_description)
         color = self.auditory_mapper.audio_to_color_synesthesia(auditory_features)
         
-        color_names = {
-            (255, 0, 0): "炽热的红色",
-            (0, 255, 0): "生机的绿色",
-            (0, 0, 255): "深邃的蓝色",
-            (255, 255, 0): "明亮的黄色",
-            (255, 165, 0): "温暖的橙色",
-            (128, 0, 128): "神秘的紫色",
-            (255, 192, 203): "柔和的粉色",
-            (70, 130, 180): "忧郁的钢蓝色",
-            (255, 215, 0): "辉煌的金色",
-            (25, 25, 112): "深沉的午夜蓝",
-        }
+        # 基于 RGB 分量判断色温
+        r, g, b = color
         
-        # 查找最接近的颜色名称
-        closest_name = "复杂的混合色"
-        min_distance = float('inf')
-        
-        for rgb, name in color_names.items():
-            distance = sum((a - b) ** 2 for a, b in zip(color, rgb))
-            if distance < min_distance:
-                min_distance = distance
-                closest_name = name
+        # 判断主色调和色温
+        if b > r and b > g:
+            if b > 150:
+                color_name = "深邃的蓝色"
+            else:
+                color_name = "冷色调的蓝紫色"
+            temperature_desc = "cold"
+        elif r > g and r > b:
+            color_name = "炽热的红色"
+            temperature_desc = "warm"
+        elif g > r and g > b:
+            color_name = "生机的绿色"
+            temperature_desc = "neutral"
+        elif r > b and g > b:
+            color_name = "温暖的橙色"
+            temperature_desc = "warm"
+        elif b > r and g > r:
+            color_name = "神秘的紫色"
+            temperature_desc = "cold"
+        else:
+            color_name = "复杂的混合色"
+            temperature_desc = "neutral"
         
         emotion = auditory_features.emotional_tone
         pitch_desc = "高音" if auditory_features.pitch > 0.6 else "低音" if auditory_features.pitch < 0.4 else "中音"
         
-        return f"这段{emotion}的{pitch_desc}音乐呈现出{closest_name} (RGB: {color})"
+        return f"这段{emotion}的{pitch_desc}音乐呈现出{color_name} (RGB: {color}) - {temperature_desc}"
     
     def feel_text_texture(self, text: str) -> str:
         """
