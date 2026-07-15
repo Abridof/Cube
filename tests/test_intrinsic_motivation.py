@@ -19,7 +19,7 @@ import math
 # 添加 src 路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from modules.intrinsic_motivation import (
+from src.modules.intrinsic_motivation import (
     MotivationType,
     PredictionError,
     InformationGain,

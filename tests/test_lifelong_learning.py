@@ -13,7 +13,7 @@ import os
 # 添加 src 到路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from modules.lifelong_learning import (
+from src.modules.lifelong_learning import (
     PlasticityRule,
     TransferType,
     TaskCategory,

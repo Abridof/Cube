@@ -40,6 +40,7 @@ from src.core.types import (
     MAX_GRAPH_NODES,
     MAX_THINKING_ITERATIONS,
     MAX_WORKING_MEMORY_ITEMS,
+    MAX_BATCH_SIZE,
 )
 
 # ==================== 核心数据结构 ====================
