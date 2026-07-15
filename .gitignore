@@ -1,42 +1,27 @@
 ```
-# Python compiled files
-*.pyc
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Distribution / packaging
-*.egg-info/
-dist/
-build/
-*.egg
-*.whl
-
-# Test related
-.pytest_cache/
-.coverage
-htmlcov/
-
-# IDE specific
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
+# Logs and temp files
 *.log
+*.tmp
 
-# Environment variables
+# Environment
 .env
 .env.local
 *.env.*
 
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
+# Coverage
+.coverage
 coverage/
 htmlcov/
 
-# Temporary files
-*.tmp
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 ```

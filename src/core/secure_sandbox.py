@@ -92,12 +92,13 @@ class ResourceLimitExceededError(Exception):
 
 
 class ASTSecurityChecker(ast.NodeVisitor):
-    """AST 安全检查器"""
+    """AST 安全检查器 - 增强版"""
     
     def __init__(self, config: SandboxConfig):
         self.config = config
         self.violations: List[str] = []
         self.imports: List[str] = []
+        self._in_decorator = False  # 跟踪是否在装饰器中
         
     def visit_Import(self, node: ast.Import):
         for alias in node.names:
@@ -131,15 +132,56 @@ class ASTSecurityChecker(ast.NodeVisitor):
             elif isinstance(node.func, ast.Attribute):
                 if node.func.attr in self.config.blocked_calls:
                     self.violations.append(f"Blocked method call: {node.func.attr}")
+                
+                # 安全检查：防止通过 getattr 绕过
+                if isinstance(node.func.value, ast.Call):
+                    if isinstance(node.func.value.func, ast.Name):
+                        if node.func.value.func.id == 'getattr':
+                            self.violations.append(
+                                "Potential security bypass via getattr detected"
+                            )
         self.generic_visit(node)
     
     def visit_Attribute(self, node: ast.Attribute):
-        if self.config.security_level == SecurityLevel.PARANOID:
-            #  paranoid 模式下检查敏感属性
-            sensitive_attrs = {'__class__', '__bases__', '__subclasses__', 
-                              '__globals__', '__builtins__', '__import__'}
+        if self.config.security_level in (SecurityLevel.HIGH, SecurityLevel.PARANOID):
+            # 检查敏感属性访问
+            sensitive_attrs = {
+                '__class__', '__bases__', '__subclasses__', 
+                '__globals__', '__builtins__', '__import__',
+                '__code__', '__func__', '__self__',
+                '__getattribute__', '__setattr__', '__delattr__'
+            }
             if node.attr in sensitive_attrs:
                 self.violations.append(f"Sensitive attribute access: {node.attr}")
+        
+        # PARANOID 模式下额外检查
+        if self.config.security_level == SecurityLevel.PARANOID:
+            # 防止通过属性链访问危险对象
+            if node.attr.startswith('_') and not node.attr.startswith('__'):
+                # 警告私有属性访问
+                pass
+        self.generic_visit(node)
+    
+    def visit_Decorator(self, node: ast.expr):
+        """检查装饰器中的潜在危险代码"""
+        if self.config.security_level in (SecurityLevel.HIGH, SecurityLevel.PARANOID):
+            # 装饰器可能隐藏恶意代码
+            if isinstance(node, ast.Call):
+                # 检查装饰器调用
+                if isinstance(node.func, ast.Name):
+                    if node.func.id in self.config.blocked_calls:
+                        self.violations.append(f"Blocked decorator: {node.func.id}")
+        self.generic_visit(node)
+    
+    def visit_Subscript(self, node: ast.Subscript):
+        """检查下标访问（防止通过 __getitem__ 绕过）"""
+        if self.config.security_level == SecurityLevel.PARANOID:
+            # 检查是否尝试访问 globals()['__builtins__'] 等
+            if isinstance(node.value, ast.Name):
+                if node.value.id in ('globals', 'locals', 'vars'):
+                    self.violations.append(
+                        f"Dangerous subscript on {node.value.id}"
+                    )
         self.generic_visit(node)
     
     def generic_visit(self, node):
