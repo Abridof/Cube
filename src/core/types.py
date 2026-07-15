@@ -35,6 +35,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import math
+import heapq
 
 
 # ============================================================================
@@ -477,12 +478,16 @@ class WorkingMemoryItem(Generic[T]):
 
 class WorkingMemory(Generic[T]):
     """
-    工作记忆系统
+    工作记忆系统 (优化版)
     
     理论基础:
     - Baddeley 的工作记忆模型 (中央执行 + 语音回路 + 视觉空间模板)
     - Miller's Law: 7±2 个组块
     - ACT-R 的激活理论
+    
+    性能优化:
+    - 使用 heapq 替代 O(n) 排序，实现 O(log n) 驱逐
+    - 惰性更新优先级队列
     """
     
     def __init__(self, capacity: int = MAX_WORKING_MEMORY_ITEMS):
@@ -491,7 +496,9 @@ class WorkingMemory(Generic[T]):
         
         self.capacity = capacity
         self._items: Dict[str, WorkingMemoryItem[T]] = {}
-        self._priority_queue: List[str] = []  # 按优先级排序的 ID 列表
+        self._heap: List[Tuple[float, str]] = []  # (activation, item_id) 最小堆
+        self._heap_valid: Dict[str, float] = {}   # 跟踪堆中有效的 activation 值
+        self._dirty: bool = False                 # 标记是否需要重建堆
         
     def __len__(self) -> int:
         return len(self._items)
@@ -516,15 +523,28 @@ class WorkingMemory(Generic[T]):
             priority=min(1.0, max(0.0, priority))
         )
         self._items[item_id] = item
-        self._update_priority_queue()
+        
+        # 计算初始激活度并加入堆
+        activation = item.get_activation()
+        heapq.heappush(self._heap, (activation, item_id))
+        self._heap_valid[item_id] = activation
+        self._dirty = True
+        
         return True
     
     def get(self, item_id: str) -> Optional[T]:
         """获取项目"""
         item = self._items.get(item_id)
         if item:
+            old_activation = item.get_activation()
             item.touch()
-            self._update_priority_queue()
+            
+            # 更新堆中的激活度
+            new_activation = item.get_activation()
+            self._heap_valid[item_id] = new_activation
+            heapq.heappush(self._heap, (new_activation, item_id))
+            self._dirty = True
+            
             return item.content
         return None
     
@@ -532,17 +552,24 @@ class WorkingMemory(Generic[T]):
         """移除项目"""
         if item_id in self._items:
             del self._items[item_id]
-            self._priority_queue.remove(item_id)
+            # 从有效集合中移除，堆中的旧条目将在弹出时被忽略
+            self._heap_valid.pop(item_id, None)
             return True
         return False
     
     def clear(self):
         """清空工作记忆"""
         self._items.clear()
-        self._priority_queue.clear()
+        self._heap.clear()
+        self._heap_valid.clear()
+        self._dirty = False
     
     def get_all(self) -> List[Tuple[str, T]]:
         """获取所有项目 (按激活度排序)"""
+        # 清理堆中的无效条目
+        self._cleanup_heap()
+        
+        # 按激活度排序
         sorted_items = sorted(
             self._items.items(),
             key=lambda x: x[1].get_activation(),
@@ -554,25 +581,40 @@ class WorkingMemory(Generic[T]):
         """获取最活跃的 n 个项目"""
         return self.get_all()[:n]
     
+    def _cleanup_heap(self):
+        """清理堆中的无效条目（惰性清理）"""
+        while self._heap and self._heap[0][1] not in self._items:
+            heapq.heappop(self._heap)
+        
+        while self._heap and self._heap[0][1] in self._items:
+            item_id = self._heap[0][1]
+            expected_activation = self._heap_valid.get(item_id)
+            if expected_activation is None or abs(self._heap[0][0] - expected_activation) > 1e-6:
+                heapq.heappop(self._heap)
+            else:
+                break
+    
     def _evict_lowest(self):
-        """驱逐激活度最低的项目"""
+        """驱逐激活度最低的项目 (O(log n))"""
         if not self._items:
             return
         
-        # 找到激活度最低的项目
-        lowest_id = min(
-            self._items.keys(),
-            key=lambda x: self._items[x].get_activation()
-        )
-        self.remove(lowest_id)
-    
-    def _update_priority_queue(self):
-        """更新优先级队列"""
-        self._priority_queue = sorted(
-            self._items.keys(),
-            key=lambda x: self._items[x].get_activation(),
-            reverse=True
-        )
+        # 清理无效条目
+        self._cleanup_heap()
+        
+        if not self._heap:
+            # 如果堆为空，重新构建
+            for item_id, item in self._items.items():
+                activation = item.get_activation()
+                heapq.heappush(self._heap, (activation, item_id))
+                self._heap_valid[item_id] = activation
+        
+        # 弹出最低激活度的项目
+        while self._heap:
+            _, lowest_id = heapq.heappop(self._heap)
+            if lowest_id in self._items:
+                self.remove(lowest_id)
+                return
     
     def get_status(self) -> Dict[str, Any]:
         """获取状态"""
@@ -581,6 +623,7 @@ class WorkingMemory(Generic[T]):
             "capacity": self.capacity,
             "utilization": len(self._items) / self.capacity,
             "item_ids": list(self._items.keys()),
+            "heap_size": len(self._heap),
         }
 
 
