@@ -26,9 +26,11 @@ import difflib
 import hashlib
 import resource
 import time
+import types
 from typing import Dict, List, Optional, Tuple, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
+from resource import error as ResourceError
 
 
 class CodeSmell(Enum):
@@ -206,14 +208,16 @@ class CodeParser:
         """Get number of lines in a function"""
         for key, func_def in self.function_definitions.items():
             if func_def.name == func_name:
-                return func_def.end_lineno - func_def.lineno + 1
+                end_line = func_def.end_lineno or func_def.lineno
+                return end_line - func_def.lineno + 1
         return 0
 
     def get_class_length(self, class_name: str) -> int:
         """Get number of lines in a class"""
         for key, cls_def in self.class_definitions.items():
             if cls_def.name == class_name:
-                return cls_def.end_lineno - cls_def.lineno + 1
+                end_line = cls_def.end_lineno or cls_def.lineno
+                return end_line - cls_def.lineno + 1
         return 0
 
     def find_duplicate_code(self, threshold: float = 0.8) -> List[Tuple[str, str, float]]:
@@ -303,20 +307,21 @@ class LimitationAnalyzer:
         # Check for long methods
         for key, func_def in self.parser.function_definitions.items():
             if file_path in key:
-                length = func_def.end_lineno - func_def.lineno + 1
+                end_lineno = func_def.end_lineno or func_def.lineno
+                length = end_lineno - func_def.lineno + 1
                 if length > 50:  # Threshold for long method
                     smell = CodeSmellDetection(
                         smell_type=CodeSmell.LONG_METHOD,
                         location=CodeLocation(
                             file_path=file_path,
                             line_start=func_def.lineno,
-                            line_end=func_def.end_lineno,
+                            line_end=end_lineno,
                         ),
                         description=f"Method '{func_def.name}' is too long ({length} lines)",
                         severity=min(1.0, length / 100.0),
                         suggestion="Consider breaking this method into smaller, focused functions",
                         affected_lines=self._get_lines(
-                            file_path, func_def.lineno, func_def.end_lineno
+                            file_path, func_def.lineno, end_lineno
                         ),
                     )
                     smells.append(smell)
@@ -324,20 +329,21 @@ class LimitationAnalyzer:
         # Check for large classes
         for key, cls_def in self.parser.class_definitions.items():
             if file_path in key:
-                length = cls_def.end_lineno - cls_def.lineno + 1
+                end_lineno = cls_def.end_lineno or cls_def.lineno
+                length = end_lineno - cls_def.lineno + 1
                 if length > 300:  # Threshold for large class
                     smell = CodeSmellDetection(
                         smell_type=CodeSmell.LARGE_CLASS,
                         location=CodeLocation(
                             file_path=file_path,
                             line_start=cls_def.lineno,
-                            line_end=cls_def.end_lineno,
+                            line_end=end_lineno,
                         ),
                         description=f"Class '{cls_def.name}' is too large ({length} lines)",
                         severity=min(1.0, length / 500.0),
                         suggestion="Consider splitting this class into smaller, single-responsibility classes",
                         affected_lines=self._get_lines(
-                            file_path, cls_def.lineno, cls_def.end_lineno
+                            file_path, cls_def.lineno, end_lineno
                         ),
                     )
                     smells.append(smell)
@@ -347,18 +353,19 @@ class LimitationAnalyzer:
             if file_path in key:
                 param_count = len(func_def.args.args)
                 if param_count > 5:  # Threshold for long parameter list
+                    end_lineno = func_def.end_lineno or func_def.lineno
                     smell = CodeSmellDetection(
                         smell_type=CodeSmell.LONG_PARAMETER_LIST,
                         location=CodeLocation(
                             file_path=file_path,
                             line_start=func_def.lineno,
-                            line_end=func_def.end_lineno,
+                            line_end=end_lineno,
                         ),
                         description=f"Function '{func_def.name}' has too many parameters ({param_count})",
                         severity=min(1.0, param_count / 10.0),
                         suggestion="Consider using a parameter object or breaking the function down",
                         affected_lines=self._get_lines(
-                            file_path, func_def.lineno, func_def.end_lineno
+                            file_path, func_def.lineno, end_lineno
                         ),
                     )
                     smells.append(smell)
@@ -368,18 +375,19 @@ class LimitationAnalyzer:
             if file_path in key:
                 metrics = self.parser.get_complexity_metrics(func_def)
                 if metrics["cyclomatic_complexity"] > 10:
+                    end_lineno = func_def.end_lineno or func_def.lineno
                     smell = CodeSmellDetection(
                         smell_type=CodeSmell.SWITCH_STATEMENTS,  # Using as proxy for complexity
                         location=CodeLocation(
                             file_path=file_path,
                             line_start=func_def.lineno,
-                            line_end=func_def.end_lineno,
+                            line_end=end_lineno,
                         ),
                         description=f"Function '{func_def.name}' has high cyclomatic complexity ({metrics['cyclomatic_complexity']})",
                         severity=min(1.0, metrics["cyclomatic_complexity"] / 20.0),
                         suggestion="Consider refactoring to reduce complexity using strategy pattern or polymorphism",
                         affected_lines=self._get_lines(
-                            file_path, func_def.lineno, func_def.end_lineno
+                            file_path, func_def.lineno, end_lineno
                         ),
                     )
                     smells.append(smell)
@@ -406,7 +414,7 @@ class LimitationAnalyzer:
 
         # Check for scalability issues
         avg_method_length = sum(
-            func.end_lineno - func.lineno + 1 for func in self.parser.function_definitions.values()
+            (func.end_lineno or func.lineno) - func.lineno + 1 for func in self.parser.function_definitions.values()
         ) / max(1, total_functions)
 
         if avg_method_length > 30:
@@ -704,7 +712,7 @@ class SafetySandbox:
 
         # Layer 2: 构建极简白名单全局命名空间
         # 关键：不使用默认的 __builtins__，完全手动控制
-        safe_globals = {
+        safe_globals: Dict[str, Any] = {
             "__builtins__": self.ALLOWED_BUILTINS.copy(),
             "__name__": "__sandbox__",
             "__doc__": None,
@@ -714,8 +722,8 @@ class SafetySandbox:
         # Layer 2.5: 添加允许的模块 (最小权限原则)
         for module_name in self.allowed_modules:
             try:
-                module = __import__(module_name)
-                safe_globals[module_name] = module
+                imported_module: types.ModuleType = __import__(module_name, fromlist=[''])
+                safe_globals[module_name] = imported_module
             except ImportError:
                 pass
         
@@ -857,7 +865,7 @@ class SelfReflectionEngine:
 
     def _categorize_smells(self, smells: List[CodeSmellDetection]) -> Dict[str, int]:
         """Categorize code smells by type"""
-        categories = {}
+        categories: Dict[str, int] = {}
         for smell in smells:
             smell_type = smell.smell_type.value
             categories[smell_type] = categories.get(smell_type, 0) + 1
@@ -865,7 +873,7 @@ class SelfReflectionEngine:
 
     def _categorize_limitations(self, limitations: List[LimitationAnalysis]) -> Dict[str, int]:
         """Categorize limitations by type"""
-        categories = {}
+        categories: Dict[str, int] = {}
         for limitation in limitations:
             lim_type = limitation.limitation_type.value
             categories[lim_type] = categories.get(lim_type, 0) + 1
