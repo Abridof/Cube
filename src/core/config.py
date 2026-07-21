@@ -6,7 +6,7 @@
 
 import os
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Callable, Union, Type
 from dataclasses import dataclass, field
 from functools import lru_cache
 
@@ -90,7 +90,7 @@ class Config:
         config = cls()
 
         # LLM 配置 - 批量读取环境变量
-        env_mappings = {
+        env_mappings: Dict[str, tuple] = {
             "LLM_API_KEY": ("llm", "api_key"),
             "LLM_API_BASE": ("llm", "api_base"),
             "LLM_MODEL": ("llm", "model"),
@@ -111,8 +111,9 @@ class Config:
         for env_var, mapping in env_mappings.items():
             value = os.getenv(env_var)
             if value is not None:
-                section, attr = mapping[0], mapping[1]
-                converter = mapping[2] if len(mapping) > 2 else lambda x: x
+                section: str = mapping[0]
+                attr: str = mapping[1]
+                converter: Callable[[str], Any] = mapping[2] if len(mapping) > 2 else lambda x: x
 
                 try:
                     converted_value = converter(value)

@@ -104,7 +104,8 @@ class ASTSecurityChecker(ast.NodeVisitor):
             module_name = alias.name.split('.')[0]
             self.imports.append(module_name)
             if self.config.security_level in (SecurityLevel.HIGH, SecurityLevel.PARANOID):
-                if module_name not in self.config.allowed_modules:
+                allowed = self.config.allowed_modules or set()
+                if module_name not in allowed:
                     self.violations.append(
                         f"Import of '{module_name}' not in allowed list"
                     )
@@ -115,7 +116,8 @@ class ASTSecurityChecker(ast.NodeVisitor):
             module_name = node.module.split('.')[0]
             self.imports.append(module_name)
             if self.config.security_level in (SecurityLevel.HIGH, SecurityLevel.PARANOID):
-                if module_name not in self.config.allowed_modules:
+                allowed = self.config.allowed_modules or set()
+                if module_name not in allowed:
                     self.violations.append(
                         f"Import from '{module_name}' not in allowed list"
                     )
@@ -124,12 +126,13 @@ class ASTSecurityChecker(ast.NodeVisitor):
     def visit_Call(self, node: ast.Call):
         if self.config.security_level in (SecurityLevel.MEDIUM, SecurityLevel.HIGH, SecurityLevel.PARANOID):
             # 检查直接函数调用
+            blocked = self.config.blocked_calls or set()
             if isinstance(node.func, ast.Name):
-                if node.func.id in self.config.blocked_calls:
+                if node.func.id in blocked:
                     self.violations.append(f"Blocked function call: {node.func.id}")
             # 检查方法调用
             elif isinstance(node.func, ast.Attribute):
-                if node.func.attr in self.config.blocked_calls:
+                if node.func.attr in blocked:
                     self.violations.append(f"Blocked method call: {node.func.attr}")
         self.generic_visit(node)
     
@@ -243,7 +246,7 @@ class SecureSandbox:
         """
         import time
         
-        result = {
+        result: Dict[str, Any] = {
             "success": False,
             "output": "",
             "error": None,

@@ -229,7 +229,7 @@ class TokenOptimizer:
 
 
 # 便捷函数
-def optimize_prompt(code: str, error: str, history: List[Dict] = None) -> str:
+def optimize_prompt(code: str, error: str, history: Optional[List[Dict]] = None) -> str:
     """快速生成优化后的 Prompt"""
     optimizer = TokenOptimizer()
     return (

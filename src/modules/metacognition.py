@@ -235,11 +235,11 @@ class StrategySelector:
 
     def select_strategy(
         self, current_state: CognitiveState, context: Dict[str, JsonValueT]
-    ) -> RegulationStrategy:
+    ) -> Optional[RegulationStrategy]:
         """根据当前状态选择调节策略"""
 
         # 基于状态的默认策略映射
-        default_strategies = {
+        default_strategies: Dict[CognitiveState, Optional[RegulationStrategy]] = {
             CognitiveState.FLOW: None,  # 保持现状
             CognitiveState.FOCUSED: None,  # 保持现状
             CognitiveState.CONFUSED: RegulationStrategy.PROVIDE_HINT,
@@ -249,7 +249,7 @@ class StrategySelector:
             CognitiveState.ANXIOUS: RegulationStrategy.DECREASE_CHALLENGE,
         }
 
-        strategy = default_strategies.get(current_state)
+        strategy: Optional[RegulationStrategy] = default_strategies.get(current_state)
 
         # 考虑上下文进行微调
         if context.get("task_criticality", False) and strategy == RegulationStrategy.TAKE_BREAK:
@@ -272,8 +272,8 @@ class StrategySelector:
     def get_best_strategy(self, state: CognitiveState) -> Optional[RegulationStrategy]:
         """获取历史上对该状态最有效的策略"""
         # 简化实现：返回平均效果最好的策略
-        best_avg = -1
-        best_strategy = None
+        best_avg: float = -1
+        best_strategy: Optional[RegulationStrategy] = None
 
         for strategy, outcomes in self.strategy_effectiveness.items():
             if outcomes:
@@ -469,7 +469,7 @@ class MetacognitiveMonitor:
             return {"status": "no_data"}
 
         # 统计各状态持续时间（简化：按次数）
-        state_counts = {}
+        state_counts: Dict[str, int] = {}
         for log in self.log_history:
             state_name = log.state.name
             state_counts[state_name] = state_counts.get(state_name, 0) + 1
@@ -482,7 +482,7 @@ class MetacognitiveMonitor:
         )
 
         # 找出主导状态
-        dominant_state = max(state_counts, key=state_counts.get) if state_counts else None
+        dominant_state: Optional[str] = max(state_counts, key=lambda k: state_counts[k]) if state_counts else None
 
         session_duration = (datetime.now() - self.session_start_time).total_seconds()
 

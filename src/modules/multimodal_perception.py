@@ -228,7 +228,7 @@ class ImagePerceiver:
         features = []
 
         # 基于字节分布的结构分析
-        byte_counts = defaultdict(int)
+        byte_counts: Dict[int, int] = defaultdict(int)
         for b in image_bytes[:10000]:  # 限制处理长度
             byte_counts[b] += 1
 
@@ -515,7 +515,7 @@ class AudioPerceiver:
         self, samples: List[float], metadata: Dict
     ) -> List[ModalFeature]:
         """提取时域特征"""
-        features = []
+        features: List[ModalFeature] = []
 
         if not samples:
             return features
@@ -562,14 +562,14 @@ class AudioPerceiver:
         self, samples: List[float], metadata: Dict
     ) -> List[ModalFeature]:
         """提取频域特征（简化 DCT 近似）"""
-        features = []
+        features: List[ModalFeature] = []
 
         if len(samples) < 100:
             return features
 
         # 简化的频谱分析（使用差分近似高频成分）
-        high_freq_energy = 0
-        low_freq_energy = 0
+        high_freq_energy: float = 0
+        low_freq_energy: float = 0
 
         for i in range(1, min(1000, len(samples))):
             diff = abs(samples[i] - samples[i - 1])
@@ -613,10 +613,10 @@ class AudioPerceiver:
             return 0
 
         best_period = 0
-        best_correlation = 0
+        best_correlation: float = 0
 
         for period in range(10, min(200, n // 2)):
-            correlation = 0
+            correlation: float = 0
             count = 0
             for i in range(n - period):
                 correlation += samples[i] * samples[i + period]
@@ -632,7 +632,7 @@ class AudioPerceiver:
 
     def _extract_rhythm_features(self, samples: List[float], metadata: Dict) -> List[ModalFeature]:
         """提取节奏特征"""
-        features = []
+        features: List[ModalFeature] = []
 
         if len(samples) < 1000:
             return features
@@ -818,7 +818,7 @@ class StructuredDataPerceiver:
 
     def _analyze_list_statistics(self, data: List) -> List[ModalFeature]:
         """分析列表统计特征"""
-        features = []
+        features: List[ModalFeature] = []
 
         if not data:
             return features
@@ -857,7 +857,7 @@ class StructuredDataPerceiver:
 
     def _analyze_dict_structure(self, data: Dict) -> List[ModalFeature]:
         """分析字典结构"""
-        features = []
+        features: List[ModalFeature] = []
 
         if not data:
             return features
@@ -876,7 +876,7 @@ class StructuredDataPerceiver:
         )
 
         # 值类型分布
-        value_types = defaultdict(int)
+        value_types: Dict[str, int] = defaultdict(int)
         for v in data.values():
             value_types[type(v).__name__] += 1
 
