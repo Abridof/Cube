@@ -15,7 +15,7 @@ Author: AI Assistant (Security Researcher)
 
 import time
 import threading
-from typing import Dict, Optional, Tuple, Any
+from typing import Dict, Optional, Tuple, Any, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from collections import defaultdict
@@ -44,7 +44,7 @@ class RateLimitConfig:
     def __post_init__(self):
         if self.refill_rate is None:
             # 默认补充速率 = 平均速率
-            self.refill_rate = self.max_requests / self.window_seconds
+            self.refill_rate = float(self.max_requests) / self.window_seconds
 
 
 @dataclass
@@ -113,7 +113,10 @@ class TokenBucket:
             if self.tokens >= tokens:
                 return 0.0
             needed = tokens - self.tokens
-            return needed / self.config.refill_rate
+            refill_rate = self.config.refill_rate
+            if refill_rate is None or refill_rate == 0:
+                return float('inf')
+            return needed / refill_rate
 
 
 class SlidingWindowCounter:
@@ -320,7 +323,7 @@ class RateLimiter:
 class RateLimitMiddleware:
     """速率限制中间件 (用于 API 服务)"""
     
-    def __init__(self, limiter: RateLimiter, key_func: callable = None):
+    def __init__(self, limiter: RateLimiter, key_func: Optional[Callable[[Any], str]] = None):
         """
         初始化中间件
         
@@ -341,7 +344,10 @@ class RateLimitMiddleware:
         Returns:
             tuple: (是否允许，响应信息)
         """
-        key = self.key_func(request)
+        if self.key_func is None:
+            key = "default"
+        else:
+            key = self.key_func(request)
         return self.limiter.allow_request(key)
 
 

@@ -27,18 +27,22 @@ try:
     from .secure_sandbox import SecureSandbox
 except ImportError:
     # Fallback for standalone testing or partial imports
-    class Config:
+    class _Config:
         @staticmethod
         def get(key, default=None):
             return default
 
-    class LLMClient:
+    class _LLMClient:
         def generate(self, *args, **kwargs):
             return {"content": "", "usage": {}}
 
-    class SecureSandbox:
+    class _SecureSandbox:
         def execute(self, *args, **kwargs):
             return {"success": False, "output": ""}
+    
+    Config = _Config  # type: ignore[misc]
+    LLMClient = _LLMClient  # type: ignore[misc]
+    SecureSandbox = _SecureSandbox  # type: ignore[misc]
 
 
 logger = logging.getLogger(__name__)

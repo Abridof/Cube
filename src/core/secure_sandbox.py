@@ -246,7 +246,7 @@ class SecureSandbox:
         """
         import time
         
-        result = {
+        result: Dict[str, Any] = {
             "success": False,
             "output": "",
             "error": None,
